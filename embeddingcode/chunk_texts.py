@@ -147,7 +147,7 @@ def embeddings_for_an_article(articlestring):
 	'''
 	This runs the whole process from input string to embeddings.
 	'''
-
+	print(articlestring[0:25])
 	sentences = turn_undivided_text_into_sentences(articlestring)
 	embedding_df = turn_sentences_to_embedding_df(sentences)
 	chunk_list, batch_dict = turn_embedding_df_to_chunks(embedding_df)
