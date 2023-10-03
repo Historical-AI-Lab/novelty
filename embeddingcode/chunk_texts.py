@@ -78,79 +78,40 @@ def turn_sentences_to_embedding_df(sentences):
 
 def turn_embedding_df_to_chunks(embedding_df):
 
-	''' This is Becca's code, slightly adapted so we keep track of input ids, token type ids, and
-	attention masks while aggregating sentences.
-
-	As a result, we can return not only a list of chunks, but a batch_dict in the original format,
-	with items now aggregated so they come as close as possible to 512 without going over. This
-	may save us from having to run the tokenizer a second time.
-
-	(Probably not a big deal with this corpus, but could save processing time later.)
+	''' This is Becca's code, with slightly different variable names.
 	'''
 
 	_512_counter = 0
 
 	words_under_512 = []
-	iis_under_512 = []
-	ttis_under_512 = []
-	ams_under_512 = []
 
 	chunk_list = []
-	batch_dict = {'input_ids': [], 'token_type_ids': [], 'attention_mask': []}
-
+	
 	for index, row in embedding_df.iterrows():
 	    next_count = _512_counter + int(row['numtokens'])
 
 	    if next_count < 512:
 	        _512_counter = next_count
 	        words_under_512.append(str(row['sentence']))
-	        print(row['input_ids'])
-	        iis_under_512.extend(row['input_ids'])
-	        ttis_under_512.extend(row['token_type_ids'])
-	        ams_under_512.extend(row['attention_mask'])
+	    
 
 	    elif next_count == 512:
 	        words_under_512.append(str(row['sentence']))
-	        iis_under_512.extend(row['input_ids'].values)
-	        ttis_under_512.extend(row['token_type_ids'].values)
-	        ams_under_512.extend(row['attention_mask'].values)
-
 	        chunk_list.append(' '.join(words_under_512))
-	        batch_dict['input_ids'].append(iis_under_512)
-	        batch_dict['token_type_ids'].append(ttis_under_512)
-	        batch_dict['attention_mask'].append(ams_under_512)
 
 	        _512_counter = 0
 	        words_under_512 = []
-	        iis_under_512 = []
-	        ttis_under_512 = []
-	        ams_under_512 = []
+	       
 
 	    else:  # next_count > 512
 	        # Do not append current sentence to words_under_512
 	        chunk_list.append(' '.join(words_under_512))
-	        batch_dict['input_ids'].append(iis_under_512)
-	        batch_dict['token_type_ids'].append(ttis_under_512)
-	        batch_dict['attention_mask'].append(ams_under_512)
-
 	        words_under_512 = [str(row['sentence'])]  # Start new chunk with the "offending" sentence
-	        iis_under_512 = row['input_ids']
-	        ttis_under_512 = row['token_type_ids']
-	        ams_under_512 = row['attention_mask']
 	        _512_counter = int(row['numtokens'])
 	
 	chunk_list.append(' '.join(words_under_512))
-	batch_dict['input_ids'].append(iis_under_512)
-	batch_dict['token_type_ids'].append(ttis_under_512)
-	batch_dict['attention_mask'].append(ams_under_512)
 
-	tensor_batch_dict = {\
-	'input_ids': torch.tensor(batch_dict['input_ids'], dtype=torch.long), 
-	'token_type_ids': torch.tensor(batch_dict['token_type_ids'], dtype=torch.long),
-    'attention_mask': torch.tensor(batch_dict['attention_mask'], dtype=torch.long)
-    }
-
-	return chunk_list, tensor_batch_dict
+	return chunk_list
 
 def embeddings_for_an_article(articlestring):
 	'''
@@ -158,8 +119,9 @@ def embeddings_for_an_article(articlestring):
 	'''
 	sentences = turn_undivided_text_into_sentences(articlestring)
 	embedding_df = turn_sentences_to_embedding_df(sentences)
-	chunk_list, batch_dict = turn_embedding_df_to_chunks(embedding_df)
+	chunk_list = turn_embedding_df_to_chunks(embedding_df)
 
+	batch_dict = tokenizer(chunk_list, max_length=512, padding=True, truncation=True, return_tensors='pt')
 	outputs = model(**batch_dict)
 	raw_embeddings = average_pool(outputs.last_hidden_state, batch_dict['attention_mask'])
 	embeddings = F.normalize(raw_embeddings, p=2, dim=1)
