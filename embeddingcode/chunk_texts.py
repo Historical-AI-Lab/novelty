@@ -18,7 +18,6 @@ model = AutoModel.from_pretrained("thenlper/gte-base")
 print('Tokenizer and model built.')
 
 import nltk
-import csv
 
 nltk.download('punkt')
 
