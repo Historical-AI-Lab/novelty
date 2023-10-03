@@ -3,6 +3,7 @@ from torch import Tensor
 from transformers import AutoTokenizer, AutoModel
 from scipy.spatial.distance import cosine
 import pandas as pd
+import json
 
 def average_pool(last_hidden_states: Tensor,
                  attention_mask: Tensor) -> Tensor:
@@ -76,9 +77,9 @@ def turn_embedding_df_to_chunks(embedding_df):
 
 	As a result, we can return not only a list of chunks, but a batch_dict in the original format,
 	with items now aggregated so they come as close as possible to 512 without going over. This
-	saves us from having to run the tokenizer a second time.
+	may save us from having to run the tokenizer a second time.
 
-	(Probably not a big deal with this corpus, but maybe save processing time later.)
+	(Probably not a big deal with this corpus, but could save processing time later.)
 	'''
 
 	_512_counter = 0
@@ -137,4 +138,61 @@ def turn_embedding_df_to_chunks(embedding_df):
 	batch_dict['attention_mask'].append(ams_under_512)
 
 	return chunk_list, batch_dict
+
+def embeddings_for_an_article(articlestring):
+	'''
+	This runs the whole process from input string to embeddings.
+	'''
+
+	sentences = turn_undivided_text_into_sentences(articlestring)
+	embedding_df = turn_sentences_to_embedding_df(sentences)
+	chunk_list, batch_dict = turn_embedding_df_to_chunks(embedding_df)
+
+	outputs = model(**batch_dict)
+	raw_embeddings = average_pool(outputs.last_hidden_state, batch_dict['attention_mask'])
+	embeddings = F.normalize(raw_embeddings, p=2, dim=1)
+
+	return chunk_list, embeddings
+
+# USAGE
+
+# We iterate through all the articles in the JSTOR file, converting each
+# to a list of embeddings and a list of chunks
+
+# We write the embeddings to a single tsv keyed by chunk ID, which
+# is the numeric part of the JSTOR id plus chunk index. I.e., the 
+# embeddings for "http://www.jstor.org/stable/512209" would be recorded as
+#
+# J512209-0
+# J512209-1
+# etc
+#
+# We don't write all the chunks, but do for every hundredth file so
+# we can inspect them and make sure everything is working as we expect.
+
+ctr = 0
+
+with open('LitStudiesJSTOR.jsonl', encoding = 'utf-8') as f:
+	for line in f:
+		json_obj = json.loads(line)
+
+		article_text = json_obj('fullText')
+		chunk_list, embeddings = embeddings_for_an_article(article_text)
+
+		articleID = json_obj['id'].replace('http://www.jstor.org/stable/', 'J')
+
+		with open('embeddings.tsv', mode = 'a', encoding = 'utf-8') as f2:
+			for i, e in enumerate(embeddings):
+				f2.write(articleID + '-' + str(i) + '\t' + '\t'.join([str(x) for x in e]) + '\n')
+
+		ctr += 1
+		if ctr % 100 == 1:
+			with open('chunks/' + articleID, mode = 'w', encoding = 'utf-8') as f3:
+				for i, c in enumerate(chunk_list):
+					f.write(str(i) + '\t' + c + '\n')
+
+
+
+
+
 
