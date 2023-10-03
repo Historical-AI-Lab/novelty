@@ -13,8 +13,13 @@ def average_pool(last_hidden_states: Tensor,
     last_hidden = last_hidden_states.masked_fill(~attention_mask[..., None].bool(), 0.0)
     return last_hidden.sum(dim=1) / attention_mask.sum(dim=1)[..., None]
 
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+print(f'Using {device}')
+
 tokenizer = AutoTokenizer.from_pretrained("thenlper/gte-base")
 model = AutoModel.from_pretrained("thenlper/gte-base")
+
+model.to(device)
 
 print('Tokenizer and model built.')
 
@@ -117,11 +122,14 @@ def embeddings_for_an_article(articlestring):
 	'''
 	This runs the whole process from input string to embeddings.
 	'''
+	global device
+	
 	sentences = turn_undivided_text_into_sentences(articlestring)
 	embedding_df = turn_sentences_to_embedding_df(sentences)
 	chunk_list = turn_embedding_df_to_chunks(embedding_df)
 
 	batch_dict = tokenizer(chunk_list, max_length=512, padding=True, truncation=True, return_tensors='pt')
+	batch_dict = {k: v.to(device) for k, v in batch_dict.items()}
 	outputs = model(**batch_dict)
 	raw_embeddings = average_pool(outputs.last_hidden_state, batch_dict['attention_mask'])
 	embeddings = F.normalize(raw_embeddings, p=2, dim=1)
