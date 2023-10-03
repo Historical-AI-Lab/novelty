@@ -143,7 +143,13 @@ def turn_embedding_df_to_chunks(embedding_df):
 	batch_dict['token_type_ids'].append(ttis_under_512)
 	batch_dict['attention_mask'].append(ams_under_512)
 
-	return chunk_list, batch_dict
+	tensor_batch_dict = {\
+	'input_ids': torch.tensor(batch_dict['input_ids'], dtype=torch.long), 
+	'token_type_ids': torch.tensor(batch_dict['token_type_ids'], dtype=torch.long),
+    'attention_mask': torch.tensor(batch_dict['attention_mask'], dtype=torch.long)
+    }
+
+	return chunk_list, tensor_batch_dict
 
 def embeddings_for_an_article(articlestring):
 	'''
