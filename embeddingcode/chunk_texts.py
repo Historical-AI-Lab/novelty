@@ -70,7 +70,7 @@ def turn_sentences_to_embedding_df(sentences):
 
 	embedding_df = pd.DataFrame({'sentence': sentences, 'input_ids' : [x.to_list() for x in batch_dict['input_ids']],
 		'token_type_ids': [x.to_list() for x in batch_dict['token_type_ids']], 
-		'attention_mask': [x.to_list_ for x in batch_dict['attention_mask']],
+		'attention_mask': [x.to_list() for x in batch_dict['attention_mask']],
 		'numtokens': numtokens})
 
 	return embedding_df
