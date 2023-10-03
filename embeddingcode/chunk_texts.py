@@ -128,8 +128,8 @@ def turn_embedding_df_to_chunks(embedding_df):
 
 	        words_under_512 = [str(row['sentence'])]  # Start new chunk with the "offending" sentence
 	        iis_under_512 = row['input_ids']
-			ttis_under_512 = row['token_type_ids']
-			ams_under_512 = row['attention_mask']
+	        ttis_under_512 = row['token_type_ids']
+	        ams_under_512 = row['attention_mask']
 	        _512_counter = int(row['numtokens'])
 	
 	chunk_list.append(' '.join(words_under_512))
