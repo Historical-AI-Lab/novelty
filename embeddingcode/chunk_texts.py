@@ -176,7 +176,7 @@ def embeddings_for_an_article(articlestring):
 
 ctr = 0
 
-with open('LitStudiesJSTOR.jsonl', encoding = 'utf-8') as f:
+with open('../LitStudiesJSTOR.jsonl', encoding = 'utf-8') as f:
 	for line in f:
 		json_obj = json.loads(line)
 
