@@ -116,8 +116,8 @@ def turn_embedding_df_to_chunks(embedding_df):
 	        _512_counter = 0
 	        words_under_512 = []
 	        iis_under_512 = []
-			ttis_under_512 = []
-			ams_under_512 = []
+	        ttis_under_512 = []
+	        ams_under_512 = []
 
 	    else:  # next_count > 512
 	        # Do not append current sentence to words_under_512
