@@ -147,7 +147,6 @@ def embeddings_for_an_article(articlestring):
 	'''
 	This runs the whole process from input string to embeddings.
 	'''
-	print(articlestring[0:25])
 	sentences = turn_undivided_text_into_sentences(articlestring)
 	embedding_df = turn_sentences_to_embedding_df(sentences)
 	chunk_list, batch_dict = turn_embedding_df_to_chunks(embedding_df)
@@ -180,7 +179,7 @@ with open('../LitStudiesJSTOR.jsonl', encoding = 'utf-8') as f:
 	for line in f:
 		json_obj = json.loads(line)
 
-		article_text = json_obj['fullText']
+		article_text = json_obj['fullText'][0]
 		chunk_list, embeddings = embeddings_for_an_article(article_text)
 
 		articleID = json_obj['id'].replace('http://www.jstor.org/stable/', 'J')
