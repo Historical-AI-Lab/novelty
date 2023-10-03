@@ -180,7 +180,7 @@ with open('../LitStudiesJSTOR.jsonl', encoding = 'utf-8') as f:
 	for line in f:
 		json_obj = json.loads(line)
 
-		article_text = json_obj('fullText')
+		article_text = json_obj['fullText']
 		chunk_list, embeddings = embeddings_for_an_article(article_text)
 
 		articleID = json_obj['id'].replace('http://www.jstor.org/stable/', 'J')
