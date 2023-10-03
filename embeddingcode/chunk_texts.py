@@ -96,7 +96,7 @@ def turn_embedding_df_to_chunks(embedding_df):
 	chunk_list = []
 	batch_dict = {'input_ids': [], 'token_type_ids': [], 'attention_mask': []}
 
-	for index, row in df.iterrows():
+	for index, row in embedding_df.iterrows():
 	    next_count = _512_counter + int(row['numtokens'])
 
 	    if next_count < 512:
