@@ -68,8 +68,9 @@ def turn_sentences_to_embedding_df(sentences):
 
 		numtokens.append(sum(batch_dict['attention_mask'][idx]))
 
-	embedding_df = pd.DataFrame({'sentence': sentences, 'input_ids' : batch_dict['input_ids'].to_list(),
-		'token_type_ids': batch_dict['token_type_ids'].to_list(), 'attention_mask': batch_dict['attention_mask'].to_list(),
+	embedding_df = pd.DataFrame({'sentence': sentences, 'input_ids' : [x.to_list() for x in batch_dict['input_ids']],
+		'token_type_ids': [x.to_list() for x in batch_dict['token_type_ids']], 
+		'attention_mask': [x.to_list_ for x in batch_dict['attention_mask']],
 		'numtokens': numtokens})
 
 	return embedding_df
