@@ -123,7 +123,7 @@ def embeddings_for_an_article(articlestring):
 	This runs the whole process from input string to embeddings.
 	'''
 	global device
-	
+
 	sentences = turn_undivided_text_into_sentences(articlestring)
 	embedding_df = turn_sentences_to_embedding_df(sentences)
 	chunk_list = turn_embedding_df_to_chunks(embedding_df)
@@ -170,7 +170,7 @@ with open('../LitStudiesJSTOR.jsonl', encoding = 'utf-8') as f:
 
 		ctr += 1
 		if ctr % 100 == 1:
-			with open('chunks/' + articleID, mode = 'w', encoding = 'utf-8') as f3:
+			with open('chunks/' + articleID + '.txt', mode = 'w', encoding = 'utf-8') as f3:
 				for i, c in enumerate(chunk_list):
 					f3.write(str(i) + '\t' + c + '\n')
 
