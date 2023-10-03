@@ -1,6 +1,6 @@
 import torch.nn.functional as F
 from torch import Tensor
-from torch import tensor
+import torch 
 from transformers import AutoTokenizer, AutoModel
 from scipy.spatial.distance import cosine
 import pandas as pd
