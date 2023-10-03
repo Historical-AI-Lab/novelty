@@ -5,14 +5,17 @@ from scipy.spatial.distance import cosine
 import pandas as pd
 import json
 
+print('First imports complete.')
+
 def average_pool(last_hidden_states: Tensor,
                  attention_mask: Tensor) -> Tensor:
     last_hidden = last_hidden_states.masked_fill(~attention_mask[..., None].bool(), 0.0)
     return last_hidden.sum(dim=1) / attention_mask.sum(dim=1)[..., None]
 
-
 tokenizer = AutoTokenizer.from_pretrained("thenlper/gte-base")
 model = AutoModel.from_pretrained("thenlper/gte-base")
+
+print('Tokenizer and model built.')
 
 import nltk
 import csv
@@ -20,6 +23,8 @@ import csv
 nltk.download('punkt')
 
 from nltk.tokenize import sent_tokenize
+
+print('NLTK downloaded.')
 
 def turn_undivided_text_into_sentences(document_string):
 	'''
@@ -180,6 +185,7 @@ with open('LitStudiesJSTOR.jsonl', encoding = 'utf-8') as f:
 		chunk_list, embeddings = embeddings_for_an_article(article_text)
 
 		articleID = json_obj['id'].replace('http://www.jstor.org/stable/', 'J')
+		print(articleID, len(chunk_list))
 
 		with open('embeddings.tsv', mode = 'a', encoding = 'utf-8') as f2:
 			for i, e in enumerate(embeddings):
