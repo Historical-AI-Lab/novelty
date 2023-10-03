@@ -102,9 +102,10 @@ def turn_embedding_df_to_chunks(embedding_df):
 	    if next_count < 512:
 	        _512_counter = next_count
 	        words_under_512.append(str(row['sentence']))
-	        iis_under_512.extend(row['input_ids'].values)
-	        ttis_under_512.extend(row['token_type_ids'].values)
-	        ams_under_512.extend(row['attention_mask'].values)
+	        print(row['input_ids'])
+	        iis_under_512.extend(row['input_ids'])
+	        ttis_under_512.extend(row['token_type_ids'])
+	        ams_under_512.extend(row['attention_mask'])
 
 	    elif next_count == 512:
 	        words_under_512.append(str(row['sentence']))
