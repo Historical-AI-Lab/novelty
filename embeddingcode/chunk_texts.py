@@ -31,6 +31,8 @@ from nltk.tokenize import sent_tokenize
 
 print('NLTK downloaded.')
 
+metadata = pd.read_csv('TitleSearchedLitMeta.tsv', sep = '\t')
+
 def turn_undivided_text_into_sentences(document_string):
 	'''
 	This function accepts a document as a single string and turns it into sentences.
@@ -153,6 +155,7 @@ def embeddings_for_an_article(articlestring):
 # we can inspect them and make sure everything is working as we expect.
 
 ctr = 0
+errors = 0
 
 with open('../LitStudiesJSTOR.jsonl', encoding = 'utf-8') as f:
 	for line in f:
@@ -160,6 +163,20 @@ with open('../LitStudiesJSTOR.jsonl', encoding = 'utf-8') as f:
 
 		article_text = json_obj['fullText'][0]
 		chunk_list, embeddings = embeddings_for_an_article(article_text)
+
+		articleID = json_obj['id'].replace('http://www.jstor.org/stable/', '')
+		foundmatch = False
+		if 'identifier' in json_obj:
+			for idtype in json_obj['identifier']:
+				if idtype['name'] != 'local_doi':
+					alternateID = idtype['value'].split('/')[1]
+					if articleID != alternateID:
+						print('Discrepancy in IDs: url id', articleID, 'doi', alternateID)
+					else:
+						foundmatch = True
+
+		if not foundmatch:
+			errors += 1
 
 		articleID = json_obj['id'].replace('http://www.jstor.org/stable/', 'J')
 		print(articleID, len(chunk_list))
