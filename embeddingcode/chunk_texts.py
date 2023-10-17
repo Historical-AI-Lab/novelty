@@ -154,15 +154,16 @@ def embeddings_for_an_article(articlestring):
 # We don't write all the chunks, but do for every hundredth file so
 # we can inspect them and make sure everything is working as we expect.
 
-ctr = 0
+notdone = 0
 errors = 0
+ctr = 0
 
 with open('../LitStudiesJSTOR.jsonl', encoding = 'utf-8') as f:
 	for line in f:
 		json_obj = json.loads(line)
-
-		article_text = json_obj['fullText'][0]
-		chunk_list, embeddings = embeddings_for_an_article(article_text)
+		ctr += 1
+		if ctr > 500:
+			break
 
 		articleID = json_obj['id'].replace('http://www.jstor.org/stable/', '')
 		foundmatch = False
@@ -177,8 +178,20 @@ with open('../LitStudiesJSTOR.jsonl', encoding = 'utf-8') as f:
 
 		if not foundmatch:
 			errors += 1
+			print('error')
+			continue
 
-		articleID = json_obj['id'].replace('http://www.jstor.org/stable/', 'J')
+		else:
+			row = metadata.loc[metadata.doi == alternateID, : ]
+			proceedflag = row['make_embeddings']
+
+		if proceedflag == 1:
+			article_text = json_obj['fullText'][0]
+			chunk_list, embeddings = embeddings_for_an_article(article_text)
+		else:
+			notdone += 1
+			continue
+
 		print(articleID, len(chunk_list))
 
 		with open('embeddings.tsv', mode = 'a', encoding = 'utf-8') as f2:
