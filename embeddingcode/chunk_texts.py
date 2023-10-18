@@ -209,9 +209,9 @@ with open('../LitStudiesJSTOR.jsonl', encoding = 'utf-8') as f:
 			notdone += 1
 			continue
 
-		outlines.append(str(json_obj['wordCount'] + ' | ' + str(articleID) + ' | ' + str(len(chunk_list))))
+		outlines.append(str(json_obj['wordCount']) + ' | ' + str(articleID) + ' | ' + str(len(chunk_list)))
 
-		with open('embeddings' + str(startline + 1000) + '.tsv', mode = 'a', encoding = 'utf-8') as f2:
+		with open('embeddings' + str(startline) + '.tsv', mode = 'a', encoding = 'utf-8') as f2:
 			for i, e in enumerate(embeddings):
 				f2.write(fullID + '-' + str(i) + '\t' + '\t'.join([str(x) for x in e.tolist()]) + '\n')
 	
