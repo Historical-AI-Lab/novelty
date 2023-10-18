@@ -198,7 +198,7 @@ with open('../LitStudiesJSTOR.jsonl', encoding = 'utf-8') as f:
 			notdone += 1
 			continue
 
-		print(jsonobj['wordCount'], articleID, len(chunk_list))
+		print(json_obj['wordCount'], articleID, len(chunk_list))
 
 		with open('embeddings.tsv', mode = 'a', encoding = 'utf-8') as f2:
 			for i, e in enumerate(embeddings):
