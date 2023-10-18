@@ -172,8 +172,9 @@ with open('../LitStudiesJSTOR.jsonl', encoding = 'utf-8') as f:
 		elif ctr >= startline:
 			json_obj = json.loads(line)
 			ctr += 1
-			if ctr + 10 >= startline:
-				outlines.append('Errors: ' + str(errors) + '  Notdone: ' + str(notdone))
+			if ctr + 10 >= startline + 1000:
+				outstring = 'Errors: ' + str(errors) + '  Notdone: ' + str(notdone)
+				outlines.append(outstring)
 		else:
 			ctr += 1
 			continue
@@ -220,10 +221,10 @@ with open('../LitStudiesJSTOR.jsonl', encoding = 'utf-8') as f:
 				f3.write(str(i) + '\t' + c + '\n')
 
 		if len(outlines) > 0:
-			with open('log_' + str(startline) + '.txt', mode = 'a') as f4:
-				for l in outlines:
-					print(l)
-					f.write(l + '\n')
+			with open('log_' + str(startline) + '.txt', mode = 'a', encoding = 'utf-8') as f4:
+				for outline in outlines:
+					print(outline)
+					f.write(outline + '\n')
 			outlines = []
 
 
