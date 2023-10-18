@@ -157,9 +157,9 @@ def embeddings_for_an_article(articlestring):
 # We don't write all the chunks, but do for every hundredth file so
 # we can inspect them and make sure everything is working as we expect.
 
-def do_a_thousand(thetuple):
+def do_a_thousand(startline):
 
-	startdate, metadata = thetuple
+	global metadata
 
 	notdone = 0
 	errors = 0
@@ -227,7 +227,7 @@ def do_a_thousand(thetuple):
 ## Main multiprocssing
 
 pool = Pool(processes = 4)
-quadruple = [(1000, metadata), (2000, metadata), (3000, metadata), (4000, metadata)]
+quadruple = [1000, 2000, 3000, 4000]
 res = pool.map_async(do_a_thousand, quadruple)
 res.wait()
 resultlist = res.get()
