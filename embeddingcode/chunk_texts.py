@@ -5,6 +5,7 @@ from transformers import AutoTokenizer, AutoModel
 from scipy.spatial.distance import cosine
 import pandas as pd
 import json
+from multiprocessing import Pool 
 
 print('First imports complete.')
 
@@ -156,62 +157,77 @@ def embeddings_for_an_article(articlestring):
 # We don't write all the chunks, but do for every hundredth file so
 # we can inspect them and make sure everything is working as we expect.
 
-notdone = 0
-errors = 0
-ctr = 0
+def do_a_thousand(startline):
+	notdone = 0
+	errors = 0
+	ctr = 0
 
-with open('../LitStudiesJSTOR.jsonl', encoding = 'utf-8') as f:
-	for line in f:
-		json_obj = json.loads(line)
-		ctr += 1
-		if ctr > 1000:
-			break
+	with open('../LitStudiesJSTOR.jsonl', encoding = 'utf-8') as f:
 
-		articleID = json_obj['id'].replace('http://www.jstor.org/stable/', '')
-		if '/' in articleID:
-			articleID = articleID.split('/')[1]
-		foundmatch = False
-		if 'identifier' in json_obj:
-			for idtype in json_obj['identifier']:
-				if idtype['name'] == 'local_doi':
-					fullID = idtype['value']
-					fileID = fullID.split('/')[1]
-					if articleID != fileID:
-						print('Discrepancy in IDs: url id', articleID, 'doi', fileID)
-					else:
-						foundmatch = True
+		for line in f:
+			if ctr >= startline + 1000:
+				break
+			elif ctr >= startline:
+				json_obj = json.loads(line)
+				ctr += 1
+			else:
+				ctr += 1
+				continue
 
-		if not foundmatch:
-			errors += 1
-			print('error')
-			continue
+			articleID = json_obj['id'].replace('http://www.jstor.org/stable/', '')
+			if '/' in articleID:
+				articleID = articleID.split('/')[1]
+			foundmatch = False
+			if 'identifier' in json_obj:
+				for idtype in json_obj['identifier']:
+					if idtype['name'] == 'local_doi':
+						fullID = idtype['value']
+						fileID = fullID.split('/')[1]
+						if articleID != fileID:
+							print('Discrepancy in IDs: url id', articleID, 'doi', fileID)
+						else:
+							foundmatch = True
 
-		else:
-			row = metadata.loc[metadata.doi == fullID, : ]
-			proceedflag = row['make_embeddings'].values[0]
-			print(proceedflag)
+			if not foundmatch:
+				errors += 1
+				print('error')
+				continue
 
-		if proceedflag == 1:
-			article_text = json_obj['fullText']
-			chunk_list, embeddings = embeddings_for_an_article(article_text)
-		else:
-			notdone += 1
-			continue
+			else:
+				row = metadata.loc[metadata.doi == fullID, : ]
+				proceedflag = row['make_embeddings'].values[0]
+				# print(proceedflag)
 
-		print(json_obj['wordCount'], articleID, len(chunk_list))
+			if proceedflag == 1:
+				article_text = json_obj['fullText']
+				chunk_list, embeddings = embeddings_for_an_article(article_text)
+			else:
+				notdone += 1
+				continue
 
-		with open('embeddings1000.tsv', mode = 'a', encoding = 'utf-8') as f2:
-			for i, e in enumerate(embeddings):
-				f2.write(fullID + '-' + str(i) + '\t' + '\t'.join([str(x) for x in e.tolist()]) + '\n')
-	
-		with open('chunks/J' + fileID + '.txt', mode = 'w', encoding = 'utf-8') as f3:
-			for i, c in enumerate(chunk_list):
-				f3.write(str(i) + '\t' + c + '\n')
+			# print(json_obj['wordCount'], articleID, len(chunk_list))
 
-print(errors, notdone)
+			with open('embeddings' + str(startline + 1000) + '.tsv', mode = 'a', encoding = 'utf-8') as f2:
+				for i, e in enumerate(embeddings):
+					f2.write(fullID + '-' + str(i) + '\t' + '\t'.join([str(x) for x in e.tolist()]) + '\n')
+		
+			with open('chunks/J' + fileID + '.txt', mode = 'w', encoding = 'utf-8') as f3:
+				for i, c in enumerate(chunk_list):
+					f3.write(str(i) + '\t' + c + '\n')
+
+	print(errors, notdone)
 
 
+## Main multiprocssing
 
+pool = Pool(processes = 4)
+quadruple = [(1000), (2000), (3000), (4000)]
+res = pool.map_async(do_a_thousand, quadruple)
+res.wait()
+resultlist = res.get()
+
+pool.close()
+pool.join()
 
 
 
