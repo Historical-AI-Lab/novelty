@@ -160,7 +160,7 @@ notdone = 0
 errors = 0
 ctr = 0
 
-startline = sys.argv[1]
+startline = int(sys.argv[1])
 
 outlines = []
 
