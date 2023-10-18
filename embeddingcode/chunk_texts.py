@@ -183,7 +183,8 @@ with open('../LitStudiesJSTOR.jsonl', encoding = 'utf-8') as f:
 
 		else:
 			row = metadata.loc[metadata.doi == alternateID, : ]
-			proceedflag = row['make_embeddings'].values[0]
+			proceedflag = row['make_embeddings'].values
+			print(proceedflag)
 
 		if proceedflag == 1:
 			article_text = json_obj['fullText'][0]
