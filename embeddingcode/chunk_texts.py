@@ -171,9 +171,9 @@ with open('../LitStudiesJSTOR.jsonl', encoding = 'utf-8') as f:
 			for idtype in json_obj['identifier']:
 				if idtype['name'] == 'local_doi':
 					fullID = idtype['value']
-					fileID = 'J' + fullID.split('/')[1]
-					if articleID != fullID:
-						print('Discrepancy in IDs: url id', articleID, 'doi', fullID)
+					fileID = fullID.split('/')[1]
+					if articleID != fileID:
+						print('Discrepancy in IDs: url id', articleID, 'doi', fileID)
 					else:
 						foundmatch = True
 
@@ -202,7 +202,7 @@ with open('../LitStudiesJSTOR.jsonl', encoding = 'utf-8') as f:
 
 		ctr += 1
 		if ctr % 100 == 1:
-			with open('chunks/' + fileID + '.txt', mode = 'w', encoding = 'utf-8') as f3:
+			with open('chunks/J' + fileID + '.txt', mode = 'w', encoding = 'utf-8') as f3:
 				for i, c in enumerate(chunk_list):
 					f3.write(str(i) + '\t' + c + '\n')
 
