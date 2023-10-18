@@ -224,7 +224,6 @@ with open('../LitStudiesJSTOR.jsonl', encoding = 'utf-8') as f:
 			with open('log_' + str(startline) + '.txt', mode = 'a', encoding = 'utf-8') as f4:
 				for outline in outlines:
 					print(outline)
-					f.write(outline + '\n')
 			outlines = []
 
 
