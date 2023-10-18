@@ -156,8 +156,6 @@ def embeddings_for_an_article(articlestring):
 # We don't write all the chunks, but do for every hundredth file so
 # we can inspect them and make sure everything is working as we expect.
 
-global metadata
-
 notdone = 0
 errors = 0
 ctr = 0
