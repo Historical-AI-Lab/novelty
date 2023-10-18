@@ -188,7 +188,7 @@ with open('../LitStudiesJSTOR.jsonl', encoding = 'utf-8') as f:
 					fullID = idtype['value']
 					fileID = fullID.split('/')[1]
 					if articleID != fileID:
-						outlines.append('Discrepancy in IDs: url id', articleID, 'doi', fileID)
+						outlines.append('Discrepancy in IDs: url id: ' + str(articleID) + ' but doi: ' + str(fileID))
 					else:
 						foundmatch = True
 
@@ -222,6 +222,7 @@ with open('../LitStudiesJSTOR.jsonl', encoding = 'utf-8') as f:
 		if len(outlines) > 0:
 			with open('log_' + str(startline) + '.txt', mode = 'a') as f4:
 				for l in outlines:
+					print(l)
 					f.write(l + '\n')
 			outlines = []
 
