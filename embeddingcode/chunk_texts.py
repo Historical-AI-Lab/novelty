@@ -157,7 +157,8 @@ def embeddings_for_an_article(articlestring):
 # We don't write all the chunks, but do for every hundredth file so
 # we can inspect them and make sure everything is working as we expect.
 
-def do_a_thousand(startline):
+def do_a_thousand(startline, metadata):
+
 	notdone = 0
 	errors = 0
 	ctr = 0
@@ -170,6 +171,9 @@ def do_a_thousand(startline):
 			elif ctr >= startline:
 				json_obj = json.loads(line)
 				ctr += 1
+				if ctr % 10 == 1:
+					with open('log' + str(startline + 1000) + '.txt', mode = 'a', encoding = 'utf-8') as f4:
+						f4.write(str(ctr) + ' - ' + str(json_obj['wordCount']) + '\n')
 			else:
 				ctr += 1
 				continue
@@ -221,7 +225,7 @@ def do_a_thousand(startline):
 ## Main multiprocssing
 
 pool = Pool(processes = 4)
-quadruple = [(1000), (2000), (3000), (4000)]
+quadruple = [(1000, metadata), (2000, metadata), (3000, metadata), (4000, metadata)]
 res = pool.map_async(do_a_thousand, quadruple)
 res.wait()
 resultlist = res.get()
