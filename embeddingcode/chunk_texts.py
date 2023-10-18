@@ -166,6 +166,8 @@ with open('../LitStudiesJSTOR.jsonl', encoding = 'utf-8') as f:
 			break
 
 		articleID = json_obj['id'].replace('http://www.jstor.org/stable/', '')
+		if '/' in articleID:
+			articleID = articleID.split('/')[1]
 		foundmatch = False
 		if 'identifier' in json_obj:
 			for idtype in json_obj['identifier']:
@@ -195,6 +197,7 @@ with open('../LitStudiesJSTOR.jsonl', encoding = 'utf-8') as f:
 			continue
 
 		print(len(article_text), articleID, len(chunk_list))
+		print(article_text)
 
 		with open('embeddings.tsv', mode = 'a', encoding = 'utf-8') as f2:
 			for i, e in enumerate(embeddings):
