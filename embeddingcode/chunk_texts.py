@@ -208,6 +208,8 @@ with open('../LitStudiesJSTOR.jsonl', encoding = 'utf-8') as f:
 			for i, c in enumerate(chunk_list):
 				f3.write(str(i) + '\t' + c + '\n')
 
+print(errors, notdone)
+
 
 
 
