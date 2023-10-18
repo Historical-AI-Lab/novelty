@@ -170,9 +170,10 @@ with open('../LitStudiesJSTOR.jsonl', encoding = 'utf-8') as f:
 		if 'identifier' in json_obj:
 			for idtype in json_obj['identifier']:
 				if idtype['name'] == 'local_doi':
-					alternateID = idtype['value'].split('/')[1]
-					if articleID != alternateID:
-						print('Discrepancy in IDs: url id', articleID, 'doi', alternateID)
+					fullID = idtype['value']
+					fileID = 'J' + fullid.split('/')[1]
+					if articleID != fullID:
+						print('Discrepancy in IDs: url id', articleID, 'doi', fullID)
 					else:
 						foundmatch = True
 
@@ -182,7 +183,7 @@ with open('../LitStudiesJSTOR.jsonl', encoding = 'utf-8') as f:
 			continue
 
 		else:
-			row = metadata.loc[metadata.doi == alternateID, : ]
+			row = metadata.loc[metadata.doi == fullID, : ]
 			proceedflag = row['make_embeddings'].values
 			print(proceedflag)
 
@@ -197,11 +198,11 @@ with open('../LitStudiesJSTOR.jsonl', encoding = 'utf-8') as f:
 
 		with open('embeddings.tsv', mode = 'a', encoding = 'utf-8') as f2:
 			for i, e in enumerate(embeddings):
-				f2.write(articleID + '-' + str(i) + '\t' + '\t'.join([str(x) for x in e.tolist()]) + '\n')
+				f2.write(fullID + '-' + str(i) + '\t' + '\t'.join([str(x) for x in e.tolist()]) + '\n')
 
 		ctr += 1
 		if ctr % 100 == 1:
-			with open('chunks/' + articleID + '.txt', mode = 'w', encoding = 'utf-8') as f3:
+			with open('chunks/' + fileID + '.txt', mode = 'w', encoding = 'utf-8') as f3:
 				for i, c in enumerate(chunk_list):
 					f3.write(str(i) + '\t' + c + '\n')
 
