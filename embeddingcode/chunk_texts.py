@@ -164,7 +164,7 @@ with open('../LitStudiesJSTOR.jsonl', encoding = 'utf-8') as f:
 	for line in f:
 		json_obj = json.loads(line)
 		ctr += 1
-		if ctr > 500:
+		if ctr > 1000:
 			break
 
 		articleID = json_obj['id'].replace('http://www.jstor.org/stable/', '')
@@ -200,15 +200,13 @@ with open('../LitStudiesJSTOR.jsonl', encoding = 'utf-8') as f:
 
 		print(json_obj['wordCount'], articleID, len(chunk_list))
 
-		with open('embeddings.tsv', mode = 'a', encoding = 'utf-8') as f2:
+		with open('embeddings1000.tsv', mode = 'a', encoding = 'utf-8') as f2:
 			for i, e in enumerate(embeddings):
 				f2.write(fullID + '-' + str(i) + '\t' + '\t'.join([str(x) for x in e.tolist()]) + '\n')
-
-		ctr += 1
-		if ctr % 100 == 1:
-			with open('chunks/J' + fileID + '.txt', mode = 'w', encoding = 'utf-8') as f3:
-				for i, c in enumerate(chunk_list):
-					f3.write(str(i) + '\t' + c + '\n')
+	
+		with open('chunks/J' + fileID + '.txt', mode = 'w', encoding = 'utf-8') as f3:
+			for i, c in enumerate(chunk_list):
+				f3.write(str(i) + '\t' + c + '\n')
 
 
 
