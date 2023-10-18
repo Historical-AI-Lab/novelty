@@ -184,7 +184,7 @@ with open('../LitStudiesJSTOR.jsonl', encoding = 'utf-8') as f:
 
 		else:
 			row = metadata.loc[metadata.doi == fullID, : ]
-			proceedflag = row['make_embeddings'].values
+			proceedflag = row['make_embeddings'].values[0]
 			print(proceedflag)
 
 		if proceedflag == 1:
