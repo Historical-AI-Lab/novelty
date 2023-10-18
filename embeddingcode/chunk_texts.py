@@ -157,7 +157,9 @@ def embeddings_for_an_article(articlestring):
 # We don't write all the chunks, but do for every hundredth file so
 # we can inspect them and make sure everything is working as we expect.
 
-def do_a_thousand(startline, metadata):
+def do_a_thousand(thetuple):
+
+	startdate, metadata = thetuple
 
 	notdone = 0
 	errors = 0
