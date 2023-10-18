@@ -33,7 +33,7 @@ print('NLTK downloaded.')
 
 metadata = pd.read_csv('TitleSearchedLitMeta.tsv', sep = '\t')
 
-def turn_undivided_text_into_sentences(document_string):
+def turn_undivided_text_into_sentences(document_pages):
 	'''
 	This function accepts a document as a single string and turns it into sentences.
 
@@ -43,6 +43,8 @@ def turn_undivided_text_into_sentences(document_string):
 
 	But for the academic journal articles this is easier. Each is a single string.
 	'''
+
+	document_string = ' '.join(document_pages)
 	
 	sentences = list(sent_tokenize(document_string))
 
@@ -190,14 +192,13 @@ with open('../LitStudiesJSTOR.jsonl', encoding = 'utf-8') as f:
 			print(proceedflag)
 
 		if proceedflag == 1:
-			article_text = json_obj['fullText'][0]
+			article_text = json_obj['fullText']
 			chunk_list, embeddings = embeddings_for_an_article(article_text)
 		else:
 			notdone += 1
 			continue
 
-		print(len(article_text), articleID, len(chunk_list))
-		print(article_text)
+		print(jsonobj['wordCount'], articleID, len(chunk_list))
 
 		with open('embeddings.tsv', mode = 'a', encoding = 'utf-8') as f2:
 			for i, e in enumerate(embeddings):
