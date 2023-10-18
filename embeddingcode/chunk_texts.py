@@ -170,6 +170,7 @@ with open('../LitStudiesJSTOR.jsonl', encoding = 'utf-8') as f:
 		if 'identifier' in json_obj:
 			for idtype in json_obj['identifier']:
 				if idtype['name'] != 'local_doi':
+					print(idtype['value'])
 					alternateID = idtype['value'].split('/')[1]
 					if articleID != alternateID:
 						print('Discrepancy in IDs: url id', articleID, 'doi', alternateID)
