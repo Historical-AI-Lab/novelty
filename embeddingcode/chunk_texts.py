@@ -171,7 +171,7 @@ with open('../LitStudiesJSTOR.jsonl', encoding = 'utf-8') as f:
 			for idtype in json_obj['identifier']:
 				if idtype['name'] == 'local_doi':
 					fullID = idtype['value']
-					fileID = 'J' + fullid.split('/')[1]
+					fileID = 'J' + fullID.split('/')[1]
 					if articleID != fullID:
 						print('Discrepancy in IDs: url id', articleID, 'doi', fullID)
 					else:
