@@ -144,7 +144,6 @@ def embeddings_for_an_article(articlestring):
 	# Explicitly delete tensors to free memory
 	del sentences
 	del embedding_df
-	del chunk_list
 	del batch_dict
 	del outputs
 	del raw_embeddings
