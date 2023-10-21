@@ -135,15 +135,32 @@ def embeddings_for_an_article(articlestring):
 	embedding_df = turn_sentences_to_embedding_df(sentences)
 	chunk_list = turn_embedding_df_to_chunks(embedding_df)
 
-	batch_dict = tokenizer(chunk_list, max_length=512, padding=True, truncation=True, return_tensors='pt')
-	batch_dict = {k: v.to(device) for k, v in batch_dict.items()}
-	outputs = model(**batch_dict)
-	raw_embeddings = average_pool(outputs.last_hidden_state, batch_dict['attention_mask'])
-	embeddings = F.normalize(raw_embeddings, p=2, dim=1)
-
-	# Explicitly delete tensors to free memory
 	del sentences
 	del embedding_df
+
+	# Create list-of-lists for batches
+	chunk_size = 20
+	num_batches = math.ceil(len(chunk_list) / chunk_size)
+	batched_chunk_lists = [chunk_list[i * chunk_size: (i + 1) * chunk_size] for i in range(num_batches)]
+
+	# Initialize master list for all embeddings
+	master_embeddings = []
+
+	# Loop through each batch of chunk_list
+	for batch in batched_chunk_lists:
+		# Tokenize and move to device
+		batch_dict = tokenizer(batch, max_length=512, padding=True, truncation=True, return_tensors='pt')
+		batch_dict = {k: v.to(device) for k, v in batch_dict.items()}
+
+		# Generate embeddings
+		outputs = model(**batch_dict)
+		raw_embeddings = average_pool(outputs.last_hidden_state, batch_dict['attention_mask'])
+		embeddings = F.normalize(raw_embeddings, p=2, dim=1)
+		
+		# Append to master list
+		master_embeddings.append(embeddings)
+
+	# Explicitly delete tensors to free memory
 	del batch_dict
 	del outputs
 	del raw_embeddings
@@ -151,7 +168,7 @@ def embeddings_for_an_article(articlestring):
 	# Clear GPU cache
 	torch.cuda.empty_cache()
 
-	return chunk_list, embeddings
+	return chunk_list, master_embeddings
 
 # USAGE
 
