@@ -141,6 +141,17 @@ def embeddings_for_an_article(articlestring):
 	raw_embeddings = average_pool(outputs.last_hidden_state, batch_dict['attention_mask'])
 	embeddings = F.normalize(raw_embeddings, p=2, dim=1)
 
+	# Explicitly delete tensors to free memory
+	del sentences
+	del embedding_df
+	del chunk_list
+	del batch_dict
+	del outputs
+	del raw_embeddings
+
+	# Clear GPU cache
+	torch.cuda.empty_cache()
+
 	return chunk_list, embeddings
 
 # USAGE
