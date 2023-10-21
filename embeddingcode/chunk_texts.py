@@ -168,6 +168,8 @@ def embeddings_for_an_article(articlestring):
 	# Clear GPU cache
 	torch.cuda.empty_cache()
 
+	master_embeddings = torch.cat(master_embeddings, dim=0)
+
 	assert len(chunk_list) == len(master_embeddings)
 
 	return chunk_list, master_embeddings
