@@ -139,7 +139,7 @@ def embeddings_for_an_article(articlestring):
 	del embedding_df
 
 	# Create list-of-lists for batches
-	chunk_size = 5
+	chunk_size = 20
 	num_batches = math.ceil(len(chunk_list) / chunk_size)
 	batched_chunk_lists = [chunk_list[i * chunk_size: (i + 1) * chunk_size] for i in range(num_batches)]
 
@@ -167,6 +167,8 @@ def embeddings_for_an_article(articlestring):
 
 	# Clear GPU cache
 	torch.cuda.empty_cache()
+
+	assert len(chunk_list) == len(master_embeddings)
 
 	return chunk_list, master_embeddings
 
