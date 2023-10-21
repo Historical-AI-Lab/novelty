@@ -4,7 +4,7 @@ import torch
 from transformers import AutoTokenizer, AutoModel
 from scipy.spatial.distance import cosine
 import pandas as pd
-import sys, json
+import sys, json, math
 
 from memory_profiler import profile
 
