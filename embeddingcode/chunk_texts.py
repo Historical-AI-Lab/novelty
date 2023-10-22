@@ -20,7 +20,7 @@ print(f'Using {device}')
 
 tokenizer = AutoTokenizer.from_pretrained("thenlper/gte-base")
 model = AutoModel.from_pretrained("thenlper/gte-base")
-
+model.eval()
 model.to(device)
 
 print('Tokenizer and model built.')
@@ -253,5 +253,4 @@ with open('../LitStudiesJSTOR.jsonl', encoding = 'utf-8') as f:
 					print(outline)
 			outlines = []
 
-
-
+print('Done. Execution complete.')
