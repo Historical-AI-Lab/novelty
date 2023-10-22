@@ -33,7 +33,8 @@ from nltk.tokenize import sent_tokenize
 
 print('NLTK downloaded.')
 
-metadata = pd.read_csv('TitleSearchedLitMeta.tsv', sep = '\t')
+metadata = pd.read_csv('../metadata/litstudies/LitMetadataWithS2.tsv', sep = '\t')
+metadata = metadata.set_index('doi')
 
 def turn_undivided_text_into_sentences(document_pages):
 	'''
@@ -213,18 +214,15 @@ with open('../LitStudiesJSTOR.jsonl', encoding = 'utf-8') as f:
 			ctr += 1
 			continue
 
-		articleID = json_obj['id'].replace('http://www.jstor.org/stable/', '')
-		if '/' in articleID:
-			articleID = articleID.split('/')[1]
 		foundmatch = False
+
 		if 'identifier' in json_obj:
 			for idtype in json_obj['identifier']:
 				if idtype['name'] == 'local_doi':
-					fullID = idtype['value']
-					fileID = fullID.split('/')[1]
-					if articleID != fileID:
-						outlines.append('Discrepancy in IDs: url id: ' + str(articleID) + ' but doi: ' + str(fileID))
-					else:
+					doi = idtype['value']
+					if doi in metadata.index:
+						proceedflag = metadata.at[doi, 'make_embeddings']
+						paperId = metadata.at[doi, 'paperId']
 						foundmatch = True
 
 		if not foundmatch:
@@ -232,31 +230,25 @@ with open('../LitStudiesJSTOR.jsonl', encoding = 'utf-8') as f:
 			outlines.append('error')
 			continue
 
-		else:
-			row = metadata.loc[metadata.doi == fullID, : ]
-			proceedflag = row['make_embeddings'].values[0]
-			# print(proceedflag)
-
-		if proceedflag == 1:
+		if proceedflag == 1 and not pd.isna(paperId)
 			article_text = json_obj['fullText']
 			chunk_list, embeddings = embeddings_for_an_article(article_text)
 		else:
 			notdone += 1
 			continue
 
-		outlines.append(str(json_obj['wordCount']) + ' | ' + str(articleID) + ' | ' + str(len(chunk_list)))
+		outlines.append(str(json_obj['wordCount']) + ' | ' + str(paperId) + ' | ' + str(len(chunk_list)))
 
 		with open('embeddings' + str(startline) + '.tsv', mode = 'a', encoding = 'utf-8') as f2:
 			for i, e in enumerate(embeddings):
-				f2.write(fullID + '-' + str(i) + '\t' + '\t'.join([str(x) for x in e.tolist()]) + '\n')
+				f2.write(paperId + '-' + str(i) + '\t' + '\t'.join([str(x) for x in e.tolist()]) + '\n')
 	
-		with open('chunks/J' + fileID + '.txt', mode = 'w', encoding = 'utf-8') as f3:
+		with open('chunks/' + paperId + '.txt', mode = 'w', encoding = 'utf-8') as f3:
 			for i, c in enumerate(chunk_list):
 				f3.write(str(i) + '\t' + c + '\n')
 
 		if len(outlines) > 0:
-			with open('log_' + str(startline) + '.txt', mode = 'a', encoding = 'utf-8') as f4:
-				for outline in outlines:
+			for outline in outlines:
 					print(outline)
 			outlines = []
 
