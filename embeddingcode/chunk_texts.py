@@ -125,7 +125,7 @@ def turn_embedding_df_to_chunks(embedding_df):
 
 	return chunk_list
 
-@profile
+# @profile
 def embeddings_for_an_article(articlestring):
 	'''
 	This runs the whole process from input string to embeddings.
