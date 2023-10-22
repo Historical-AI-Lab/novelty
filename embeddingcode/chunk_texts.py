@@ -140,7 +140,7 @@ def embeddings_for_an_article(articlestring):
 	del embedding_df
 
 	# Create list-of-lists for batches
-	chunk_size = 20
+	chunk_size = 8
 	num_batches = math.ceil(len(chunk_list) / chunk_size)
 	batched_chunk_lists = [chunk_list[i * chunk_size: (i + 1) * chunk_size] for i in range(num_batches)]
 
@@ -161,13 +161,13 @@ def embeddings_for_an_article(articlestring):
 		# Append to master list
 		master_embeddings.append(embeddings)
 
-	# Explicitly delete tensors to free memory
-	del batch_dict
-	del outputs
-	del raw_embeddings
+		# Explicitly delete tensors to free memory
+		del batch_dict
+		del outputs
+		del raw_embeddings
 
-	# Clear GPU cache
-	torch.cuda.empty_cache()
+		# Clear GPU cache
+		torch.cuda.empty_cache()
 
 	master_embeddings = torch.cat(master_embeddings, dim=0)
 
