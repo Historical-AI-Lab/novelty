@@ -230,7 +230,7 @@ with open('../LitStudiesJSTOR.jsonl', encoding = 'utf-8') as f:
 			outlines.append('error')
 			continue
 
-		if proceedflag == 1 and not pd.isna(paperId)
+		if proceedflag == 1 and not pd.isna(paperId):
 			article_text = json_obj['fullText']
 			chunk_list, embeddings = embeddings_for_an_article(article_text)
 		else:
