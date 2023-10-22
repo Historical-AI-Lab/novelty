@@ -148,7 +148,7 @@ def embeddings_for_an_article(articlestring):
 	master_embeddings = []
 
 	# Loop through each batch of chunk_list
-	with torch.no.grad():   # save memory
+	with torch.no_grad():   # save memory
 		for batch in batched_chunk_lists:
 			# Tokenize and move to device
 			batch_dict = tokenizer(batch, max_length=512, padding=True, truncation=True, return_tensors='pt')
