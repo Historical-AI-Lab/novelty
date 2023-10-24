@@ -6,8 +6,6 @@ from scipy.spatial.distance import cosine
 import pandas as pd
 import sys, json, math
 
-# from memory_profiler import profile
-
 print('First imports complete.')
 
 def average_pool(last_hidden_states: Tensor,
@@ -125,7 +123,6 @@ def turn_embedding_df_to_chunks(embedding_df):
 
 	return chunk_list
 
-# @profile
 def embeddings_for_an_article(articlestring):
 	'''
 	This runs the whole process from input string to embeddings.
