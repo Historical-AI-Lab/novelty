@@ -197,15 +197,17 @@ startline = int(sys.argv[1])
 
 outlines = []
 
+increment = 5000
+
 with open('../LitStudiesJSTOR.jsonl', encoding = 'utf-8') as f:
 
 	for line in f:
-		if ctr >= startline + 1000:
+		if ctr >= startline + increment:
 			break
 		elif ctr >= startline:
 			json_obj = json.loads(line)
 			ctr += 1
-			if ctr + 10 >= startline + 1000:
+			if ctr + 10 >= startline + increment:
 				outstring = 'Errors: ' + str(errors) + '  Notdone: ' + str(notdone)
 				outlines.append(outstring)
 		else:
