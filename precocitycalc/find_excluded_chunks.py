@@ -34,11 +34,13 @@ def get_exclusions_for_all_files(metadata_df, folder_path):
 
 			cited3grams = make_3grams(chunks_as_stripped_lists)  # This is just a set of 3grams (which are represented as tuples)
 
-			exclusions = get_exclusions(S2_Id, pub_year, authors, cited3grams, metadata_df, folder_path):
+			articles_that_cite_it = get_citing_Ids(for_this_article)  # a list of S2 Ids that cite the article in question
+
+			exclusions = get_exclusions(S2_Id, pub_year, authors, cited3grams, articles_that_cite_it, metadata_df, folder_path):
 
 			all_exclusions.append(exclusions)
 
-def get_exclusions(S2_Id, pub_year, cited_authors, cited3grams, metadata_df, folder_path):
+def get_exclusions(S2_Id, pub_year, cited_authors, cited3grams, articles_that_cite_it, metadata_df, folder_path):
 
 	forward_window = metadata_df.loc[year is in the next 20 years, and has S2_Id]
 
@@ -46,9 +48,22 @@ def get_exclusions(S2_Id, pub_year, cited_authors, cited3grams, metadata_df, fol
 
 	for row in forward_window:
 
+		S2_Id = row.S2_Id
+
+		# Articles that don't cite the cited_article are definitionally fine. We don't check them.
+		# No exclusions get added for such an article, and we proceed to the next one in the
+		# forward_window.
+
+		if S2_Id not in articles_that_cite_it:
+			continue
+
 		citing_chunks = get_chunks(S2_Id)
 
-		if any of row.authors are in authors: # We're not going to compare any articles that share authorship
+		# We're not going to compare any articles that share authorship. All chunks in such an article
+		# are definitionally forbidden and all get added to the list of exclusions for this
+		# cited_article.
+
+		if any of row.authors are in authors: 
 			for chunk in citing_chunks:
 				exclusions.append(this_chunk_ID)
 
