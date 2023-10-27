@@ -4,7 +4,7 @@ import torch
 from transformers import AutoTokenizer, AutoModel
 from scipy.spatial.distance import cosine
 import pandas as pd
-import json
+import sys, json, math
 
 print('First imports complete.')
 
@@ -18,7 +18,7 @@ print(f'Using {device}')
 
 tokenizer = AutoTokenizer.from_pretrained("thenlper/gte-base")
 model = AutoModel.from_pretrained("thenlper/gte-base")
-
+model.eval()
 model.to(device)
 
 print('Tokenizer and model built.')
@@ -31,9 +31,10 @@ from nltk.tokenize import sent_tokenize
 
 print('NLTK downloaded.')
 
-metadata = pd.read_csv('TitleSearchedLitMeta.tsv', sep = '\t')
+metadata = pd.read_csv('../metadata/litstudies/LitMetadataWithS2.tsv', sep = '\t')
+metadata = metadata.set_index('doi')
 
-def turn_undivided_text_into_sentences(document_string):
+def turn_undivided_text_into_sentences(document_pages):
 	'''
 	This function accepts a document as a single string and turns it into sentences.
 
@@ -43,6 +44,8 @@ def turn_undivided_text_into_sentences(document_string):
 
 	But for the academic journal articles this is easier. Each is a single string.
 	'''
+
+	document_string = ' '.join(document_pages)
 	
 	sentences = list(sent_tokenize(document_string))
 
@@ -130,13 +133,45 @@ def embeddings_for_an_article(articlestring):
 	embedding_df = turn_sentences_to_embedding_df(sentences)
 	chunk_list = turn_embedding_df_to_chunks(embedding_df)
 
-	batch_dict = tokenizer(chunk_list, max_length=512, padding=True, truncation=True, return_tensors='pt')
-	batch_dict = {k: v.to(device) for k, v in batch_dict.items()}
-	outputs = model(**batch_dict)
-	raw_embeddings = average_pool(outputs.last_hidden_state, batch_dict['attention_mask'])
-	embeddings = F.normalize(raw_embeddings, p=2, dim=1)
+	del sentences
+	del embedding_df
 
-	return chunk_list, embeddings
+	# Create list-of-lists for batches
+	chunk_size = 8
+	num_batches = math.ceil(len(chunk_list) / chunk_size)
+	batched_chunk_lists = [chunk_list[i * chunk_size: (i + 1) * chunk_size] for i in range(num_batches)]
+
+	# Initialize master list for all embeddings
+	master_embeddings = []
+
+	# Loop through each batch of chunk_list
+	with torch.no_grad():   # save memory
+		for batch in batched_chunk_lists:
+			# Tokenize and move to device
+			batch_dict = tokenizer(batch, max_length=512, padding=True, truncation=True, return_tensors='pt')
+			batch_dict = {k: v.to(device) for k, v in batch_dict.items()}
+
+			# Generate embeddings
+			outputs = model(**batch_dict)
+			raw_embeddings = average_pool(outputs.last_hidden_state, batch_dict['attention_mask'])
+			embeddings = F.normalize(raw_embeddings, p=2, dim=1)
+			
+			# Append to master list
+			master_embeddings.append(embeddings)
+
+			# Explicitly delete tensors to free memory
+			del batch_dict
+			del outputs
+			del raw_embeddings
+
+			# Clear GPU cache
+			torch.cuda.empty_cache()
+
+		master_embeddings = torch.cat(master_embeddings, dim=0)
+
+	assert len(chunk_list) == len(master_embeddings)
+
+	return chunk_list, master_embeddings
 
 # USAGE
 
@@ -154,45 +189,67 @@ def embeddings_for_an_article(articlestring):
 # We don't write all the chunks, but do for every hundredth file so
 # we can inspect them and make sure everything is working as we expect.
 
-ctr = 0
+notdone = 0
 errors = 0
+ctr = 0
+
+startline = int(sys.argv[1])
+
+outlines = []
+
+increment = 5000
 
 with open('../LitStudiesJSTOR.jsonl', encoding = 'utf-8') as f:
+
 	for line in f:
-		json_obj = json.loads(line)
+		if ctr >= startline + increment:
+			break
+		elif ctr >= startline:
+			json_obj = json.loads(line)
+			ctr += 1
+			if ctr + 10 >= startline + increment:
+				outstring = 'Errors: ' + str(errors) + '  Notdone: ' + str(notdone)
+				outlines.append(outstring)
+		else:
+			ctr += 1
+			continue
 
-		article_text = json_obj['fullText'][0]
-		chunk_list, embeddings = embeddings_for_an_article(article_text)
-
-		articleID = json_obj['id'].replace('http://www.jstor.org/stable/', '')
 		foundmatch = False
+
 		if 'identifier' in json_obj:
 			for idtype in json_obj['identifier']:
-				if idtype['name'] != 'local_doi':
-					alternateID = idtype['value'].split('/')[1]
-					if articleID != alternateID:
-						print('Discrepancy in IDs: url id', articleID, 'doi', alternateID)
-					else:
+				if idtype['name'] == 'local_doi':
+					doi = idtype['value']
+					if doi in metadata.index:
+						proceedflag = metadata.at[doi, 'make_embeddings']
+						paperId = metadata.at[doi, 'paperId']
 						foundmatch = True
 
 		if not foundmatch:
 			errors += 1
+			outlines.append('error')
+			continue
 
-		articleID = json_obj['id'].replace('http://www.jstor.org/stable/', 'J')
-		print(articleID, len(chunk_list))
+		if proceedflag == 1 and not pd.isna(paperId):
+			article_text = json_obj['fullText']
+			chunk_list, embeddings = embeddings_for_an_article(article_text)
+		else:
+			notdone += 1
+			continue
 
-		with open('embeddings.tsv', mode = 'a', encoding = 'utf-8') as f2:
+		outlines.append(str(json_obj['wordCount']) + ' | ' + str(paperId) + ' | ' + str(len(chunk_list)))
+
+		with open('embeddings' + str(startline) + '.tsv', mode = 'a', encoding = 'utf-8') as f2:
 			for i, e in enumerate(embeddings):
-				f2.write(articleID + '-' + str(i) + '\t' + '\t'.join([str(x) for x in e.tolist()]) + '\n')
+				f2.write(paperId + '-' + str(i) + '\t' + '\t'.join([str(x) for x in e.tolist()]) + '\n')
+	
+		with open('chunks/' + paperId + '.txt', mode = 'w', encoding = 'utf-8') as f3:
+			for i, c in enumerate(chunk_list):
+				f3.write(str(i) + '\t' + c + '\n')
 
-		ctr += 1
-		if ctr % 100 == 1:
-			with open('chunks/' + articleID + '.txt', mode = 'w', encoding = 'utf-8') as f3:
-				for i, c in enumerate(chunk_list):
-					f3.write(str(i) + '\t' + c + '\n')
+		if len(outlines) > 0:
+			for outline in outlines:
+					print(outline)
+			outlines = []
 
-
-
-
-
-
+print('Done. Execution complete.')
