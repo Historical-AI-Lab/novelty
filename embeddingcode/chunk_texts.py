@@ -31,7 +31,29 @@ from nltk.tokenize import sent_tokenize
 
 print('NLTK downloaded.')
 
-metadata = pd.read_csv('../metadata/litstudies/LitMetadataWithS2.tsv', sep = '\t')
+# USAGE
+
+# We iterate through all the articles in the JSTOR file, converting each
+# to a list of embeddings and a list of chunks
+
+# We write the embeddings to a single tsv keyed by chunk ID, which
+# is the numeric part of the JSTOR id plus chunk index. I.e., the 
+# embeddings for "http://www.jstor.org/stable/512209" would be recorded as
+#
+# J512209-0
+# J512209-1
+# etc
+#
+# We don't write all the chunks, but do for every hundredth file so
+# we can inspect them and make sure everything is working as we expect.
+
+startline = int(sys.argv[1])
+if len(sys.argv) > 2:
+	metapath = sys.argv[2]
+else:
+	metapath = '../metadata/litstudies/LitMetadataWithS2.tsv'
+
+metadata = pd.read_csv(metapath, sep = '\t')
 metadata = metadata.set_index('doi')
 
 def turn_undivided_text_into_sentences(document_pages):
@@ -173,22 +195,6 @@ def embeddings_for_an_article(articlestring):
 
 	return chunk_list, master_embeddings
 
-# USAGE
-
-# We iterate through all the articles in the JSTOR file, converting each
-# to a list of embeddings and a list of chunks
-
-# We write the embeddings to a single tsv keyed by chunk ID, which
-# is the numeric part of the JSTOR id plus chunk index. I.e., the 
-# embeddings for "http://www.jstor.org/stable/512209" would be recorded as
-#
-# J512209-0
-# J512209-1
-# etc
-#
-# We don't write all the chunks, but do for every hundredth file so
-# we can inspect them and make sure everything is working as we expect.
-
 notdone = 0
 errors = 0
 ctr = 0
@@ -239,7 +245,7 @@ with open('../LitStudiesJSTOR.jsonl', encoding = 'utf-8') as f:
 
 		outlines.append(str(json_obj['wordCount']) + ' | ' + str(paperId) + ' | ' + str(len(chunk_list)))
 
-		with open('embeddings' + str(startline) + '.tsv', mode = 'a', encoding = 'utf-8') as f2:
+		with open('embeddingsTry2' + str(startline) + '.tsv', mode = 'a', encoding = 'utf-8') as f2:
 			for i, e in enumerate(embeddings):
 				f2.write(paperId + '-' + str(i) + '\t' + '\t'.join([str(x) for x in e.tolist()]) + '\n')
 	
