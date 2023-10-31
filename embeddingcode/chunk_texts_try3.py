@@ -235,10 +235,10 @@ with open('tryagaindata.jsonl', encoding = 'utf-8') as f:
 
 		else:
 			article_text = json_obj['fullText']
-			if len(article_text) > 100:
+			if len(article_text) > 0 and len(article_text[0]) > 2:
 				chunk_list, embeddings = embeddings_for_an_article(article_text)
 			else:
-				outlines.append('short text: ' + paperId + " | " + article_text)
+				outlines.append('short text: ' + paperId)
 				continue
 
 		outlines.append(str(json_obj['wordCount']) + ' | ' + str(paperId) + ' | ' + str(len(chunk_list)))
