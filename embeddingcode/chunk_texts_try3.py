@@ -205,6 +205,13 @@ outlines = []
 
 increment = 5000
 
+volswehave = set()
+with open('embeddingsTry2' + str(startline) + '.tsv', mode = 'r', encoding = 'utf-8') as f:
+	for line in f:
+		chunkid = line.split('\t')[0]
+		s2id = chunkid.split('-')[0]
+		volswehave.add(s2id)
+
 with open('tryagaindata.jsonl', encoding = 'utf-8') as f:
 
 	for line in f:
@@ -227,6 +234,9 @@ with open('tryagaindata.jsonl', encoding = 'utf-8') as f:
 				if idtype['name'] == 'paperId':
 					paperId = idtype['value']
 					foundmatch = True
+
+		if paperId in volswehave:
+			continue
 
 		if not foundmatch:
 			errors += 1
