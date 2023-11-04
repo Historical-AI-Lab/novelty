@@ -1,3 +1,7 @@
+# This version of the code is a deprecated fork where I attempted
+# to use multiprocessing. Was not actually used. --Ted
+
+
 import torch.nn.functional as F
 from torch import Tensor
 import torch 

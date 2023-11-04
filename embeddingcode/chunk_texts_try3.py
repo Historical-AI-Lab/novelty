@@ -1,3 +1,7 @@
+# This was the version of chunk_texts we ran on the literary studies
+# articles, but it is now deprecated and replaced by chunk_texts.py -- Ted
+
+
 import torch.nn.functional as F
 from torch import Tensor
 import torch 
