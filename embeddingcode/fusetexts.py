@@ -74,7 +74,7 @@ ctr = 0
 for file in txt_files:
 	# Construct full file path
 	file_path = os.path.join('chunks', file)
-
+	ssid = file.split('.')[0]
 	ctr += 1
 	if ctr % 100 == 1:
 		print(ctr)
@@ -88,10 +88,7 @@ for file in txt_files:
 
 		for line in contents:
 			lineparts = line.split('\t')
-			label = lineparts[0]
-			labelparts = label.split('-')
-			ssid = labelparts[0]
-			chunknum = labelparts[1]
+			chunknum = labelparts[0]
 			text = lineparts[1]
 			if len(lineparts) > 2:
 				print('tab in text')
