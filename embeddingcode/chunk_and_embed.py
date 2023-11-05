@@ -23,9 +23,23 @@ import torch
 from transformers import AutoTokenizer, AutoModel
 from scipy.spatial.distance import cosine
 import pandas as pd
-import sys, json, math
+import sys, json, math, os
 
 print('First imports complete.')
+
+# Now we're going to parse the command-line arguments.
+
+startline = int(sys.argv[1])
+
+jsonlpath = sys.argv[2]
+
+metapath = sys.argv[3]
+
+metadata = pd.read_csv(metapath, sep = '\t')
+metadata = metadata.set_index('doi')         # We're going to index metadata by doi
+											 # It's important that this be the original doi
+											 # provided by JSTOR, because we'll use it to
+											 # align the jsons with our metadata file.
 
 def average_pool(last_hidden_states: Tensor,
                  attention_mask: Tensor) -> Tensor:
@@ -49,29 +63,6 @@ nltk.download('punkt')
 from nltk.tokenize import sent_tokenize
 
 print('NLTK downloaded.')
-
-# We iterate through all the articles in the JSTOR file, converting each
-# to a list of embeddings and a list of chunks
-
-# We write the embeddings to a single tsv keyed by chunk ID, which
-# is the numeric part of the JSTOR id plus chunk index. I.e., the 
-# embeddings for "http://www.jstor.org/stable/512209" would be recorded as
-#
-# J512209-0
-# J512209-1
-# etc
-#
-# We don't write all the chunks, but do for every hundredth file so
-# we can inspect them and make sure everything is working as we expect.
-
-startline = int(sys.argv[1])
-if len(sys.argv) > 2:
-	metapath = sys.argv[2]
-else:
-	metapath = '../metadata/litstudies/LitMetadataWithS2.tsv'
-
-metadata = pd.read_csv(metapath, sep = '\t')
-metadata = metadata.set_index('doi')
 
 def turn_undivided_text_into_sentences(document_pages):
 	'''
@@ -212,24 +203,45 @@ def embeddings_for_an_article(articlestring):
 
 	return chunk_list, master_embeddings
 
+
+# MAIN
+#
+# Execution actually starts here.
+#
+# We iterate through all the articles in the JSTOR file, converting each
+# to a list of embeddings and a list of chunks
+
+# We write the embeddings to a single tsv keyed by chunk ID, which
+# is the numeric part of the JSTOR id plus chunk index. I.e., the 
+# embeddings for "http://www.jstor.org/stable/512209" would be recorded as
+#
+# J512209-0
+# J512209-1
+# etc
+
 notdone = 0
 errors = 0
 ctr = 0
 
-startline = int(sys.argv[1])
-
 outlines = []
 
-increment = 5000
+increment = 3000
 
-volswehave = set()
-with open('embeddingsTry2' + str(startline) + '.tsv', mode = 'r', encoding = 'utf-8') as f:
-	for line in f:
-		chunkid = line.split('\t')[0]
-		s2id = chunkid.split('-')[0]
-		volswehave.add(s2id)
+outpath = 'embeddings_' + str(startline) + '.tsv'
 
-with open('tryagaindata.jsonl', encoding = 'utf-8') as f:
+# If the outfile for these 3000 lines already exists, we read it and
+# make a note of the documents already embedded.
+
+docswehave = set()
+
+if os.path.exists(outpath):
+	with open(outpath, mode = 'r', encoding = 'utf-8') as f:
+		for line in f:
+			chunkid = line.split('\t')[0]
+			s2id = chunkid.split('-')[0]
+			docswehave.add(s2id)
+
+with open(jsonlpath, encoding = 'utf-8') as f:
 
 	for line in f:
 		if ctr >= startline + increment:
@@ -245,21 +257,24 @@ with open('tryagaindata.jsonl', encoding = 'utf-8') as f:
 			continue
 
 		foundmatch = False
+		paperId = 'not a real Id'
 
 		if 'identifier' in json_obj:
 			for idtype in json_obj['identifier']:
-				if idtype['name'] == 'paperId':
-					paperId = idtype['value']
-					foundmatch = True
+				if idtype['name'] == 'local_doi':
+					doi = idtype['value']
+					if doi in metadata.index:
+						proceedflag = metadata.at[doi, 'make_embeddings']
+						paperId = metadata.at[doi, 'paperId']
+						foundmatch = True
 
-		if paperId in volswehave:
+		if paperId in docswehave:
 			continue
 
 		if not foundmatch:
 			errors += 1
 			outlines.append('error')
 			continue
-
 		else:
 			article_text = json_obj['fullText']
 			if len(article_text) > 0 and len(article_text[0]) > 2:
@@ -270,7 +285,7 @@ with open('tryagaindata.jsonl', encoding = 'utf-8') as f:
 
 		outlines.append(str(json_obj['wordCount']) + ' | ' + str(paperId) + ' | ' + str(len(chunk_list)))
 
-		with open('embeddingsTry2' + str(startline) + '.tsv', mode = 'a', encoding = 'utf-8') as f2:
+		with open(outpath, mode = 'a', encoding = 'utf-8') as f2:
 			for i, e in enumerate(embeddings):
 				f2.write(paperId + '-' + str(i) + '\t' + '\t'.join([str(x) for x in e.tolist()]) + '\n')
 	
