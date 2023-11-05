@@ -102,7 +102,7 @@ for file in txt_files:
 				outtext = ' '.join([x for x in words if x in lexicon])
 				chunkID = ssid + '-' + '.'.join(labels)
 				outline = chunkID + '\t' + 'l1' + '\t' + outtext + '\n'
-				f.write(outline)
+				f2.write(outline)
 				sizedist.append(len(outtext))
 
 sizedist = np.array(sizedist)
