@@ -68,6 +68,7 @@ with open('lexicon.txt', encoding = 'utf-8') as f:
 txt_files = [f for f in os.listdir('chunks') if f.endswith('.txt')]
 
 sizedist = []
+ctr = 0
 
 # Iterate through the listed .txt files
 for file in txt_files:
@@ -75,6 +76,8 @@ for file in txt_files:
     file_path = os.path.join('chunks', file)
 
     ctr += 1
+    if ctr % 100 == 1:
+        print(ctr)
     
     # Process each file
     with open(file_path, 'r') as f:
