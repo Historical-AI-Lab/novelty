@@ -88,7 +88,7 @@ for file in txt_files:
 
 		for line in contents:
 			lineparts = line.split('\t')
-			chunknum = labelparts[0]
+			chunknum = lineparts[0]
 			text = lineparts[1]
 			if len(lineparts) > 2:
 				print('tab in text')
