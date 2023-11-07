@@ -10,3 +10,11 @@ A lot of our current work is under here.
 
 ```/semantic_scholar``` contains scripts for aligning JSTOR metadata with semantic scholar metadata about citations.
 
+## embeddingcode
+
+This contains scripts for running GTE embeddings. Right now they are only adapted to run on data from JSTOR; getting them adapted for fiction is a next step.
+
+## precocitycalc
+
+This contains code for doing forward-and-back calculations. It will apply to both the embedding and the topic model representations of the corpus. Code for text reuse calculation is also placed here, since excluding chunks that quote/paraphrase other documents is part of this workflow.
+

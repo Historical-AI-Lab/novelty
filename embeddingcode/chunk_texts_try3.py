@@ -1,5 +1,5 @@
-# This version of the code is a deprecated fork where I attempted
-# to use multiprocessing. Was not actually used. --Ted
+# This was the version of chunk_texts we ran on the literary studies
+# articles, but it is now deprecated and replaced by chunk_texts.py -- Ted
 
 
 import torch.nn.functional as F
@@ -8,8 +8,7 @@ import torch
 from transformers import AutoTokenizer, AutoModel
 from scipy.spatial.distance import cosine
 import pandas as pd
-import json
-from multiprocessing import Pool 
+import sys, json, math
 
 print('First imports complete.')
 
@@ -23,7 +22,7 @@ print(f'Using {device}')
 
 tokenizer = AutoTokenizer.from_pretrained("thenlper/gte-base")
 model = AutoModel.from_pretrained("thenlper/gte-base")
-
+model.eval()
 model.to(device)
 
 print('Tokenizer and model built.')
@@ -36,7 +35,30 @@ from nltk.tokenize import sent_tokenize
 
 print('NLTK downloaded.')
 
-metadata = pd.read_csv('TitleSearchedLitMeta.tsv', sep = '\t')
+# USAGE
+
+# We iterate through all the articles in the JSTOR file, converting each
+# to a list of embeddings and a list of chunks
+
+# We write the embeddings to a single tsv keyed by chunk ID, which
+# is the numeric part of the JSTOR id plus chunk index. I.e., the 
+# embeddings for "http://www.jstor.org/stable/512209" would be recorded as
+#
+# J512209-0
+# J512209-1
+# etc
+#
+# We don't write all the chunks, but do for every hundredth file so
+# we can inspect them and make sure everything is working as we expect.
+
+startline = int(sys.argv[1])
+if len(sys.argv) > 2:
+	metapath = sys.argv[2]
+else:
+	metapath = '../metadata/litstudies/LitMetadataWithS2.tsv'
+
+metadata = pd.read_csv(metapath, sep = '\t')
+metadata = metadata.set_index('doi')
 
 def turn_undivided_text_into_sentences(document_pages):
 	'''
@@ -137,107 +159,119 @@ def embeddings_for_an_article(articlestring):
 	embedding_df = turn_sentences_to_embedding_df(sentences)
 	chunk_list = turn_embedding_df_to_chunks(embedding_df)
 
-	batch_dict = tokenizer(chunk_list, max_length=512, padding=True, truncation=True, return_tensors='pt')
-	batch_dict = {k: v.to(device) for k, v in batch_dict.items()}
-	outputs = model(**batch_dict)
-	raw_embeddings = average_pool(outputs.last_hidden_state, batch_dict['attention_mask'])
-	embeddings = F.normalize(raw_embeddings, p=2, dim=1)
+	del sentences
+	del embedding_df
 
-	return chunk_list, embeddings
+	# Create list-of-lists for batches
+	chunk_size = 8
+	num_batches = math.ceil(len(chunk_list) / chunk_size)
+	batched_chunk_lists = [chunk_list[i * chunk_size: (i + 1) * chunk_size] for i in range(num_batches)]
 
-# USAGE
+	# Initialize master list for all embeddings
+	master_embeddings = []
 
-# We iterate through all the articles in the JSTOR file, converting each
-# to a list of embeddings and a list of chunks
+	# Loop through each batch of chunk_list
+	with torch.no_grad():   # save memory
+		for batch in batched_chunk_lists:
+			# Tokenize and move to device
+			batch_dict = tokenizer(batch, max_length=512, padding=True, truncation=True, return_tensors='pt')
+			batch_dict = {k: v.to(device) for k, v in batch_dict.items()}
 
-# We write the embeddings to a single tsv keyed by chunk ID, which
-# is the numeric part of the JSTOR id plus chunk index. I.e., the 
-# embeddings for "http://www.jstor.org/stable/512209" would be recorded as
-#
-# J512209-0
-# J512209-1
-# etc
-#
-# We don't write all the chunks, but do for every hundredth file so
-# we can inspect them and make sure everything is working as we expect.
+			# Generate embeddings
+			outputs = model(**batch_dict)
+			raw_embeddings = average_pool(outputs.last_hidden_state, batch_dict['attention_mask'])
+			embeddings = F.normalize(raw_embeddings, p=2, dim=1)
+			
+			# Append to master list
+			master_embeddings.append(embeddings)
 
-def do_a_thousand(startline):
+			# Explicitly delete tensors to free memory
+			del batch_dict
+			del outputs
+			del raw_embeddings
 
-	global metadata
+			# Clear GPU cache
+			torch.cuda.empty_cache()
 
-	notdone = 0
-	errors = 0
-	ctr = 0
+		master_embeddings = torch.cat(master_embeddings, dim=0)
 
-	with open('../LitStudiesJSTOR.jsonl', encoding = 'utf-8') as f:
+	assert len(chunk_list) == len(master_embeddings)
 
-		for line in f:
-			if ctr >= startline + 1000:
-				break
-			elif ctr >= startline:
-				json_obj = json.loads(line)
-				ctr += 1
-				if ctr % 10 == 1:
-					with open('log' + str(startline + 1000) + '.txt', mode = 'a', encoding = 'utf-8') as f4:
-						f4.write(str(ctr) + ' - ' + str(json_obj['wordCount']) + '\n')
-			else:
-				ctr += 1
-				continue
+	return chunk_list, master_embeddings
 
-			articleID = json_obj['id'].replace('http://www.jstor.org/stable/', '')
-			if '/' in articleID:
-				articleID = articleID.split('/')[1]
-			foundmatch = False
-			if 'identifier' in json_obj:
-				for idtype in json_obj['identifier']:
-					if idtype['name'] == 'local_doi':
-						fullID = idtype['value']
-						fileID = fullID.split('/')[1]
-						if articleID != fileID:
-							print('Discrepancy in IDs: url id', articleID, 'doi', fileID)
-						else:
-							foundmatch = True
+notdone = 0
+errors = 0
+ctr = 0
 
-			if not foundmatch:
-				errors += 1
-				print('error')
-				continue
+startline = int(sys.argv[1])
 
-			else:
-				row = metadata.loc[metadata.doi == fullID, : ]
-				proceedflag = row['make_embeddings'].values[0]
-				# print(proceedflag)
+outlines = []
 
-			if proceedflag == 1:
-				article_text = json_obj['fullText']
+increment = 5000
+
+volswehave = set()
+with open('embeddingsTry2' + str(startline) + '.tsv', mode = 'r', encoding = 'utf-8') as f:
+	for line in f:
+		chunkid = line.split('\t')[0]
+		s2id = chunkid.split('-')[0]
+		volswehave.add(s2id)
+
+with open('tryagaindata.jsonl', encoding = 'utf-8') as f:
+
+	for line in f:
+		if ctr >= startline + increment:
+			break
+		elif ctr >= startline:
+			json_obj = json.loads(line)
+			ctr += 1
+			if ctr + 10 >= startline + increment:
+				outstring = 'Errors: ' + str(errors) + '  Notdone: ' + str(notdone)
+				outlines.append(outstring)
+		else:
+			ctr += 1
+			continue
+
+		foundmatch = False
+
+		if 'identifier' in json_obj:
+			for idtype in json_obj['identifier']:
+				if idtype['name'] == 'paperId':
+					paperId = idtype['value']
+					foundmatch = True
+
+		if paperId in volswehave:
+			continue
+
+		if not foundmatch:
+			errors += 1
+			outlines.append('error')
+			continue
+
+		else:
+			article_text = json_obj['fullText']
+			if len(article_text) > 0 and len(article_text[0]) > 2:
 				chunk_list, embeddings = embeddings_for_an_article(article_text)
 			else:
-				notdone += 1
+				outlines.append('short text: ' + paperId)
 				continue
 
-			# print(json_obj['wordCount'], articleID, len(chunk_list))
+		outlines.append(str(json_obj['wordCount']) + ' | ' + str(paperId) + ' | ' + str(len(chunk_list)))
 
-			with open('embeddings' + str(startline + 1000) + '.tsv', mode = 'a', encoding = 'utf-8') as f2:
-				for i, e in enumerate(embeddings):
-					f2.write(fullID + '-' + str(i) + '\t' + '\t'.join([str(x) for x in e.tolist()]) + '\n')
-		
-			with open('chunks/J' + fileID + '.txt', mode = 'w', encoding = 'utf-8') as f3:
-				for i, c in enumerate(chunk_list):
-					f3.write(str(i) + '\t' + c + '\n')
+		with open('embeddingsTry2' + str(startline) + '.tsv', mode = 'a', encoding = 'utf-8') as f2:
+			for i, e in enumerate(embeddings):
+				f2.write(paperId + '-' + str(i) + '\t' + '\t'.join([str(x) for x in e.tolist()]) + '\n')
+	
+		with open('chunks/' + paperId + '.txt', mode = 'w', encoding = 'utf-8') as f3:
+			for i, c in enumerate(chunk_list):
+				f3.write(str(i) + '\t' + c + '\n')
 
-	print(errors, notdone)
+		if len(outlines) > 0:
+			for outline in outlines:
+				print(outline)
+			outlines = []
 
-
-## Main multiprocssing
-
-pool = Pool(processes = 4)
-quadruple = [1000, 2000, 3000, 4000]
-res = pool.map_async(do_a_thousand, quadruple)
-res.wait()
-resultlist = res.get()
-
-pool.close()
-pool.join()
-
-
-
+if len(outlines) > 0:
+	for outline in outlines:
+		print(outline)
+	outlines = []
+print('Done. Execution complete.')

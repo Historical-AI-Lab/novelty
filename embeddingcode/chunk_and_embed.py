@@ -1,5 +1,20 @@
-# This version of the code is a deprecated fork where I attempted
-# to use multiprocessing. Was not actually used. --Ted
+# This is the version of the embedding script we should run on future
+# JSTOR datasets. It has fixes for the bugs I encountered while running
+# on literary studies.
+
+# USAGE
+
+#      python3 chunk_and_embed.py 3000 jsonl_file metadata_file
+
+# Where the command line arguments are, in order
+#
+# 3000 -- The line to start on in the jsonl_file
+# jsonl_file -- Path to the .jsonl file containing full text from JSTOR
+# metadata_file -- Path to a metadata file that has been enriched by
+#                  our semantic scholar scripts. In particular, it should
+#                  have a doi column (from JSTOR) and a paperId column
+#                  from Semantic Scholar. paperIds will of course only exist
+#                  for articles we could find in Semantic Scholar.
 
 
 import torch.nn.functional as F
@@ -8,10 +23,23 @@ import torch
 from transformers import AutoTokenizer, AutoModel
 from scipy.spatial.distance import cosine
 import pandas as pd
-import json
-from multiprocessing import Pool 
+import sys, json, math, os
 
 print('First imports complete.')
+
+# Now we're going to parse the command-line arguments.
+
+startline = int(sys.argv[1])
+
+jsonlpath = sys.argv[2]
+
+metapath = sys.argv[3]
+
+metadata = pd.read_csv(metapath, sep = '\t')
+metadata = metadata.set_index('doi')         # We're going to index metadata by doi
+											 # It's important that this be the original doi
+											 # provided by JSTOR, because we'll use it to
+											 # align the jsons with our metadata file.
 
 def average_pool(last_hidden_states: Tensor,
                  attention_mask: Tensor) -> Tensor:
@@ -23,7 +51,7 @@ print(f'Using {device}')
 
 tokenizer = AutoTokenizer.from_pretrained("thenlper/gte-base")
 model = AutoModel.from_pretrained("thenlper/gte-base")
-
+model.eval()
 model.to(device)
 
 print('Tokenizer and model built.')
@@ -35,8 +63,6 @@ nltk.download('punkt')
 from nltk.tokenize import sent_tokenize
 
 print('NLTK downloaded.')
-
-metadata = pd.read_csv('TitleSearchedLitMeta.tsv', sep = '\t')
 
 def turn_undivided_text_into_sentences(document_pages):
 	'''
@@ -137,16 +163,51 @@ def embeddings_for_an_article(articlestring):
 	embedding_df = turn_sentences_to_embedding_df(sentences)
 	chunk_list = turn_embedding_df_to_chunks(embedding_df)
 
-	batch_dict = tokenizer(chunk_list, max_length=512, padding=True, truncation=True, return_tensors='pt')
-	batch_dict = {k: v.to(device) for k, v in batch_dict.items()}
-	outputs = model(**batch_dict)
-	raw_embeddings = average_pool(outputs.last_hidden_state, batch_dict['attention_mask'])
-	embeddings = F.normalize(raw_embeddings, p=2, dim=1)
+	del sentences
+	del embedding_df
 
-	return chunk_list, embeddings
+	# Create list-of-lists for batches
+	chunk_size = 8
+	num_batches = math.ceil(len(chunk_list) / chunk_size)
+	batched_chunk_lists = [chunk_list[i * chunk_size: (i + 1) * chunk_size] for i in range(num_batches)]
 
-# USAGE
+	# Initialize master list for all embeddings
+	master_embeddings = []
 
+	# Loop through each batch of chunk_list
+	with torch.no_grad():   # save memory
+		for batch in batched_chunk_lists:
+			# Tokenize and move to device
+			batch_dict = tokenizer(batch, max_length=512, padding=True, truncation=True, return_tensors='pt')
+			batch_dict = {k: v.to(device) for k, v in batch_dict.items()}
+
+			# Generate embeddings
+			outputs = model(**batch_dict)
+			raw_embeddings = average_pool(outputs.last_hidden_state, batch_dict['attention_mask'])
+			embeddings = F.normalize(raw_embeddings, p=2, dim=1)
+			
+			# Append to master list
+			master_embeddings.append(embeddings)
+
+			# Explicitly delete tensors to free memory
+			del batch_dict
+			del outputs
+			del raw_embeddings
+
+			# Clear GPU cache
+			torch.cuda.empty_cache()
+
+		master_embeddings = torch.cat(master_embeddings, dim=0)
+
+	assert len(chunk_list) == len(master_embeddings)
+
+	return chunk_list, master_embeddings
+
+
+# MAIN
+#
+# Execution actually starts here.
+#
 # We iterate through all the articles in the JSTOR file, converting each
 # to a list of embeddings and a list of chunks
 
@@ -157,87 +218,88 @@ def embeddings_for_an_article(articlestring):
 # J512209-0
 # J512209-1
 # etc
-#
-# We don't write all the chunks, but do for every hundredth file so
-# we can inspect them and make sure everything is working as we expect.
 
-def do_a_thousand(startline):
+notdone = 0
+errors = 0
+ctr = 0
 
-	global metadata
+outlines = []
 
-	notdone = 0
-	errors = 0
-	ctr = 0
+increment = 3000
 
-	with open('../LitStudiesJSTOR.jsonl', encoding = 'utf-8') as f:
+outpath = 'embeddings_' + str(startline) + '.tsv'
 
+# If the outfile for these 3000 lines already exists, we read it and
+# make a note of the documents already embedded.
+
+docswehave = set()
+
+if os.path.exists(outpath):
+	with open(outpath, mode = 'r', encoding = 'utf-8') as f:
 		for line in f:
-			if ctr >= startline + 1000:
-				break
-			elif ctr >= startline:
-				json_obj = json.loads(line)
-				ctr += 1
-				if ctr % 10 == 1:
-					with open('log' + str(startline + 1000) + '.txt', mode = 'a', encoding = 'utf-8') as f4:
-						f4.write(str(ctr) + ' - ' + str(json_obj['wordCount']) + '\n')
-			else:
-				ctr += 1
-				continue
+			chunkid = line.split('\t')[0]
+			s2id = chunkid.split('-')[0]
+			docswehave.add(s2id)
 
-			articleID = json_obj['id'].replace('http://www.jstor.org/stable/', '')
-			if '/' in articleID:
-				articleID = articleID.split('/')[1]
-			foundmatch = False
-			if 'identifier' in json_obj:
-				for idtype in json_obj['identifier']:
-					if idtype['name'] == 'local_doi':
-						fullID = idtype['value']
-						fileID = fullID.split('/')[1]
-						if articleID != fileID:
-							print('Discrepancy in IDs: url id', articleID, 'doi', fileID)
-						else:
-							foundmatch = True
+with open(jsonlpath, encoding = 'utf-8') as f:
 
-			if not foundmatch:
-				errors += 1
-				print('error')
-				continue
+	for line in f:
+		if ctr >= startline + increment:
+			break
+		elif ctr >= startline:
+			json_obj = json.loads(line)
+			ctr += 1
+			if ctr + 10 >= startline + increment:
+				outstring = 'Errors: ' + str(errors) + '  Notdone: ' + str(notdone)
+				outlines.append(outstring)
+		else:
+			ctr += 1
+			continue
 
-			else:
-				row = metadata.loc[metadata.doi == fullID, : ]
-				proceedflag = row['make_embeddings'].values[0]
-				# print(proceedflag)
+		foundmatch = False
+		paperId = 'not a real Id'
 
-			if proceedflag == 1:
-				article_text = json_obj['fullText']
+		if 'identifier' in json_obj:
+			for idtype in json_obj['identifier']:
+				if idtype['name'] == 'local_doi':
+					doi = idtype['value']
+					if doi in metadata.index:
+						proceedflag = metadata.at[doi, 'make_embeddings']
+						paperId = metadata.at[doi, 'paperId']
+						foundmatch = True
+
+		if paperId in docswehave:
+			continue
+
+		if not foundmatch:
+			errors += 1
+			outlines.append('error')
+			continue
+		else:
+			article_text = json_obj['fullText']
+			if len(article_text) > 0 and len(article_text[0]) > 2:
 				chunk_list, embeddings = embeddings_for_an_article(article_text)
 			else:
-				notdone += 1
+				outlines.append('short text: ' + paperId)
 				continue
 
-			# print(json_obj['wordCount'], articleID, len(chunk_list))
+		outlines.append(str(json_obj['wordCount']) + ' | ' + str(paperId) + ' | ' + str(len(chunk_list)))
 
-			with open('embeddings' + str(startline + 1000) + '.tsv', mode = 'a', encoding = 'utf-8') as f2:
-				for i, e in enumerate(embeddings):
-					f2.write(fullID + '-' + str(i) + '\t' + '\t'.join([str(x) for x in e.tolist()]) + '\n')
-		
-			with open('chunks/J' + fileID + '.txt', mode = 'w', encoding = 'utf-8') as f3:
-				for i, c in enumerate(chunk_list):
-					f3.write(str(i) + '\t' + c + '\n')
+		with open(outpath, mode = 'a', encoding = 'utf-8') as f2:
+			for i, e in enumerate(embeddings):
+				f2.write(paperId + '-' + str(i) + '\t' + '\t'.join([str(x) for x in e.tolist()]) + '\n')
+	
+		with open('chunks/' + paperId + '.txt', mode = 'w', encoding = 'utf-8') as f3:
+			for i, c in enumerate(chunk_list):
+				f3.write(str(i) + '\t' + c + '\n')
 
-	print(errors, notdone)
+		if len(outlines) > 0:
+			for outline in outlines:
+				print(outline)
+			outlines = []
 
-
-## Main multiprocssing
-
-pool = Pool(processes = 4)
-quadruple = [1000, 2000, 3000, 4000]
-res = pool.map_async(do_a_thousand, quadruple)
-res.wait()
-resultlist = res.get()
-
-pool.close()
-pool.join()
-
-
-
+if len(outlines) > 0:
+	for outline in outlines:
+		print(outline)
+	outlines = []
+print('Done. Execution complete.')

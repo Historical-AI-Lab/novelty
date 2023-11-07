@@ -8,6 +8,28 @@
 # The first argument will be the metadata spreadsheet for e.g. literary studies or ecology
 # articles. The second will be the path to a folder containing the actual chunks.
 
+# Updated Tues Nov 7
+
+import sys
+
+def get_chunks(folder_containing_chunkfiles, S2_Id):
+
+	'''
+	Returns a list of 2-tuples where the first item is chunk_Id (defined as S2_Id + '-' + integer_order)
+	and the second item is the text.
+	'''
+
+	chunklist = []
+	with open(folder_containing_chunkfiles + S2_Id + '.txt', mode = 'r', encoding = 'utf-8') as f:
+		for line in f:
+			parts = line.split('\t')
+			chunk_Id = S2_Id + '-' + parts[0]
+			text = parts[1]
+			chunklist.append((chunk_Id, text))
+
+	return chunklist
+
+
 def get_exclusions_for_all_files(metadata_df, folder_path):
 	'''
 	This will iterate through all the files that have Semantic Scholar IDs in metadata_spreadsheet.
@@ -19,11 +41,11 @@ def get_exclusions_for_all_files(metadata_df, folder_path):
 	'''
 	all_exclusions = []
 
-	for row in metadata_df:
-		if row has S2_Id:
-			pub_year = row.year
+	for idx, row in metadata_df.iterrows():
+		if not pd.isnull(row['paperId']):        # this is checking to see whether we found it in S2
+			pub_year = int(row.year)
 			authors = row.authors
-			S2_Id = row.S2_Id
+			S2_Id = row.paperId
 
 			cited_chunks = get_chunks(S2_Id)
 			chunks_as_stripped_lists, had_quotes = strip_punctuation(chunks)
@@ -40,15 +62,20 @@ def get_exclusions_for_all_files(metadata_df, folder_path):
 
 			all_exclusions.append(exclusions)
 
+	return all_exclusions
+
 def get_exclusions(S2_Id, pub_year, cited_authors, cited3grams, articles_that_cite_it, metadata_df, folder_path):
 
-	forward_window = metadata_df.loc[year is in the next 20 years, and has S2_Id]
+	forward_window = metadata_df.loc[(metadata_df.year > pub_year) & (metadata_df.year <= pub_year + 20) & (~pd.isnull(metadata_df.paperId)), : ]
+
+	# We consider only papers published after the year of the cited-article's publication and within the next twenty years.
 
 	exclusions = []
+	cited_authorset = set(cited_authors)
 
-	for row in forward_window:
+	for idx, row in forward_window.iterrows():
 
-		S2_Id = row.S2_Id
+		S2_Id = row.paperId
 
 		# Articles that don't cite the cited_article are definitionally fine. We don't check them.
 		# No exclusions get added for such an article, and we proceed to the next one in the
@@ -57,15 +84,15 @@ def get_exclusions(S2_Id, pub_year, cited_authors, cited3grams, articles_that_ci
 		if S2_Id not in articles_that_cite_it:
 			continue
 
-		citing_chunks = get_chunks(S2_Id)
+		citing_chunks = get_chunks(S2_Id) # see function above for data structure returned: list of 2-tuples
 
 		# We're not going to compare any articles that share authorship. All chunks in such an article
 		# are definitionally forbidden and all get added to the list of exclusions for this
 		# cited_article.
-
-		if any of row.authors are in authors: 
-			for chunk in citing_chunks:
-				exclusions.append(this_chunk_ID)
+		citing_authorset = set(row.authors)
+		if len(cited_authorset.intersection(citing_authorset)) > 1:  # this is a way of checking "if any are in" 
+			for chunk_Id, chunktext in citing_chunks:
+				exclusions.append(chunk_Id)  
 
 			continue    
 
@@ -80,7 +107,6 @@ def get_exclusions(S2_Id, pub_year, cited_authors, cited3grams, articles_that_ci
 		forbidden_chunks = get_forbidden_combos(cited3grams, citing3grams, had_quotes, cited_authors)
 
 		exclusions.extend(forbidden_chunks)
-
 
 	return exclusions
 
