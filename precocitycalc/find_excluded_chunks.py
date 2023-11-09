@@ -11,6 +11,14 @@
 # Updated Tues Nov 7
 
 import sys
+import pandas as pd
+from ast import literal_eval
+
+def get_metadata(filepath):
+	meta = pd.read_csv(filepath, sep = '\t')
+	meta['authors'] = meta['authors'].apply(literal_eval)
+	
+	return meta
 
 def get_chunks(folder_containing_chunkfiles, S2_Id):
 
@@ -29,6 +37,12 @@ def get_chunks(folder_containing_chunkfiles, S2_Id):
 
 	return chunklist
 
+def lowercase_last_names(author_names):
+    lastnames = []
+    for name in author_names:
+        if name != 'anonymous':
+            lastnames.append(name.split()[-1].lower())
+    return lastnames
 
 def get_exclusions_for_all_files(metadata_df, folder_path):
 	'''
@@ -39,15 +53,15 @@ def get_exclusions_for_all_files(metadata_df, folder_path):
 
 	The code below is kind of pseudocode right now
 	'''
-	all_exclusions = []
+	all_exclusions = dict()
 
 	for idx, row in metadata_df.iterrows():
 		if not pd.isnull(row['paperId']):        # this is checking to see whether we found it in S2
 			pub_year = int(row.year)
 			authors = row.authors
-			S2_Id = row.paperId
+			cited_Id = row.paperId
 
-			cited_chunks = get_chunks(S2_Id)
+			cited_chunks = get_chunks(cited_Id)
 			chunks_as_stripped_lists, had_quotes = strip_punctuation(chunks)
 
 			# We're going to turn each chunk into two things: 1) A list of lowercase words that have punctuation stripped
@@ -58,13 +72,14 @@ def get_exclusions_for_all_files(metadata_df, folder_path):
 
 			articles_that_cite_it = get_citing_Ids(for_this_article)  # a list of S2 Ids that cite the article in question
 
-			exclusions = get_exclusions(S2_Id, pub_year, authors, cited3grams, articles_that_cite_it, metadata_df, folder_path):
+			exclusions = get_exclusions(cited_Id, pub_year, authors, cited3grams, articles_that_cite_it, metadata_df, folder_path):
 
-			all_exclusions.append(exclusions)
+			all_exclusions[cited_Id] = exclusions    # we store exclusions in a dict where key is the cited file Id
+													 # and value is a list of forbidden chunks
 
 	return all_exclusions
 
-def get_exclusions(S2_Id, pub_year, cited_authors, cited3grams, articles_that_cite_it, metadata_df, folder_path):
+def get_exclusions(cited_Id, pub_year, cited_authors, cited3grams, articles_that_cite_it, metadata_df, folder_path):
 
 	forward_window = metadata_df.loc[(metadata_df.year > pub_year) & (metadata_df.year <= pub_year + 20) & (~pd.isnull(metadata_df.paperId)), : ]
 
@@ -135,3 +150,11 @@ def get_forbidden_combos(cited3grams, citing3grams, had_quotes, cited_authors):
 	or at least six words in sequence shared with any chunk in a (and one of those words had quotes attached).
 
 	'''
+
+# MAIN EXECUTION STARTS here
+
+metadata_path = sys.argv[1]
+chunk_folder = sys.argv[2]
+
+metadata = get_metadata(metadata_path)
+
