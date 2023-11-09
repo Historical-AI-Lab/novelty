@@ -3,22 +3,42 @@
 # calculation.
 
 # USAGE:
-# python find_excluded_chunks.py metadata_spreadsheet.tsv folder_containing_chunkfiles
+# python find_excluded_chunks.py metadata_spreadsheet.tsv folder_containing_chunkfiles citation_jsonl_path
 #
 # The first argument will be the metadata spreadsheet for e.g. literary studies or ecology
 # articles. The second will be the path to a folder containing the actual chunks.
 
 # Updated Tues Nov 7
 
-import sys
+import sys, json
 import pandas as pd
 from ast import literal_eval
 
 def get_metadata(filepath):
+	'''
+	Loads the metadata spreadsheet and applies literal_eval to the
+	authors column.
+	'''
 	meta = pd.read_csv(filepath, sep = '\t')
 	meta['authors'] = meta['authors'].apply(literal_eval)
 	
 	return meta
+
+def load_citation_jsons(filepath):
+	'''
+	Gets citations, in the form of a dictionary where keys are cited paperIds
+	and values are a list of citing paperIds.
+	'''
+
+	citations_for = dict()
+	with open(filepath, encoding ='utf-8') as f:
+		for line in f:
+			json_obj = json.loads(line)
+			if 'paperId' in json_obj and 'citations' in json_obj:
+				paperId = json_obj['paperId']
+				citations = json_obj['citations']
+				citations_for[paperId] = citations
+	return citations_for
 
 def get_chunks(folder_containing_chunkfiles, S2_Id):
 
@@ -44,7 +64,7 @@ def lowercase_last_names(author_names):
             lastnames.append(name.split()[-1].lower())
     return lastnames
 
-def get_exclusions_for_all_files(metadata_df, folder_path):
+def get_exclusions_for_all_files(metadata_df, folder_path, citations_for):
 	'''
 	This will iterate through all the files that have Semantic Scholar IDs in metadata_spreadsheet.
 	In each case it will call get_exclusions(), which will return a list of forbidden chunks.
@@ -70,7 +90,7 @@ def get_exclusions_for_all_files(metadata_df, folder_path):
 
 			cited3grams = make_3grams(chunks_as_stripped_lists)  # This is just a set of 3grams (which are represented as tuples)
 
-			articles_that_cite_it = get_citing_Ids(for_this_article)  # a list of S2 Ids that cite the article in question
+			articles_that_cite_it = citations_for[cited_Id]  # a list of S2 Ids that cite the article in question
 
 			exclusions = get_exclusions(cited_Id, pub_year, authors, cited3grams, articles_that_cite_it, metadata_df, folder_path):
 
@@ -155,6 +175,9 @@ def get_forbidden_combos(cited3grams, citing3grams, had_quotes, cited_authors):
 
 metadata_path = sys.argv[1]
 chunk_folder = sys.argv[2]
+citation_jsonl_path = sys.argv[3]
 
 metadata = get_metadata(metadata_path)
+citations_for = load_citation_jsons(citation_jsonl_path)   # a dictionary of citations for each paperId
 
+get_exclusions_for_all_files(metadata, chunk_folder, citations_for)   # does the actual work
