@@ -16,6 +16,7 @@ from ast import literal_eval
 import string
 from nltk import ngrams
 import nltk
+from collections import Counter
 
 def get_metadata(filepath):
 	'''
@@ -147,28 +148,28 @@ def get_exclusions(cited_Id, pub_year, cited_authors, cited3grams, articles_that
 
 		S2_Id = row.paperId
 
-		# Articles that don't cite the cited_article are definitionally fine. We don't check them.
-		# No exclusions get added for such an article, and we proceed to the next one in the
-		# forward_window.
-
-		if S2_Id not in articles_that_cite_it:
-			continue
-
-		citing_chunks = get_chunks(folder_path, S2_Id) # see function above for data structure returned: list of 2-tuples
-
-		if len(citing_chunks) < 1:
-			continue  # There's nothing to exclude if the file is empty or not found
-
 		# We're not going to compare any articles that share authorship. All chunks in such an article
 		# are definitionally forbidden and all get added to the list of exclusions for this
 		# cited_article.
-		citing_authorset = set(row.authors)
+		citing_authorset = set(row.authors)    
 
 		if len(cited_authorset.intersection(citing_authorset)) > 1:  # this is a way of checking "if any are in" 
 			for chunk_Id, chunktext in citing_chunks:
 				exclusions.append(chunk_Id)  
 
-			continue # no need to check text if there are authors in common    
+			continue # no need to check text if there are authors in common
+
+		# Articles that don't share authors AND don't cite the cited_article are definitionally fine. We don't check them.
+		# No exclusions get added for such an article, and we proceed to the next one in the
+		# forward_window.
+
+		if S2_Id not in articles_that_cite_it:
+			continue 
+
+		citing_chunks = get_chunks(folder_path, S2_Id) # see function above for data structure returned: list of 2-tuples
+
+		if len(citing_chunks) < 1:
+			continue  # There's nothing to exclude if the file is empty or not found
 
 		chunks_as_stripped_lists, had_quotes = strip_punctuation_from_chunks(citing_chunks)
 
@@ -296,14 +297,14 @@ def get_forbidden_combos(cited3grams, citing3grams, had_quotes, cited_authors):
 
 	'''
 	forbidden = []
-	for idx, citing_set in enumerate(citing3grams):
+	for idx, citing_set in citing3grams:
 		lowercase_last_names = get_lowercase_last_names(cited_authors)
 		if theres_an_author_match(citing_set, lowercase_last_names):   # you can write a function to check this
 			forbidden.append(idx)
 			continue      # if any author names match any tokens in any of the 3grams, this citing chunk is forbidden
 					# and we can proceed to the next
 					# otherwise, we need to look for quotes
-		for cited_set in cited3grams:
+		for idx2, cited_set in cited3grams:
 			# Then the next thing is, we don't have to compare the 3grams individually.
 			# The point of having a set is you can do this ...
 			overlapping3grams = cited_set.intersection(citing_set)    # .intersection() finds all the matches
@@ -333,7 +334,7 @@ def get_forbidden_combos(cited3grams, citing3grams, had_quotes, cited_authors):
 def count_repeats(all_words_in_overlap):
 	''' 
 	'''
-	word_counts = Counter(words)
+	word_counts = Counter(all_words_in_overlap)
 	count_first_condition = sum(count >= 3 for count in word_counts.values()) >= 2
 	count_second_condition = sum(count >= 2 for count in word_counts.values()) >= 4
 	return count_first_condition and count_second_condition     # nice technique, combining them implicitly with and
