@@ -156,7 +156,7 @@ def get_exclusions(cited_Id, pub_year, cited_authors, cited3grams, articles_that
 		if len(cited_authorset.intersection(citing_authorset)) > 0:  # this is a way of checking "if any are in" 
 			citing_chunks = get_chunks(folder_path, S2_Id) # see function above for data structure returned: list of 2-tuples
 			for chunk_Id, chunktext in citing_chunks:
-				# exclusions.append(chunk_Id)  
+				exclusions.append(chunk_Id)  
 				pass
 			continue # no need to check text if there are authors in common
 		
