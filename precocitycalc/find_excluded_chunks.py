@@ -154,19 +154,24 @@ def get_exclusions(cited_Id, pub_year, cited_authors, cited3grams, articles_that
 		citing_authorset = set(row.authors)    
 
 		if len(cited_authorset.intersection(citing_authorset)) > 1:  # this is a way of checking "if any are in" 
+			citing_chunks = get_chunks(folder_path, S2_Id) # see function above for data structure returned: list of 2-tuples
 			for chunk_Id, chunktext in citing_chunks:
 				exclusions.append(chunk_Id)  
-
 			continue # no need to check text if there are authors in common
+		
+		else:
+			# Articles that don't share authors AND don't cite the cited_article are definitionally fine. We don't check them.
+			# No exclusions get added for such an article, and we proceed to the next one in the
+			# forward_window.
 
-		# Articles that don't share authors AND don't cite the cited_article are definitionally fine. We don't check them.
-		# No exclusions get added for such an article, and we proceed to the next one in the
-		# forward_window.
+			if S2_Id not in articles_that_cite_it:
+				continue
+			else:
+				citing_chunks = get_chunks(folder_path, S2_Id) # see function above for data structure returned: list of 2-tuples
 
-		if S2_Id not in articles_that_cite_it:
-			continue 
-
-		citing_chunks = get_chunks(folder_path, S2_Id) # see function above for data structure returned: list of 2-tuples
+		# Notice that we only read citing_chunks from file if we have to.
+		# It's going to be very common that S2_Id is not in articles-that-cite-it,
+		# and in that case, if there is no author overlap, we can skip the time-consuming file read.
 
 		if len(citing_chunks) < 1:
 			continue  # There's nothing to exclude if the file is empty or not found
