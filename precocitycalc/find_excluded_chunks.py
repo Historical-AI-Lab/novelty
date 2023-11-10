@@ -153,13 +153,11 @@ def get_exclusions(cited_Id, pub_year, cited_authors, cited3grams, articles_that
 		# cited_article.
 		citing_authorset = set(row.authors)    
 
-		if "Fake Authorman" in citing_authorset and "Fake Authorman" in cited_authorset:
-			print("WE LOVE YOU FAKE AUTHORMAN!!!!!!!!!!!!!!!!!!!!!!")
-
 		if len(cited_authorset.intersection(citing_authorset)) > 0:  # this is a way of checking "if any are in" 
 			citing_chunks = get_chunks(folder_path, S2_Id) # see function above for data structure returned: list of 2-tuples
 			for chunk_Id, chunktext in citing_chunks:
-				exclusions.append(chunk_Id)  
+				# exclusions.append(chunk_Id)  
+				pass
 			continue # no need to check text if there are authors in common
 		
 		else:
@@ -188,6 +186,9 @@ def get_exclusions(cited_Id, pub_year, cited_authors, cited3grams, articles_that
 		citing3grams = make_3grams(chunks_as_stripped_lists)  # This is just a list of sets of 3grams (which are represented as tuples)
 
 		forbidden_chunks = get_forbidden_combos(cited3grams, citing3grams, had_quotes, cited_authors)
+
+		if len(forbidden_chunks) > 0:
+			print('We found at least one forbidden chunk.')
 
 		exclusions.extend(forbidden_chunks)
 
@@ -305,10 +306,18 @@ def get_forbidden_combos(cited3grams, citing3grams, had_quotes, cited_authors):
 
 	'''
 	forbidden = []
+	ctr = 0
 	for idx, citing_set in citing3grams:
+
+		quoted_in_this_chunk = had_quotes[ctr]
+		ctr += 1    # This counter is a kludge to keep "had quotes" aligned with
+					# the chunk index. You'd think we would just use idx for that
+					# but that variable has the whole S2_Id part of the chunk Id.
+
 		lowercase_last_names = get_lowercase_last_names(cited_authors)
 		if theres_an_author_match(citing_set, lowercase_last_names):   # you can write a function to check this
 			forbidden.append(idx)
+			print('AN AUTHOR NAME WAS FOUND')
 			continue      # if any author names match any tokens in any of the 3grams, this citing chunk is forbidden
 					# and we can proceed to the next
 					# otherwise, we need to look for quotes
@@ -316,9 +325,10 @@ def get_forbidden_combos(cited3grams, citing3grams, had_quotes, cited_authors):
 			# Then the next thing is, we don't have to compare the 3grams individually.
 			# The point of having a set is you can do this ...
 			overlapping3grams = cited_set.intersection(citing_set)    # .intersection() finds all the matches
-			if len(overlapping3grams) < 4:      # a shared 6-word sequence will create I think four shared 3-grams
+			if len(overlapping3grams) < 4:
+				# print(idx, len(overlapping3grams))      # a shared 6-word sequence will create I think four shared 3-grams
 				continue                        # if we don't have four, there cannot be a shared 6-word sequence
-											# so go to the next cited_set
+												# so go to the next cited_set
 			all_words_in_overlap = flatten_set_of_tuples(overlapping3grams)
 							 # I'll imagine you've written a function that turns
 							 # a set of tuples into a list of all the words in the tuples
@@ -329,7 +339,7 @@ def get_forbidden_combos(cited3grams, citing3grams, had_quotes, cited_authors):
 						# and at least four words appear 2 or more times; this must be true if there's a
 						# shared sequence for reasons explained at the end of this document
 						# The function should return True or False
-			anything_had_quotes = did_any_have_quotes(all_words_in_overlap, had_quotes)  # left as exercise
+			anything_had_quotes = did_any_have_quotes(all_words_in_overlap, quoted_in_this_chunk)  # left as exercise
 			if enough_repeats and anything_had_quotes:
 				forbidden.append(idx)
 				break      # we don't need to compare it to any other chunks of the cited document
