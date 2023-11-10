@@ -153,7 +153,10 @@ def get_exclusions(cited_Id, pub_year, cited_authors, cited3grams, articles_that
 		# cited_article.
 		citing_authorset = set(row.authors)    
 
-		if len(cited_authorset.intersection(citing_authorset)) > 1:  # this is a way of checking "if any are in" 
+		if "Fake Authorman" in citing_authorset and "Fake Authorman" in cited_authorset:
+			print("WE LOVE YOU FAKE AUTHORMAN!!!!!!!!!!!!!!!!!!!!!!")
+
+		if len(cited_authorset.intersection(citing_authorset)) > 0:  # this is a way of checking "if any are in" 
 			citing_chunks = get_chunks(folder_path, S2_Id) # see function above for data structure returned: list of 2-tuples
 			for chunk_Id, chunktext in citing_chunks:
 				exclusions.append(chunk_Id)  
