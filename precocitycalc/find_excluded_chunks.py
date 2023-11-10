@@ -3,16 +3,17 @@
 # calculation.
 
 # USAGE:
-# python find_excluded_chunks.py metadata_spreadsheet.tsv folder_containing_chunkfiles citation_jsonl_path
+# python3 find_excluded_chunks.py metadata_spreadsheet.tsv folder_containing_chunkfiles citation_jsonl_path
 #
 # The first argument will be the metadata spreadsheet for e.g. literary studies or ecology
 # articles. The second will be the path to a folder containing the actual chunks.
 
 # Updated Tues Nov 7
 
-import sys, json
+import sys, json, os
 import pandas as pd
 from ast import literal_eval
+import string
 
 def get_metadata(filepath):
 	'''
@@ -48,6 +49,11 @@ def get_chunks(folder_containing_chunkfiles, S2_Id):
 	'''
 
 	chunklist = []
+	desired_file = folder_containing_chunkfiles + S2_Id + '.txt'
+
+	if not os.path.isfile():
+		return chunklist      # if we can't find the file we return an empty list
+
 	with open(folder_containing_chunkfiles + S2_Id + '.txt', mode = 'r', encoding = 'utf-8') as f:
 		for line in f:
 			parts = line.split('\t')
@@ -58,11 +64,11 @@ def get_chunks(folder_containing_chunkfiles, S2_Id):
 	return chunklist
 
 def lowercase_last_names(author_names):
-    lastnames = []
-    for name in author_names:
-        if name != 'anonymous':
-            lastnames.append(name.split()[-1].lower())
-    return lastnames
+	lastnames = []
+	for name in author_names:
+		if name != 'anonymous':
+			lastnames.append(name.split()[-1].lower())
+	return lastnames
 
 def get_exclusions_for_all_files(metadata_df, folder_path, citations_for):
 	'''
@@ -81,7 +87,13 @@ def get_exclusions_for_all_files(metadata_df, folder_path, citations_for):
 			authors = row.authors
 			cited_Id = row.paperId
 
-			cited_chunks = get_chunks(cited_Id)
+			cited_chunks = get_chunks(folder_path, cited_Id)
+
+			if len(cited_chunks) < 1:
+				continue        # if we can't find the file or it's empty there are no exclusions
+			else:
+				print(cited_Id)    # for debugging purposes
+
 			chunks_as_stripped_lists, had_quotes = strip_punctuation(chunks)
 
 			# We're going to turn each chunk into two things: 1) A list of lowercase words that have punctuation stripped
@@ -92,7 +104,7 @@ def get_exclusions_for_all_files(metadata_df, folder_path, citations_for):
 
 			articles_that_cite_it = citations_for[cited_Id]  # a list of S2 Ids that cite the article in question
 
-			exclusions = get_exclusions(cited_Id, pub_year, authors, cited3grams, articles_that_cite_it, metadata_df, folder_path):
+			exclusions = get_exclusions(cited_Id, pub_year, authors, cited3grams, articles_that_cite_it, metadata_df, folder_path)
 
 			all_exclusions[cited_Id] = exclusions    # we store exclusions in a dict where key is the cited file Id
 													 # and value is a list of forbidden chunks
@@ -146,8 +158,52 @@ def get_exclusions(cited_Id, pub_year, cited_authors, cited3grams, articles_that
 	return exclusions
 
 
-def get_forbidden_combos(cited3grams, citing3grams, had_quotes, cited_authors):
+# def get_forbidden_combos(cited3grams, citing3grams, had_quotes, cited_authors):
 
+	
+def flatten_set_of_tuples(tuples):
+	word_list = []
+	for tup in tuples:
+		word_list.extend(tup)
+	return word_list        # yep I think this works
+
+def theres_an_author_match(citing_set, lowercase_last_names):
+	list_of_words_in_chunk = flatten_set_of_tuples(citing_set)    # you need to put citing_set in the parens like all_words_in_chunk = flatten_set_of_tuples(citing_set)
+	set_of_words_in_chunk = set(list_of_words_in_chunk)
+	set_of_names = set(lowercase_last_names)
+	names_found = set_of_words_in_chunk.intersection(set_of_names)
+
+	if len(names_found) > 0:
+		return True
+	else:
+		return False
+
+def strip_punctuation_from_list(words):
+	# Create a translation table that maps each punctuation character to None
+	translation_table = str.maketrans('', '', string.punctuation)
+	# Use the translation table to strip punctuation from each word in the list
+	stripped_words = [word.translate(translation_table) for word in words]
+	return stripped_words
+
+def find_quoted_words(text):
+	had_quotes = []
+	tokenizedSent = text.split()
+	for word in tokenizedSent:
+		if word.startswith('"') or word.endswith('"'):
+			had_quotes.append(word.strip('"'))
+		elif word.startswith("'") or word.endswith("'"):
+			had_quotes.append(word.strip("'"))
+
+	return strip_punctuation_from_list(had_quotes)
+
+def did_any_have_quotes(all_words_in_overlap, had_quotes):
+	''' Returns a Boolean: True if any of the words in the set of 3 grams had
+	quotes attached.
+	'''
+	quoted_overlap_words = [i for i in all_words_in_overlap if i in had_quotes]
+	return len(quoted_overlap_words) > 0
+
+def get_forbidden_combos(cited3grams, citing3grams, had_quotes, cited_authors):
 	'''
 	This function receives 
 
@@ -155,7 +211,7 @@ def get_forbidden_combos(cited3grams, citing3grams, had_quotes, cited_authors):
 	is represented as a set of 3grams.
 	
 	b) A list, of length N2 where N2 is the number of chunks in the citing file. Each chunk 
-	is representedas a set of 3grams.
+	is represented as a set of 3grams.
 
 	Those 3grams are represented as tuples
 
@@ -170,81 +226,47 @@ def get_forbidden_combos(cited3grams, citing3grams, had_quotes, cited_authors):
 	or at least six words in sequence shared with any chunk in a (and one of those words had quotes attached).
 
 	'''
-def flatten_set_of_tuples(tuples):
-	word_list = []
-    for tup in tuples:
-    	word_list.extend(tup)
-	return word_list        # yep I think this works
-def theres_an_author_match(citing_set, lowercase_last_names):
-  flatten_set_of_tuples()    # you need to put citing_set in the parens like all_words_in_chunk = flatten_set_of_tuples(citing_set)
-  author_match = False          # you could set this initially to False, and set it to True if match is found
-  #check if author name matches any tokens in any of 3 grams
-  for item in list:      # ah — you can simplify the nested loops by just saying if name in all_words_in_chunk: where you currently say if item == name:
-    for name in lowercase_last_names:
-      #if item == 'Anon'
-      if item == name:
-        #author_match.append(item) # just say author_match = True?  we don't care how many matches there are, so break?
-        author_match = True
+	forbidden = []
+	for idx, citing_set in enumerate(citing3grams):
+		if theres_an_author_match(citing_set, lowercase_last_names):   # you can write a function to check this
+			forbidden.append(idx)
+			continue      # if any author names match any tokens in any of the 3grams, this citing chunk is forbidden
+					# and we can proceed to the next
+					# otherwise, we need to look for quotes
+		for cited_set in cited3grams:
+			# Then the next thing is, we don't have to compare the 3grams individually.
+			# The point of having a set is you can do this ...
+			overlapping3grams = cited_set.intersection(citing_set)    # .intersection() finds all the matches
+			if len(overlapping3grams) < 4:      # a shared 6-word sequence will create I think four shared 3-grams
+				continue                        # if we don't have four, there cannot be a shared 6-word sequence
+											# so go to the next cited_set
+			all_words_in_overlap = flatten_set_of_tuples(overlapping3grams)
+							 # I'll imagine you've written a function that turns
+							 # a set of tuples into a list of all the words in the tuples
+							 # e.g [("review", "of", "economic"), ("of", "economic", "studies")]
+							 # ==> ["review", "of", "economic", "of", "economic", "studies"]
+			enough_repeats = count_repeats(all_words_in_overlap)
+						# this is a function that checks to see if at least two words appear 3 or more times
+						# and at least four words appear 2 or more times; this must be true if there's a
+						# shared sequence for reasons explained at the end of this document
+						# The function should return True or False
+			anything_had_quotes = did_any_have_quotes(all_words_in_overlap, had_quotes)  # left as exercise
+			if enough_repeats and anything_had_quotes:
+				forbidden.append(idx)
+				break      # we don't need to compare it to any other chunks of the cited document
+						   # because one match is enough to condemn it
+	return forbidden
 
-    #question -- would it be better to use some sort of similarity score here for last names instead of an exact match?
 
-    # I think exact match is okay since we're only checking last name. Fuzzy match becomes necessary when there are first names OR initials etc etc
-#function to find words with quotation marks (single or double) attached to them. We'll need this to compare later with overlapping words from the 3grams.
-#It's not perfect because it still picks up apostrophes from conjunctions...
-
-def find_quoted_words(text):
-    tokenizedSent = text.split()
-    had_quotes = [i for i in tokenizedSent if "\"" in i]
-    had_quotes += [i for i in tokenizedSent if "\'" in i]
-    had_quotes = [word.strip('\"\'.') for word in had_quotes]
-    return had_quotes
-
-# Example
-example_text = 'We agree with \'everything\' except Hubble\'s claim that "what we don\'t know cannot kill us."'
-find_quoted_words(example_text)
-
-def did_any_have_quotes(all_words_in_overlap, had_quotes):
-    quoted_overlap_words = [i for i in all_words_in_overlap if i in had_quotes]
-    return quoted_overlap_words
-
-def get_forbidden_combos(cited3grams, citing3grams, had_quotes, cited_authors):
-forbidden = []
-for idx, citing_set in enumerate(citing3grams):
-  if theres_an_author_match(citing_set, lowercase_last_names):   # you can write a function to check this
-        forbidden.append(idx)
-        continue      # if any author names match any tokens in any of the 3grams, this citing chunk is forbidden
-                      # and we can proceed to the next
-                      # otherwise, we need to look for quotes
-    for cited_set in cited3grams:
-            # Then the next thing is, we don't have to compare the 3grams individually.
-      # The point of having a set is you can do this ...
-      overlapping3grams = cited_set.intersection(citing_set)    # .intersection() finds all the matches
-            if len(overlapping3grams) < 4:      # a shared 6-word sequence will create I think four shared 3-grams
-          continue                        # if we don't have four, there cannot be a shared 6-word sequence
-                                          # so go to the next cited_set
-      all_words_in_overlap = flatten_set_of_tuples(overlapping3grams)
-                             # I'll imagine you've written a function that turns
-                             # a set of tuples into a list of all the words in the tuples
-                             # e.g [("review", "of", "economic"), ("of", "economic", "studies")]
-                             # ==> ["review", "of", "economic", "of", "economic", "studies"]
-            enough_repeats = count_repeats(all_words_in_overlap)
-                        # this is a function that checks to see if at least two words appear 3 or more times
-                        # and at least four words appear 2 or more times; this must be true if there's a
-                        # shared sequence for reasons explained at the end of this document
-                        # The function should return True or False
-            anything_had_quotes = did_any_have_quotes(all_words_in_overlap, had_quotes)  # left as exercise
-            if enough_repeats and anything_had_quotes:
-                forbidden.append(idx)
-                break      # we don't need to compare it to any other chunks of the cited document
-                           # because one match is enough to condemn it
 #Another way to look at count_repeats:
 
 def count_repeats(all_words_in_overlap):
-    words = all_words_in_overlap.split()
-    word_counts = Counter(words)
-    count_first_condition = any(count >= 3 for count in word_counts.values())
-    count_second_condition = sum(count >= 2 for count in word_counts.values()) >= 4
-    return count_first_condition and count_second_condition     # nice technique, separating the conditions cdproj allows us to change criteria later if we need to
+	''' 
+	'''
+	word_counts = Counter(words)
+	count_first_condition = sum(count >= 3 for count in word_counts.values()) >= 2
+	count_second_condition = sum(count >= 2 for count in word_counts.values()) >= 4
+	return count_first_condition and count_second_condition     # nice technique, combining them implicitly with and
 
 #Test:
 overlapping_words = ['what','is','the','economic','review','doing','about','this']
