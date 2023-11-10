@@ -65,7 +65,7 @@ def get_chunks(folder_containing_chunkfiles, S2_Id):
 
 	return chunklist
 
-def lowercase_last_names(author_names):
+def get_lowercase_last_names(author_names):
 	lastnames = []
 	for name in author_names:
 		if name != 'anonymous':
@@ -297,6 +297,7 @@ def get_forbidden_combos(cited3grams, citing3grams, had_quotes, cited_authors):
 	'''
 	forbidden = []
 	for idx, citing_set in enumerate(citing3grams):
+		lowercase_last_names = get_lowercase_last_names(cited_authors)
 		if theres_an_author_match(citing_set, lowercase_last_names):   # you can write a function to check this
 			forbidden.append(idx)
 			continue      # if any author names match any tokens in any of the 3grams, this citing chunk is forbidden
