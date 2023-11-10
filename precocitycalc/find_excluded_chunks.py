@@ -154,7 +154,7 @@ def get_exclusions(cited_Id, pub_year, cited_authors, cited3grams, articles_that
 		if S2_Id not in articles_that_cite_it:
 			continue
 
-		citing_chunks = get_chunks(S2_Id) # see function above for data structure returned: list of 2-tuples
+		citing_chunks = get_chunks(folder_path, S2_Id) # see function above for data structure returned: list of 2-tuples
 
 		if len(citing_chunks) < 1:
 			continue  # There's nothing to exclude if the file is empty or not found
