@@ -3,7 +3,7 @@
 # calculation.
 
 # USAGE:
-# python3 find_excluded_chunks.py metadata_spreadsheet.tsv folder_containing_chunkfiles citation_jsonl_path
+# python3 find_excluded_chunks.py metadata_spreadsheet.tsv folder_containing_chunkfiles citation_jsonl_path output_path
 #
 # The first argument will be the metadata spreadsheet for e.g. literary studies or ecology
 # articles. The second will be the path to a folder containing the actual chunks.
@@ -72,7 +72,7 @@ def lowercase_last_names(author_names):
 			lastnames.append(name.split()[-1].lower())
 	return lastnames
 
-def get_exclusions_for_all_files(metadata_df, folder_path, citations_for):
+def get_exclusions_for_all_files(metadata_df, folder_path, citations_for, output_log):
 	'''
 	This will iterate through all the files that have Semantic Scholar IDs in metadata_spreadsheet.
 	In each case it will call get_exclusions(), which will return a list of forbidden chunks.
@@ -119,10 +119,16 @@ def get_exclusions_for_all_files(metadata_df, folder_path, citations_for):
 			all_exclusions[cited_Id] = exclusions    # we store exclusions in a dict where key is the cited file Id
 													 # and value is a list of forbidden chunks
 
-			#FOR DEBUGGING I'M STOPPING IT AT 10 files
+			#FOR DEBUGGING WE COULD STOP IT AT 10 files
 
-			if hits > 10:
-				break
+			# if hits > 10:
+			#	break
+
+			# INSTEAD I'M WRITING NON-EMPTY RESULTS TO LOG
+			if len(exclusions) > 0:
+				with open(output_log, mode = 'a', encoding = 'utf-8') as f:
+					for excluded_chunk in exclusions:
+						f.write(cited_Id + '\t' + excluded_chunk + '\n')
 
 	print(misses, hits)
 	return all_exclusions
@@ -341,11 +347,12 @@ did_any_have_quotes(overlapping_words, quoted_words)
 metadata_path = sys.argv[1]
 chunk_folder = sys.argv[2]
 citation_jsonl_path = sys.argv[3]
+output_log = sys.argv[4]
 
 metadata = get_metadata(metadata_path)
 citations_for = load_citation_jsons(citation_jsonl_path)   # a dictionary of citations for each paperId
 
-all_exclusions = get_exclusions_for_all_files(metadata, chunk_folder, citations_for)   # does the actual work
+all_exclusions = get_exclusions_for_all_files(metadata, chunk_folder, citations_for, output_log)   # does the actual work
 
 print(len(all_exclusions))
 print(all_exclusions)
