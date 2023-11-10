@@ -14,6 +14,8 @@ import sys, json, os
 import pandas as pd
 from ast import literal_eval
 import string
+from nltk import ngrams
+import nltk
 
 def get_metadata(filepath):
 	'''
@@ -51,7 +53,7 @@ def get_chunks(folder_containing_chunkfiles, S2_Id):
 	chunklist = []
 	desired_file = folder_containing_chunkfiles + S2_Id + '.txt'
 
-	if not os.path.isfile():
+	if not os.path.isfile(desired_file):
 		return chunklist      # if we can't find the file we return an empty list
 
 	with open(folder_containing_chunkfiles + S2_Id + '.txt', mode = 'r', encoding = 'utf-8') as f:
@@ -81,20 +83,30 @@ def get_exclusions_for_all_files(metadata_df, folder_path, citations_for):
 	'''
 	all_exclusions = dict()
 
+	misses = 0
+	hits = 0     # for debugging
+
 	for idx, row in metadata_df.iterrows():
 		if not pd.isnull(row['paperId']):        # this is checking to see whether we found it in S2
 			pub_year = int(row.year)
 			authors = row.authors
 			cited_Id = row.paperId
 
+			if cited_Id in citations_for:
+				articles_that_cite_it = citations_for[cited_Id]  # a list of S2 Ids that cite the article in question
+			else:
+				articles_that_cite_it = []
+
 			cited_chunks = get_chunks(folder_path, cited_Id)
 
 			if len(cited_chunks) < 1:
+				misses += 1
 				continue        # if we can't find the file or it's empty there are no exclusions
 			else:
+				hits += 1
 				print(cited_Id)    # for debugging purposes
 
-			chunks_as_stripped_lists, had_quotes = strip_punctuation(chunks)
+			chunks_as_stripped_lists, had_quotes = strip_punctuation_from_chunks(cited_chunks)
 
 			# We're going to turn each chunk into two things: 1) A list of lowercase words that have punctuation stripped
 			# 2) a set of words that had quotes attached to them. Part 2 doesn't matter really for the cited_chunks
@@ -102,13 +114,17 @@ def get_exclusions_for_all_files(metadata_df, folder_path, citations_for):
 
 			cited3grams = make_3grams(chunks_as_stripped_lists)  # This is just a set of 3grams (which are represented as tuples)
 
-			articles_that_cite_it = citations_for[cited_Id]  # a list of S2 Ids that cite the article in question
-
 			exclusions = get_exclusions(cited_Id, pub_year, authors, cited3grams, articles_that_cite_it, metadata_df, folder_path)
 
 			all_exclusions[cited_Id] = exclusions    # we store exclusions in a dict where key is the cited file Id
 													 # and value is a list of forbidden chunks
 
+			#FOR DEBUGGING I'M STOPPING IT AT 10 files
+
+			if hits > 10:
+				break
+
+	print(misses, hits)
 	return all_exclusions
 
 def get_exclusions(cited_Id, pub_year, cited_authors, cited3grams, articles_that_cite_it, metadata_df, folder_path):
@@ -119,6 +135,7 @@ def get_exclusions(cited_Id, pub_year, cited_authors, cited3grams, articles_that
 
 	exclusions = []
 	cited_authorset = set(cited_authors)
+
 
 	for idx, row in forward_window.iterrows():
 
@@ -133,32 +150,33 @@ def get_exclusions(cited_Id, pub_year, cited_authors, cited3grams, articles_that
 
 		citing_chunks = get_chunks(S2_Id) # see function above for data structure returned: list of 2-tuples
 
+		if len(citing_chunks) < 1:
+			continue  # There's nothing to exclude if the file is empty or not found
+
 		# We're not going to compare any articles that share authorship. All chunks in such an article
 		# are definitionally forbidden and all get added to the list of exclusions for this
 		# cited_article.
 		citing_authorset = set(row.authors)
+
 		if len(cited_authorset.intersection(citing_authorset)) > 1:  # this is a way of checking "if any are in" 
 			for chunk_Id, chunktext in citing_chunks:
 				exclusions.append(chunk_Id)  
 
-			continue    
+			continue # no need to check text if there are authors in common    
 
-		chunks_as_stripped_lists, had_quotes = strip_punctuation(citing_chunks)
+		chunks_as_stripped_lists, had_quotes = strip_punctuation_from_chunks(citing_chunks)
 
 		# We're going to turn each chunk into two things: 1) A list of lowercase words that have punctuation stripped
 		# 2) a set of words that had quotes attached to them. Part 2 doesn't matter really for the cited_chunks
 		# but will for the citing_chunks
 
-		citing3grams = make_3grams(chunks_as_stripped_lists)  # This is just a set of 3grams (which are represented as tuples)
+		citing3grams = make_3grams(chunks_as_stripped_lists)  # This is just a list of sets of 3grams (which are represented as tuples)
 
 		forbidden_chunks = get_forbidden_combos(cited3grams, citing3grams, had_quotes, cited_authors)
 
 		exclusions.extend(forbidden_chunks)
 
 	return exclusions
-
-
-# def get_forbidden_combos(cited3grams, citing3grams, had_quotes, cited_authors):
 
 	
 def flatten_set_of_tuples(tuples):
@@ -177,6 +195,25 @@ def theres_an_author_match(citing_set, lowercase_last_names):
 		return True
 	else:
 		return False
+
+def strip_punctuation_from_chunks(chunklist):
+	'''
+	Accepts a list of 2-tuples where each tuple contains
+	a chunkid and
+	a text
+
+	and returns a list of 2-tuples where the text is 
+	a list of words sans punctuation 
+	'''
+
+	newlist = []
+	hadquotes = []
+
+	for anid, text in chunklist:
+		newlist.append((anid, strip_punctuation_from_list(text.split())))
+		hadquotes.append(find_quoted_words(text))
+
+	return newlist, hadquotes
 
 def strip_punctuation_from_list(words):
 	# Create a translation table that maps each punctuation character to None
@@ -202,6 +239,32 @@ def did_any_have_quotes(all_words_in_overlap, had_quotes):
 	'''
 	quoted_overlap_words = [i for i in all_words_in_overlap if i in had_quotes]
 	return len(quoted_overlap_words) > 0
+
+def make_3grams(listof2tuples):
+	'''
+	This accepts a list of 2-tuples where each chunk is represented by
+	a chunk id
+	and a list of words
+
+	it returns a list of 2-tuples where each chunk is represented by
+	a chunk id
+	and a set of 3 grams
+	'''
+
+	n = 3
+
+	newlist = []
+
+	for anid, listofwords in listof2tuples:
+		words = ngrams(listofwords, n)
+		grams = set()
+		for gram in words:
+			grams.add(gram)
+
+		newlist.append((anid, grams))
+
+	return newlist
+
 
 def get_forbidden_combos(cited3grams, citing3grams, had_quotes, cited_authors):
 	'''
@@ -282,4 +345,7 @@ citation_jsonl_path = sys.argv[3]
 metadata = get_metadata(metadata_path)
 citations_for = load_citation_jsons(citation_jsonl_path)   # a dictionary of citations for each paperId
 
-get_exclusions_for_all_files(metadata, chunk_folder, citations_for)   # does the actual work
+all_exclusions = get_exclusions_for_all_files(metadata, chunk_folder, citations_for)   # does the actual work
+
+print(len(all_exclusions))
+print(all_exclusions)
