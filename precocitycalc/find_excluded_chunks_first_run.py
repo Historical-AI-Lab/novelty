@@ -88,6 +88,7 @@ def get_lowercase_last_names(author_names):
 	global lexicon
 	lastnames = []
 	for name in author_names:
+		name = name.replace('\xa0', ' ')
 		if name != 'anonymous':
 			lastnames.append(name.split()[-1].lower())
 
