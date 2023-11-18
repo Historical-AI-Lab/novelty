@@ -12,10 +12,10 @@ for filename in embedfiles:
 			fields = line.strip().split()
 			chunkID = fields[0]
 			docID = chunkID.split('-')[0]
-			if doc in prevdocs:
+			if docID in prevdocs:
 				duplicates += 1
 			else:
-				thesedocs.add(doc)
+				thesedocs.add(docID)
 
 	prevdocs = prevdocs.union(thesedocs)
 	thesedocs = set()
