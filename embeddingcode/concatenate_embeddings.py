@@ -21,6 +21,6 @@ for filename in embedfiles:
 	thesedocs = set()
 
 
-print(duplicates, leb(prevdocs))
+print(duplicates, len(prevdocs))
 
 
