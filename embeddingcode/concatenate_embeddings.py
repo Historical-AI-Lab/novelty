@@ -11,7 +11,7 @@ for filename in embedfiles:
 		for line in f:
 			fields = line.strip().split()
 			chunkID = fields[0]
-			docID = chunkID/split('-')[0]
+			docID = chunkID.split('-')[0]
 			if doc in prevdocs:
 				duplicates += 1
 			else:
