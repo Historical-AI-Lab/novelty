@@ -7,7 +7,7 @@ thesedocs = set()
 duplicates = 0
 
 for filename in embedfiles:
-	with open(filename, encoding = 'utf-8') a f:
+	with open(filename, encoding = 'utf-8') as f:
 		for line in f:
 			fields = line.strip().split()
 			chunkID = fields[0]
