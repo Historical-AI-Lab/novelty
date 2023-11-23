@@ -118,7 +118,7 @@ for result in resultlist:
 
     if not os.path.isfile(summaryfile):
         with open(summaryfile, mode = 'w', encoding = 'utf-8') as f:
-            outlist = ['docid', 'date', 'num_chunks', 'fraction_compared' 'filtered', 'time_radius', 'chunks_used', 'precocity', 'novelty', 'transience']
+            outlist = ['docid', 'date', 'num_chunks', 'fraction_compared', 'filtered', 'time_radius', 'chunks_used', 'precocity', 'novelty', 'transience']
             header = '\t'.join(outlist) + '\n'
             f.write(header)
 
