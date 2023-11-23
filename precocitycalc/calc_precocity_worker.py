@@ -108,10 +108,7 @@ def calculate_a_year(package):
             paperlastnames = set()
 
         ctr += 1
-        print(centerdate, ctr)
-        if ctr >= 4:
-            break
-        if ctr % 10 == 1:
+        if ctr % 100 == 1:
             print(centerdate, ctr)
 
         papervectors = get_vectors(paperId, data)
