@@ -129,8 +129,12 @@ def calculate_a_year(package):
             paperlastnames = set()
 
         ctr += 1
+        print(centerdate, ctr)
+        if ctr >= 3:
+            break
         if ctr % 100 == 1:
             print(centerdate, ctr)
+
 
         papervectors = get_vectors(paperId, data, function_string, chunk_mapper)
 
