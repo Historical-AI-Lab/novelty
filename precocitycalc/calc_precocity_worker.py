@@ -104,7 +104,7 @@ def calculate_a_year(package):
 
     chunk_mapper = dict()
     if function_string == 'kld':
-        for chunkid, vec in data.items()
+        for chunkid, vec in data.items():
             chunkindexes = [x for x in chunkid.split('-')[1].split('.')]
             docid = chunkid.split('-')[0]
             for idx in chunkindexes:
