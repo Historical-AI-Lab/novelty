@@ -31,5 +31,5 @@ for doc, chunks in cosines:
 		print(doc, 'missing')
 	else:
 		missing = chunks - topics[doc]
-		if len(missing) > 0
-		print(missing)
+		if len(missing) > 0:
+			print(missing)
