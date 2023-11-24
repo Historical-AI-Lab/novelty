@@ -8,7 +8,11 @@ with open(topicpath, encoding = "utf-8") as f:
         fields = line.strip().split('\t')
         chunkid = fields[0]
         docid = chunkid.split('-')[0]
-        chunkpart = chunkid.split('-')[1]
+        try:
+        	chunkpart = chunkid.split('-')[1]
+        except:
+        	print(chunkid)
+        	
         if docid not in topics:
         	topics[docid] = set()
         topics[docid].add(chunkpart)
