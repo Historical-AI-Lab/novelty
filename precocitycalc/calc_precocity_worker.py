@@ -109,7 +109,7 @@ def calculate_a_year(package):
             docid = chunkid.split('-')[0]
             for idx in chunkindexes:
                 equivalent_chunk = docid + '-' + idx
-                chunk_mappper[equivalent_chunk] = chunkid
+                chunk_mapper[equivalent_chunk] = chunkid
 
     databyyear = dict()
 
