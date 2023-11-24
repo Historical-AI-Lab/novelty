@@ -1,5 +1,5 @@
-topicdata = '../topicmodel/lits250doctopic.txt'
-cosinedata = '../litstudies/all_lit_embeds.tsv'
+topicpath = '../topicmodel/lits250doctopic.txt'
+cosinepath = '../litstudies/all_lit_embeds.tsv'
 
 topics = dict()
 
