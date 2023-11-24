@@ -1,4 +1,4 @@
-topicpath = '../topicmodel/lits250doctopic.txt'
+topicpath = '../topicmodel/lits250doctopics.txt'
 cosinepath = '../litstudies/all_lit_embeds.tsv'
 
 topics = dict()
