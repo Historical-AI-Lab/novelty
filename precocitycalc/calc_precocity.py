@@ -76,6 +76,8 @@ else:
     print('Illegal function string.')
     sys.exit(0)
 
+print(len(chunkmap))
+
 with open(excludepath, encoding = "utf-8") as f:
     for line in f:
         fields = line.strip().split('\t')
@@ -86,7 +88,10 @@ with open(excludepath, encoding = "utf-8") as f:
             if function_string == 'cosine':
                 exclusions[centerdoc].add(field)
             elif function_string == 'kld':
-                exclusions[centerdoc].add(chunkmap[field])
+                if field in chunkmap:
+                    exclusions[centerdoc].add(chunkmap[field])
+                else:
+                    print(field)
 
 totalvols = meta.shape[0]
 
