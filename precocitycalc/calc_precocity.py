@@ -43,21 +43,50 @@ meta = get_metadata(metapath)  # converts the author strings to lists
 data = dict()
 exclusions = dict()
 
+# We have a challenge to handle. Our exclusions are defined to the smaller
+# 512-token chunks, but the topic model combines those chunks to produce 
+# larger ones of *at least* 512 words. So we need a map from the topic chunks
+# to the exclusions
+
+# Also notice data format is subtly different for the topic model. There's an
+# initial unused field.
+
+chunkmap = dict()
+
+if function_string == 'cosine':
+    with open(datapath, encoding = "utf-8") as f:
+        for line in f:
+            fields = line.strip().split('\t')
+            chunkid = fields[0]
+            vector = np.array([float(x) for x in fields[1:]], dtype = np.float64)
+            data[chunkid] = vector
+elif function_string == 'kld':
+    with open(datapath, encoding = "utf-8") as f:
+        for line in f:
+            fields = line.strip().split('\t')
+            chunkid = fields[1]
+            vector = np.array([float(x) for x in fields[2:]], dtype = np.float64)
+            data[chunkid] = vector
+            chunkindexes = [x for x in chunkid.split('-')[1].split('.')]
+            docid = chunkid.split('-')[0]
+            for idx in chunkindexes:
+                equivalent_chunk = docid + '-' + idx
+                chunkmap[equivalent_chunk] = chunkid
+else:
+    print('Illegal function string.')
+    sys.exit(0)
+
 with open(excludepath, encoding = "utf-8") as f:
     for line in f:
         fields = line.strip().split('\t')
         centerdoc = fields[0]
         if centerdoc not in exclusions:
-            exclusions[centerdoc] = []
+            exclusions[centerdoc] = set()
         for field in fields[1:]:
-            exclusions[centerdoc].append(field)
-
-with open(datapath, encoding = "utf-8") as f:
-    for line in f:
-        fields = line.strip().split('\t')
-        chunkid = fields[0]
-        vector = np.array([float(x) for x in fields[1:]], dtype = np.float64)
-        data[chunkid] = vector
+            if function_string == 'cosine':
+                exclusions[centerdoc].add(field)
+            elif function_string == 'kld':
+                exclusions[centerdoc].add(chunkmap[field])
 
 totalvols = meta.shape[0]
 

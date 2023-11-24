@@ -32,14 +32,21 @@ def get_lowercase_last_names(author_names):
 
     return set([x for x in lastnames if x not in lexicon])
 
-def get_vectors(paperId, data):
+def get_vectors(paperId, data, function_string, chunk_mapper):
     papervectors = []
     for i in range (0, 1000):
         chunkid = paperId + '-' + str(i)
+        if i > 990:
+            print('Dangerously long document.')
+        if function_string == 'kld':
+            if chunkid not in chunk_mapper:
+                break
+            else:
+                chunkid = chunk_mapper[chunkid]
         if chunkid not in data:        
             break
         else:
-            papervectors.append(data[chunkid])
+            papervectors.append((chunkid, data[chunkid]))
     return papervectors
 
 def any_overlap(a, b):
@@ -90,6 +97,20 @@ def calculate_a_year(package):
 
     condition_package = (fractions2check, filter_states, positive_radii, aggregates2check)
 
+    # We have a challenge to handle. Our exclusions are defined to the smaller
+    # 512-token chunks, but the topic model combines those chunks to produce 
+    # larger ones of *at least* 512 words. So we need a map from the topic chunks
+    # to the exclusions
+
+    chunk_mapper = dict()
+    if function_string == 'kld':
+        for chunkid, vec in data.items()
+            chunkindexes = [x for x in chunkid.split('-')[1].split('.')]
+            docid = chunkid.split('-')[0]
+            for idx in chunkindexes:
+                equivalent_chunk = docid + '-' + idx
+                chunk_mappper[equivalent_chunk] = chunkid
+
     databyyear = dict()
 
     ctr = 0
@@ -111,7 +132,7 @@ def calculate_a_year(package):
         if ctr % 100 == 1:
             print(centerdate, ctr)
 
-        papervectors = get_vectors(paperId, data)
+        papervectors = get_vectors(paperId, data, function_string, chunk_mapper)
 
         if len(papervectors) == 0:
             print(paperId, ' not found')
@@ -122,7 +143,7 @@ def calculate_a_year(package):
         if paperId in exclusions:
             exclude_for_this = exclusions[paperId]
         else:
-            exclude_for_this = []
+            exclude_for_this = set()
 
         distances = dict()    
         # note these include both novelties and transiences
@@ -149,12 +170,14 @@ def calculate_a_year(package):
                 except:
                     comp_lastnames = set()
 
-                comp_vectors = get_vectors(comp_paper, data)
+                comp_vectors = get_vectors(comp_paper, data, function_string, chunk_mapper)
                 author_overlap = any_overlap(paperlastnames, comp_lastnames)
 
-                for c_idx, c_vec in enumerate(comp_vectors):
-                    chunkid = comp_paper + '-' + str(c_idx)
-                    for p_idx, p_vec in enumerate(papervectors):
+                for c_idx, chunktuple in enumerate(comp_vectors):    # c_idx is not actually used
+                    chunkid, c_vec = chunktuple
+                    
+                    for p_idx, papertuple in enumerate(papervectors):
+                        paperchunkid, p_vec = papertuple             # paperchunkid is not actually used
                         if function_string == 'kld':
                             distance = entropy(p_vec, c_vec)
                             # always surprise of the paper relative to comparison
