@@ -102,14 +102,22 @@ def calculate_a_year(package):
     # larger ones of *at least* 512 words. So we need a map from the topic chunks
     # to the exclusions
 
+    chunksfordoc = dict()
+
     chunk_mapper = dict()
-    if function_string == 'kld':
+    if function_string == 'kld' or function_string == 'cosine':
         for chunkid, vec in data.items():
             chunkindexes = [x for x in chunkid.split('-')[1].split('.')]
             docid = chunkid.split('-')[0]
+            if docid not in chunksfordoc:
+                chunksfordoc[docid] = []
+            chunksfordoc.append(chunkid)
             for idx in chunkindexes:
                 equivalent_chunk = docid + '-' + idx
                 chunk_mapper[equivalent_chunk] = chunkid
+
+    print(len(chunk_mapper))
+    print(chunksfordoc['b4dd2057bd1320e75b132bebe7e1d2b48ed02662'])
 
     databyyear = dict()
 
