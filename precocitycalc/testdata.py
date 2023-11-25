@@ -3,7 +3,7 @@ cosinepath = '../litstudies/all_lit_embeds.tsv'
 
 topics = dict()
 
-with open(topicpath, encoding = "utf-8") as f:
+with open(cosinepath, encoding = "utf-8") as f:
     for line in f:
         fields = line.strip().split('\t')
         chunkid = fields[0]
@@ -12,14 +12,14 @@ with open(topicpath, encoding = "utf-8") as f:
         	chunkpart = chunkid.split('-')[1]
         except:
         	print(chunkid)
-        	
+
         if docid not in topics:
         	topics[docid] = set()
         topics[docid].add(chunkpart)
 
 cosines = dict()
 
-with open(cosinepath, encoding = "utf-8") as f:
+with open(topicpath, encoding = "utf-8") as f:
     for line in f:
         fields = line.strip().split('\t')
         chunkid = fields[1]
