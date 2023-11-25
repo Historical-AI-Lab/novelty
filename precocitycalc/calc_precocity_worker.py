@@ -126,6 +126,7 @@ def calculate_a_year(package):
     ctr = 0
 
     numbers_of_exclusions = []
+    numbers_of_overlaps= []
 
     paperstocheck = meta.index[meta.year == centerdate].tolist()
 
@@ -173,7 +174,8 @@ def calculate_a_year(package):
                     else:
                         distances[(chunk_num, filtered, comp_date)] = []
 
-        excludecounter = 0
+        exclude_counter = 0
+        author_overlap_counter = 0
 
         for comp_date in range(-20, 21):
             if comp_date == 0:
@@ -202,15 +204,19 @@ def calculate_a_year(package):
 
                         distances[(p_idx, False, comp_date)].append(distance)
 
-                        if chunkid in exclude_for_this or author_overlap:
-                            excludecounter += 1
-                            pass
+                        if chunkid in exclude_for_this:
+                            exclude_counter += 1
+                            pass 
+                        elif author_overlap:
+                            author_overlap_counter += 1
                         else:
                             distances[(p_idx, True, comp_date)].append(distance)
                             # if there is no reason to exclude
                             # also append to the True filtered state
 
-        numbers_of_exclusions.append(excludecounter)
+        numbers_of_exclusions.append(exclude_counter)
+        numbers_of_overlaps.append(author_overlap_counter)
+
         novelties = dict()
         for p_idx in range(number_of_chunks):
             for fraction in fractions2check:
@@ -273,7 +279,8 @@ def calculate_a_year(package):
         document_precocity['num_chunks'] = number_of_chunks
         doc_precocities[paperId] = document_precocity
 
-    print('Average number of exclusions: ', np.mean(numbers_of_exclusions))
+    print('Average number of text-reuse exclusions: ', np.mean(numbers_of_exclusions))
+    print('Average number of author-overlap exclusions: ', np.mean(numbers_of_overlaps))
     print(errors)
     return doc_precocities, centerdate, condition_package
 
