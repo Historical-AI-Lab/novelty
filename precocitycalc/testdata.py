@@ -30,7 +30,7 @@ with open(topicpath, encoding = "utf-8") as f:
         for idx in chunkindexes:
             cosines[docid].add(idx)
 
-for doc, chunks in cosines:
+for doc, chunks in cosines.items():
 	if doc not in topics:
 		print(doc, 'missing')
 	else:
