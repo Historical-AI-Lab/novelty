@@ -120,7 +120,6 @@ def calculate_a_year(package):
                 chunk_mapper[equivalent_chunk] = chunkid
 
     print(len(chunk_mapper))
-    print(chunksfordoc['b4dd2057bd1320e75b132bebe7e1d2b48ed02662'])
 
     databyyear = dict()
 
@@ -273,7 +272,7 @@ def calculate_a_year(package):
 
         document_precocity['num_chunks'] = number_of_chunks
         doc_precocities[paperId] = document_precocity
-        
+
     print('Average number of exclusions: ', np.mean(numbers_of_exclusions))
     print(errors)
     return doc_precocities, centerdate, condition_package
