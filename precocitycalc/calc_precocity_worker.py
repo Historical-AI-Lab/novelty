@@ -32,21 +32,24 @@ def get_lowercase_last_names(author_names):
 
     return set([x for x in lastnames if x not in lexicon])
 
-def get_vectors(paperId, data, function_string, chunk_mapper):
+def get_vectors(paperId, data, function_string, chunksfordoc):
     papervectors = []
-    for i in range (0, 1000):
-        chunkid = paperId + '-' + str(i)
-        if i > 990:
-            print('Dangerously long document.')
-        if function_string == 'kld':
-            if chunkid not in chunk_mapper:
+    if function_string == 'cosine':
+        for i in range (0, 1000):
+            chunkid = paperId + '-' + str(i)
+            if i > 990:
+                print('Dangerously long document.')
+            if chunkid not in data:        
                 break
             else:
-                chunkid = chunk_mapper[chunkid]
-        if chunkid not in data:        
-            break
+                papervectors.append((chunkid, data[chunkid]))
+    else:
+        if paperId not in chunksfordoc:
+            return papervectors
         else:
-            papervectors.append((chunkid, data[chunkid]))
+            for chunk in chunksfordoc[paperId]:
+                papervectors.append((chunk, data[chunk]))
+
     return papervectors
 
 def any_overlap(a, b):
@@ -111,7 +114,7 @@ def calculate_a_year(package):
             docid = chunkid.split('-')[0]
             if docid not in chunksfordoc:
                 chunksfordoc[docid] = []
-            chunksfordoc.append(chunkid)
+            chunksfordoc[docid].append(chunkid)
             for idx in chunkindexes:
                 equivalent_chunk = docid + '-' + idx
                 chunk_mapper[equivalent_chunk] = chunkid
@@ -144,7 +147,7 @@ def calculate_a_year(package):
             print(centerdate, ctr)
 
 
-        papervectors = get_vectors(paperId, data, function_string, chunk_mapper)
+        papervectors = get_vectors(paperId, data, function_string, chunksfordoc)
 
         if len(papervectors) == 0:
             print(paperId, ' not found')
@@ -182,7 +185,7 @@ def calculate_a_year(package):
                 except:
                     comp_lastnames = set()
 
-                comp_vectors = get_vectors(comp_paper, data, function_string, chunk_mapper)
+                comp_vectors = get_vectors(comp_paper, data, function_string, chunksfordoc)
                 author_overlap = any_overlap(paperlastnames, comp_lastnames)
 
                 for c_idx, chunktuple in enumerate(comp_vectors):    # c_idx is not actually used
