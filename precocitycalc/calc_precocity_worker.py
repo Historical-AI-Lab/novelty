@@ -176,6 +176,7 @@ def calculate_a_year(package):
 
         exclude_counter = 0
         author_overlap_counter = 0
+        all_counter = 0
 
         for comp_date in range(-20, 21):
             if comp_date == 0:
@@ -203,6 +204,7 @@ def calculate_a_year(package):
                             distance = z_transform(cosine(p_vec, c_vec))
 
                         distances[(p_idx, False, comp_date)].append(distance)
+                        all_counter += 1
 
                         if chunkid in exclude_for_this:
                             exclude_counter += 1
@@ -214,8 +216,8 @@ def calculate_a_year(package):
                             # if there is no reason to exclude
                             # also append to the True filtered state
 
-        numbers_of_exclusions.append(exclude_counter)
-        numbers_of_overlaps.append(author_overlap_counter)
+        numbers_of_exclusions.append(exclude_counter / all_counter)
+        numbers_of_overlaps.append(author_overlap_counter / all_counter)
 
         novelties = dict()
         for p_idx in range(number_of_chunks):
@@ -279,8 +281,8 @@ def calculate_a_year(package):
         document_precocity['num_chunks'] = number_of_chunks
         doc_precocities[paperId] = document_precocity
 
-    print('Average number of text-reuse exclusions: ', np.mean(numbers_of_exclusions))
-    print('Average number of author-overlap exclusions: ', np.mean(numbers_of_overlaps))
+    print('Average fraction of text-reuse exclusions: ', np.mean(numbers_of_exclusions))
+    print('Average fraction of author-overlap exclusions: ', np.mean(numbers_of_overlaps))
     print(errors)
     return doc_precocities, centerdate, condition_package
 
