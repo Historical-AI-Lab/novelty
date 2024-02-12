@@ -113,13 +113,13 @@ def fix_broken_words(text, dictionary):
 	# Join the fixed words back into a string
 	return ' '.join(fixed_words)
 
-def turn_undivided_text_into_sentences(document_string):
+def turn_undivided_text_into_sentences(pages):
 	'''
 	This function accepts a document as a single string and turns it into sentences.
 	It concatenates sentences if they're shorter than six words
 	'''
 	global dictionary
-	
+	document_string = ' '.join(pages)
 	document_string = fix_broken_words(document_string, dictionary)
 	
 	sentences = list(sent_tokenize(document_string))
