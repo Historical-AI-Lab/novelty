@@ -277,10 +277,7 @@ with open(jsonlpath, encoding = 'utf-8') as f:
 						paperId = metadata.at[doi, 'paperId']
 						foundmatch = True
 
-		if paperId in docswehave:
-			continue
-
-		if not foundmatch:
+		if not foundmatch or not isinstance(paperId, str):
 			errors += 1
 			outlines.append('error')
 			continue
@@ -294,6 +291,11 @@ with open(jsonlpath, encoding = 'utf-8') as f:
 
 		outlines.append(str(json_obj['wordCount']) + ' | ' + str(paperId) + ' | ' + str(len(chunk_list)))
 
+		if len(outlines) > 0:
+			for outline in outlines:
+				print(outline)
+			outlines = []
+
 		with open(outpath, mode = 'a', encoding = 'utf-8') as f2:
 			for i, e in enumerate(embeddings):
 				f2.write(paperId + '-' + str(i) + '\t' + '\t'.join([str(x) for x in e.tolist()]) + '\n')
@@ -302,11 +304,6 @@ with open(jsonlpath, encoding = 'utf-8') as f:
 			for i, c in enumerate(chunk_list):
 				c = c.replace('\t', ' ').replace('\n', ' ')
 				f3.write(str(i) + '\t' + c + '\n')
-
-		if len(outlines) > 0:
-			for outline in outlines:
-				print(outline)
-			outlines = []
 
 if len(outlines) > 0:
 	for outline in outlines:
