@@ -201,9 +201,9 @@ def embeddings_for_an_article(articlestring):
 
 		master_embeddings = torch.cat(master_embeddings, dim=0)
 
-	assert len(chunk_list) == len(master_embeddings)
+	assert len(sentences) == len(master_embeddings)
 
-	return chunk_list, master_embeddings
+	return sentences, master_embeddings
 
 # MAIN
 #
