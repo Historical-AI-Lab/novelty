@@ -1,5 +1,5 @@
 # This version of the embedding script produces one-sentence
-# chunks, unless the sentences are less than six words long.
+# chunks, unless the sentences are less than ten words long.
 # Those will be concatenated with an adjacent sentence.
 
 # USAGE
@@ -130,20 +130,23 @@ def turn_undivided_text_into_sentences(pages):
 
 	for s in sentences:
 		wordlen = len(s.split())
-		if wordlen < 6 and wordlen + last_len < 11:
+		if wordlen + last_len < 20:
 			last_sentence.append(s)
 			last_len += wordlen
-		elif wordlen < 6 and wordlen + last_len < 320:
+		elif wordlen < 10 and wordlen + last_len < 320:
 			last_sentence.append(s)
 			sentence_to_add = ' '.join(last_sentence)
 			new_sentences.append(sentence_to_add)
 			last_sentence = []
 			last_len = 0
 		elif last_len < 320:
-			sentence_to_add = ' '.join(last_sentence)
-			new_sentences.append(sentence_to_add)
-			last_sentence = [s]
-			last_len = wordlen
+			if len(last_sentence) > 0:
+				sentence_to_add = ' '.join(last_sentence) 
+				new_sentences.append(sentence_to_add) # Add the last sentence
+				last_sentence = []
+				last_len = 0
+			last_sentence.append(s)
+			last_len += wordlen
 		else:
 			# Break the last_sentence into evenly-sized chunks
 			last_sentence = ' '.join(last_sentence).split()  # Join sentences and split into words
@@ -155,8 +158,12 @@ def turn_undivided_text_into_sentences(pages):
 			for chunk in chunks:
 				sentence_to_add = ' '.join(chunk)
 				new_sentences.append(sentence_to_add)
-			last_sentence = [s]
+					
+			last_sentence = [s]	
 			last_len = wordlen
+	
+	sentence_to_add = ' '.join(last_sentence)
+	new_sentences.append(sentence_to_add)
 
 	return new_sentences 
 
