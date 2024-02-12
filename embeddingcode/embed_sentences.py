@@ -225,7 +225,7 @@ ctr = 0
 
 outlines = []
 
-increment = 3000
+increment = 5000
 
 outpath = 'sentence_embeddings/sent_embeddings_' + str(startline) + '.tsv'
 
