@@ -130,7 +130,7 @@ def turn_undivided_text_into_sentences(pages):
 
 	for s in sentences:
 		wordlen = len(s.split())
-		if wordlen + last_len < 20:
+		if wordlen + last_len < 20 or (wordlen < 5 and wordlen + last_len < 40):
 			last_sentence.append(s)
 			last_len += wordlen
 		elif wordlen < 10 and wordlen + last_len < 320:
@@ -163,7 +163,8 @@ def turn_undivided_text_into_sentences(pages):
 			last_len = wordlen
 	
 	sentence_to_add = ' '.join(last_sentence)
-	new_sentences.append(sentence_to_add)
+	if len(sentence_to_add) > 10:
+		new_sentences.append(sentence_to_add)
 
 	return new_sentences 
 
