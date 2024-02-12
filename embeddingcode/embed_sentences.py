@@ -81,37 +81,37 @@ dictionary = set()
 
 with open('../precocitycalc/MainDictionary.txt', encoding = 'utf-8') as f:
 	for line in f:
-		word = f.split('\t')[0]
+		word = line.split('\t')[0]
 		dictionary.add(word)
 
 def fix_broken_words(text, dictionary):
-    # Split the text into words
-    words = text.split()
-    fixed_words = []
-    i = 0
-    
-    while i < len(words):
-        word = words[i]
-        # Check if the word ends with a hyphen and is not the last word in the list
-        if word.endswith('-') and i + 1 < len(words):
-            # Attempt to merge this word with the next one
-            merged_word = word[:-1] + words[i + 1]
-            # Check if the merged word is in the dictionary
-            stripped_word = merged_word.strip(string.punctuation)
-            if stripped_word.lower() in dictionary:
-                # If the merged word is valid, add the merged word and skip the next one
-                fixed_words.append(merged_word)
-                i += 2
-                continue
-            else:
-                # If the merged word is not valid, just remove the hyphen
-                word = word[:-1]
-        # Add the current word (with or without modification) to the fixed words list
-        fixed_words.append(word)
-        i += 1
-    
-    # Join the fixed words back into a string
-    return ' '.join(fixed_words)
+	# Split the text into words
+	words = text.split()
+	fixed_words = []
+	i = 0
+	
+	while i < len(words):
+		word = words[i]
+		# Check if the word ends with a hyphen and is not the last word in the list
+		if word.endswith('-') and i + 1 < len(words):
+			# Attempt to merge this word with the next one
+			merged_word = word[:-1] + words[i + 1]
+			# Check if the merged word is in the dictionary
+			stripped_word = merged_word.strip(string.punctuation)
+			if stripped_word.lower() in dictionary:
+				# If the merged word is valid, add the merged word and skip the next one
+				fixed_words.append(merged_word)
+				i += 2
+				continue
+			else:
+				# If the merged word is not valid, just remove the hyphen
+				word = word[:-1]
+		# Add the current word (with or without modification) to the fixed words list
+		fixed_words.append(word)
+		i += 1
+	
+	# Join the fixed words back into a string
+	return ' '.join(fixed_words)
 
 def turn_undivided_text_into_sentences(document_string):
 	'''
