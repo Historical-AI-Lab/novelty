@@ -281,6 +281,8 @@ with open(jsonlpath, encoding = 'utf-8') as f:
 			errors += 1
 			outlines.append('error')
 			continue
+		elif paperId in docswehave:
+			continue
 		else:
 			article_text = json_obj['fullText']
 			if len(article_text) > 0 and len(article_text[0]) > 2:
