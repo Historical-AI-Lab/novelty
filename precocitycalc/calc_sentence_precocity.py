@@ -19,7 +19,7 @@ import pandas as pd
 import numpy as np
 import random, sys, os
 from multiprocessing import Pool
-import calc_precocity_worker as cpw
+import calc_sentence_precocity_worker as cpw
 from ast import literal_eval
 from glob import glob
 
@@ -136,9 +136,11 @@ for centerdate, spanmeta in spanstocalculate:
         if row.year == centerdate and paperId in exclusions:
             spanexclude[paperId] = exclusions[paperId]
 
-
-    package = (centerdate, spanmeta, spandata, spanexclude, function_string)
-    packages.append(package)
+    centermeta = spanmeta.loc[(spanmeta.year == centerdate), :]
+    docsincenterdate = centermeta.shape[0]
+    for i in range(0, docsincenterdate, 40)
+        package = (centerdate, spanmeta, spandata, spanexclude, function_string, i)
+        packages.append(package)
 
 del data, meta, exclusions
 
