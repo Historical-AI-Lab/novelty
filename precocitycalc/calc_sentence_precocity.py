@@ -55,7 +55,7 @@ exclusions = dict()
 chunkmap = dict()
 
 if function_string == 'cosine':
-    files = glob.glob(datapath + 'sent*.tsv')
+    files = glob(datapath + 'sent*.tsv')
     for afile in files:
         with open(afile, encoding = "utf-8") as f:
             for line in f:
