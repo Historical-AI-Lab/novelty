@@ -138,7 +138,7 @@ for centerdate, spanmeta in spanstocalculate:
 
     centermeta = spanmeta.loc[(spanmeta.year == centerdate), :]
     docsincenterdate = centermeta.shape[0]
-    for i in range(0, docsincenterdate, 70):
+    for i in range(0, docsincenterdate, 100):
         package = (centerdate, spanmeta, spandata, spanexclude, function_string, i)
         packages.append(package)
 
