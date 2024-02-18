@@ -144,7 +144,7 @@ for centerdate, spanmeta in spanstocalculate:
 
 del data, meta, exclusions
 
-print('Beginning multiprocessing.')
+print('Beginning multiprocessing: ', len(packages), ' packages.')
 pool = Pool(processes = len(packages))
 
 res = pool.map_async(cpw.calculate_a_year, packages)
