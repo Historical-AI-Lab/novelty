@@ -143,7 +143,7 @@ for centerdate, spanmeta in spanstocalculate:
     print(centerdate, 'has documents: ', docsincenterdate)
     if end_pos > docsincenterdate:
         end_pos = docsincenterdate
-    for i in range(init_pos, end_pos, 10):
+    for i in range(init_pos, end_pos, 50):
         package = (centerdate, spanmeta, spandata, spanexclude, function_string, i)
         packages.append(package)
 
