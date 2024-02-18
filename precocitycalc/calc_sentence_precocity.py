@@ -7,7 +7,7 @@
 
 # USAGE
 
-# python calc_sentence_precocity.py metapath datapath excludepath startdate enddate function
+# python calc_sentence_precocity.py metapath datapath excludepath startdate enddate function init_pos end_pos
 
 # where
 
@@ -29,6 +29,8 @@ excludepath = sys.argv[3]
 startdate = int(sys.argv[4])
 enddate = int(sys.argv[5])
 function_string = sys.argv[6]
+init_pos = int(sys.argv[7])
+end_pos = int(sys.argv[8])
 
 def get_metadata(filepath):
     '''
@@ -138,7 +140,10 @@ for centerdate, spanmeta in spanstocalculate:
 
     centermeta = spanmeta.loc[(spanmeta.year == centerdate), :]
     docsincenterdate = centermeta.shape[0]
-    for i in range(0, docsincenterdate, 100):
+    print(centerdate, 'has documents: ', docsincenterdate)
+    if end_pos > docsincenterdate:
+        end_pos = docsincenterdate
+    for i in range(init_pos, end_pos, 10):
         package = (centerdate, spanmeta, spandata, spanexclude, function_string, i)
         packages.append(package)
 

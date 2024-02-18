@@ -130,7 +130,7 @@ def calculate_a_year(package):
 
     paperstocheck = meta.index[meta.year == centerdate].tolist()
 
-    enddoc = startdoc + 40
+    enddoc = startdoc + 10
     if enddoc > len(paperstocheck):
         enddoc = len(paperstocheck)
 
