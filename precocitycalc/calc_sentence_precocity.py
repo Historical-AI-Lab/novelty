@@ -138,14 +138,14 @@ for centerdate, spanmeta in spanstocalculate:
 
     centermeta = spanmeta.loc[(spanmeta.year == centerdate), :]
     docsincenterdate = centermeta.shape[0]
-    for i in range(0, docsincenterdate, 40):
+    for i in range(0, docsincenterdate, 70):
         package = (centerdate, spanmeta, spandata, spanexclude, function_string, i)
         packages.append(package)
 
 del data, meta, exclusions
 
 print('Beginning multiprocessing.')
-pool = Pool(processes = len(spanstocalculate))
+pool = Pool(processes = len(packages))
 
 res = pool.map_async(cpw.calculate_a_year, packages)
 res.wait()
