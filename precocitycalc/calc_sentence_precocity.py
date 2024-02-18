@@ -122,9 +122,9 @@ for centerdate, spanmeta in spanstocalculate:
     spandata = dict()
     spanexclude = dict()
     for paperId, row in spanmeta.iterrows():  # the index is paperId
-        for i in range(1000):
+        for i in range(3000):
             chunkid = paperId + '-' + str(i)
-            if i > 990:
+            if i > 2990:
                 print('danger: ', i)
             if chunkid in data:
                 spandata[chunkid] = data[chunkid]
