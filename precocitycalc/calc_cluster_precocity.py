@@ -104,7 +104,7 @@ for centerdate in range(startdate, enddate):
     spanstocalculate.append((centerdate, df))
 
 outputname = 'precocity_' + function_string + '_' + str(startdate)
-summaryfile = 'sentence_results/' + outputname + 's_docs.tsv'
+summaryfile = 'cluster_results/' + outputname + 's_docs.tsv'
 print(outputname)
 
 # segments = []
