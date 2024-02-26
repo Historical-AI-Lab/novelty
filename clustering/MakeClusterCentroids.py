@@ -38,19 +38,24 @@ counter = 0
 for articleid, group in groups:
     # Get the numeric matrix
     matrix = group.iloc[:, 1:769].values
+
+    nrows = matrix.shape[0]
+    if nrows < 3:
+        continue    # skip articles with less than 3 sentences
     
     # Perform PCA on the matrix
-    pca = PCA(n_components=0.7)
-    transformed_matrix = pca.fit_transform(matrix)
+    try:
+        pca = PCA(n_components=0.7)
+        transformed_matrix = pca.fit_transform(matrix)
+    except:
+        print(f"PCA error processing article {articleid}")
+        continue
     
     # Print the number of dimensions retained
     # print(f"Article ID: {articleid}")
     # print(f"Number of dimensions retained: {pca.n_components_}")
     
     # Print the number of rows in the matrix
-    nrows = matrix.shape[0]
-    if nrows < 3:
-        continue    # skip articles with less than 3 sentences
     
     # Increment the counter
     counter += 1
@@ -73,17 +78,20 @@ for articleid, group in groups:
         centroids.append(np.mean(matrix, axis=0))
         write_centroids(articleid, centroids, 'cluster_centroids.tsv')
         continue
-
-    # Initialize the KMeansConstrained model
-    kmeans = KMeansConstrained(
-        n_clusters=num_clusters,
-        size_min=min_rows_per_cluster,
-        size_max=max_rows_per_cluster,
-        random_state=0
-    )
-    # Fit the model
-    kmeans.fit(transformed_matrix)
-    # print(kmeans.labels_)
+    try:
+        # Initialize the KMeansConstrained model
+        kmeans = KMeansConstrained(
+            n_clusters=num_clusters,
+            size_min=min_rows_per_cluster,
+            size_max=max_rows_per_cluster,
+            random_state=0
+        )
+        # Fit the model
+        kmeans.fit(transformed_matrix)
+        
+    except:
+        print(f"Kmeans error processing article {articleid}")
+        continue
 
     for cluster_id in range(num_clusters):
         # Get the indexes of rows assigned to the current cluster_id
