@@ -8,7 +8,7 @@
 import pandas as pd
 from datasets import Dataset
 
-metadata = pd.read_csv('/projects/ischoolichass/ichass/usesofscale/novelty/metadata/litstudies/LitMetadataWithS2.tsv')
+metadata = pd.read_csv('/projects/ischoolichass/ichass/usesofscale/novelty/metadata/litstudies/LitMetadataWithS2.tsv', sep = '\t')
 
 minyear = min(metadata['year'])
 maxyear = max(metadata['year'])
