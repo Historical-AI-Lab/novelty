@@ -12,7 +12,7 @@ metadata = pd.read_csv('/projects/ischoolichass/ichass/usesofscale/novelty/metad
 metadata['year'] = metadata['year'].astype(int)
 
 def LoadTimeSlice(floor, ceiling, metadata):
-    selected_paperIds = metadata[(metadata['paperId'] >= floor) & (metadata['paperId'] <= ceiling)]['paperId']
+    selected_paperIds = metadata[(metadata['year'] >= floor) & (metadata['year'] <= ceiling)]['paperId']
 
     rootfolder = '/projects/ischoolichass/ichass/usesofscale/novelty/embeddingcode/chunks'
 
