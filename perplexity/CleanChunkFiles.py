@@ -63,7 +63,7 @@ for path in chunkfiles:
     with open(path, encoding='utf-8') as file:
         for line in file:
             line_parts = line.strip().split('\t')
-            if len(fields) != 2:
+            if len(line_parts) != 2:
                     print('Skipping line:', len(line))
                     continue
             chunk_number = int(line_parts[0])
