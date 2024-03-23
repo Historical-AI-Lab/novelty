@@ -11,6 +11,12 @@ from datasets import Dataset
 metadata = pd.read_csv('/projects/ischoolichass/ichass/usesofscale/novelty/metadata/litstudies/LitMetadataWithS2.tsv', sep = '\t')
 metadata['year'] = metadata['year'].astype(int)
 
+# Drop rows with missing paperId values
+metadata = metadata.dropna(subset=['paperId'])
+
+# Filter out paperIds with length less than 2
+metadata = metadata[metadata['paperId'].str.len() > 2]
+
 def LoadTimeSlice(floor, ceiling, metadata):
     selected_paperIds = metadata[(metadata['year'] >= floor) & (metadata['year'] <= ceiling)]['paperId']
 
