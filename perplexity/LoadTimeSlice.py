@@ -9,6 +9,7 @@ import pandas as pd
 from datasets import Dataset
 
 metadata = pd.read_csv('/projects/ischoolichass/ichass/usesofscale/novelty/metadata/litstudies/LitMetadataWithS2.tsv', sep = '\t')
+metadata['year'] = metadata['year'].astype(int)
 
 def LoadTimeSlice(floor, ceiling, metadata):
     selected_paperIds = metadata[(metadata['paperId'] >= floor) & (metadata['paperId'] <= ceiling)]['paperId']
@@ -56,6 +57,8 @@ def LoadTimeSlice(floor, ceiling, metadata):
 
 minyear = min(metadata['year'])
 maxyear = max(metadata['year'])
+
+assert isinstance(minyear, int), "minyear must be an integer"
 
 for floor in range(minyear, maxyear - 12, 4):
     ceiling = floor + 12
