@@ -31,6 +31,8 @@ def LoadTimeSlice(floor, ceiling, metadata):
         with open(filepath, 'r') as file:
             for line in file:
                 fields = line.strip().split('\t')
+                if len(fields) != 2:
+                    continue
                 text = fields[1]
                 paper_Ids.append(paperId)
                 text_data.append(text)
