@@ -10,15 +10,6 @@ from datasets import Dataset
 
 metadata = pd.read_csv('/projects/ischoolichass/ichass/usesofscale/novelty/metadata/litstudies/LitMetadataWithS2.tsv', sep = '\t')
 
-minyear = min(metadata['year'])
-maxyear = max(metadata['year'])
-
-for floor in range(minyear, maxyear - 12, 4):
-    ceiling = floor + 12
-    dataset = LoadTimeSlice(floor, ceiling, metadata)
-    print('successfully loaded dataset for', floor, 'to', ceiling)
-    break
-
 def LoadTimeSlice(floor, ceiling, metadata):
     selected_paperIds = metadata[(metadata['paperId'] >= floor) & (metadata['paperId'] <= ceiling)]['paperId']
 
@@ -62,3 +53,12 @@ def LoadTimeSlice(floor, ceiling, metadata):
     dataset = Dataset.from_pandas(df)
     
     return dataset
+
+minyear = min(metadata['year'])
+maxyear = max(metadata['year'])
+
+for floor in range(minyear, maxyear - 12, 4):
+    ceiling = floor + 12
+    dataset = LoadTimeSlice(floor, ceiling, metadata)
+    print('successfully loaded dataset for', floor, 'to', ceiling)
+    break
