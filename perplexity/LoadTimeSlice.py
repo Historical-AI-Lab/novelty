@@ -3,10 +3,11 @@
 # This function accepts a floor, a ceiling, and a metadata dataframe.
 # It selects paperIds between the floor and ceiling, and loads the text
 # files corresponding to those paperIds. It transforms them first into
-# a pandas dataframe and then into a HuggingFace dataset.
+# a pandas dataframe and then into a HuggingFace DatasetDict, which
+# it returns.
 
 import pandas as pd
-from datasets import Dataset
+from datasets import Dataset, DatasetDict
 
 metadata = pd.read_csv('/projects/ischoolichass/ichass/usesofscale/novelty/metadata/litstudies/LitMetadataWithS2.tsv', sep = '\t')
 metadata['year'] = metadata['year'].astype(int)
@@ -58,10 +59,7 @@ def LoadTimeSlice(floor, ceiling, metadata):
     # Combine test_dataset and training_dataset into a DatasetDict
     dataset_dict = DatasetDict({'train': training_dataset, 'test': test_dataset})
     
-    # Transform df into a HuggingFace dataset
-    dataset = Dataset.from_pandas(df)
-    
-    return dataset
+    return dataset_dict
 
 minyear = min(metadata['year'])
 maxyear = max(metadata['year'])
