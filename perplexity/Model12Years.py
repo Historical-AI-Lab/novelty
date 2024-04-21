@@ -254,15 +254,15 @@ def whole_word_masking_data_collator(features):
 
 args = sys.argv
 
-# metadatapath = args[1]
-# floor = int(args[2])
-# ceiling = int(args[3])
-# rootfolder = args[4]
+metadatapath = args[1]
+floor = int(args[2])
+ceiling = int(args[3])
+rootfolder = args[4]
 
-metadatapath = 'novelty/metadata/litstudies/LitMetadataWithS2.tsv'
-floor = 1910
-ceiling = 1921
-rootfolder = 'novelty/perplexity/cleanchunksbefore29'
+# metadatapath = 'novelty/metadata/litstudies/LitMetadataWithS2.tsv'
+# floor = 1910
+# ceiling = 1921
+# rootfolder = 'novelty/perplexity/cleanchunksbefore29'
 
 model, tokenizer, metadata = load_model_and_tokenizer(metadatapath)
 print('Loaded model, tokenizer, and metadata')
