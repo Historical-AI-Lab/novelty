@@ -1,3 +1,13 @@
+# Model12Years.py is a script that trains a masked language model on two four-year shoulder periods
+# of a twelve-year time segment. It breaks texts into 256-word chunks and uses whole-word masking to
+# train and evaluate the model.
+
+# Code written by Becca Cohen and Ted Underwood, drawing heavily on the
+# HuggingFace blog post "Fine-Tuning a Masked Language Model."
+# (https://huggingface.co/learn/nlp-course/en/chapter7/3)
+
+# This version April 2024.
+
 import random, math, sys, torch, os
 import pandas as pd
 
