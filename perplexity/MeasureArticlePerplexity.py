@@ -40,16 +40,19 @@ def LoadPaper(paperId, rootfolder):
     '''
     
     filepath = rootfolder + '/' + paperId + '.txt'
+    all_paper_Ids = []
+    text_data = []
+    
     with open(filepath, 'r') as file:
         for line in file:
             fields = line.strip().split('\t')
             if len(fields) != 2:
                 continue
             text = fields[1]
-            paper_Ids.append(paperId)
+            all_paper_Ids.append(paperId)
             text_data.append(text)
 
-    df = pd.DataFrame({'paper_Id': paper_Ids, 'text': text_data})
+    df = pd.DataFrame({'paper_Id': all_paper_Ids, 'text': text_data})
     return Dataset.from_pandas(df)
 
 def tokenize_function(examples):
