@@ -251,6 +251,12 @@ tokenizer = RobertaTokenizer.from_pretrained('roberta-base')
 
 metadata = pd.read_csv(metadatapath, sep ='\t')   
 
+metadata['year'] = metadata['year'].astype(int)
+
+# Drop rows with missing paperId values, or with paperId values that are too short
+metadata = metadata.dropna(subset=['paperId'])
+metadata = metadata[metadata['paperId'].str.len() > 2]
+
 print('Metadata loaded.')
 
 # Assuming the models are already loaded, put them in evaluation mode
