@@ -126,7 +126,7 @@ def all_word_masking(features):
         None
 
     """
-     dataset_dict = {}
+    dataset_dict = {}
 
     for i, feature in enumerate(features):
         input_ids = feature["input_ids"]
