@@ -26,7 +26,7 @@ from torch.utils.data import DataLoader
 from torch.optim import AdamW
 from accelerate import Accelerator
 
-def LoadPaper(paperID, rootfolder):
+def LoadPaper(paperId, rootfolder):
     '''
     This function loads the text chunks corresponding to a paperId
     and returns them as a Dataset object.
