@@ -230,6 +230,7 @@ config1 = RobertaConfig.from_pretrained(model_dir1)
 
 # Load the RoBERTa model
 model1 = RobertaModel(config1)
+print('Model 1 loaded.')
 
 # Also load models 12 and 16 years in the future
 model_dir2 = 'from' + str(modelfloor + 12) + 'to' + str(modelceiling + 12)
@@ -239,6 +240,8 @@ config3 = RobertaConfig.from_pretrained(model_dir3)
 model2 = RobertaModel(config2)
 model3 = RobertaModel(config3)
 
+print('Models 2 and 3 loaded.')
+
 model1name = 'model' + str(modelfloor) + '-' + str(modelceiling)
 model2name = 'model' + str(modelfloor + 12) + '-' + str(modelceiling + 12)
 model3name = 'model' + str(modelfloor + 16) + '-' + str(modelceiling + 16)
@@ -247,6 +250,8 @@ model3name = 'model' + str(modelfloor + 16) + '-' + str(modelceiling + 16)
 tokenizer = RobertaTokenizer.from_pretrained('roberta-base')
 
 metadata = pd.read_csv(metadatapath, sep ='\t')   
+
+print('Metadata loaded.')
 
 # Assuming the models are already loaded, put them in evaluation mode
 model1.eval()
@@ -299,7 +304,7 @@ for year in range(floor, ceiling + 1):
             for i, perplexity in enumerate(m3_paper_perplexities[paper]):
                 file.write(paper + '\t' + str(year) + '\t' + model3name + '\t' + str(i) + '\t' + str(perplexity) + '\n') 
 
-    print('Perplexitiesfor year ', year, ' calculated and saved to file.')
+    print('Perplexities for year ', year, ' calculated and saved to file.')
 
     # Reinitialize the perplexity dictionaries for m1, m2, and m3
     m1_paper_perplexities = {}
