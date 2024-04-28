@@ -18,7 +18,6 @@ from transformers import RobertaConfig, RobertaForMaskedLM, AutoTokenizer
 from datasets import Dataset, DatasetDict
 from transformers import default_data_collator
 from torch.utils.data import DataLoader
-from torch.cuda.amp import autocast
 
 def LoadPaper(paperId, rootfolder):
     '''
@@ -258,7 +257,7 @@ config1 = RobertaConfig.from_pretrained(model_dir1)
 
 # Load the RoBERTa model
 model1 = RobertaForMaskedLM(config1)
-print('Model 1 loaded.')
+print('Model 1 loaded.', flush=True)
 
 # Also load models 12 and 16 years in the future
 model_dir2 = 'from' + str(modelfloor + 12) + 'to' + str(modelceiling + 12)
@@ -287,7 +286,7 @@ metadata = metadata[metadata['paperId'].str.len() > 2]
 
 print('Metadata loaded.')
 
-device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+device = torch.device("cuda")
 print(f"Device: {device}", flush = True)
 model1.to(device)
 model2.to(device)
