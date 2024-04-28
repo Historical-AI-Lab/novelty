@@ -11,20 +11,13 @@
 # arguments, and together give us the name of the model to be used. (It will have been
 # trained on the first four and last four years of the twelve-year period.)
 
-import random, math, sys, torch, os
+import sys, torch
 import pandas as pd
 
-from transformers import RobertaConfig, RobertaModel, RobertaTokenizer
-from datasets import Dataset, DatasetDict, concatenate_datasets
-from transformers import TrainingArguments
-import collections
-import numpy as np
+from transformers import RobertaConfig, RobertaForMaskedLM, AutoTokenizer
+from datasets import Dataset, DatasetDict
 from transformers import default_data_collator
-from transformers import AutoTokenizer
-from transformers import Trainer, get_scheduler
 from torch.utils.data import DataLoader
-from torch.optim import AdamW
-from accelerate import Accelerator
 
 def LoadPaper(paperId, rootfolder):
     '''
@@ -160,7 +153,8 @@ def all_word_masking(features):
 
             masked_datasets.append({"input_ids": new_input_ids, "labels": new_labels})
 
-        dataset_dict[i] = Dataset.from_dict(masked_datasets)
+        df = pd.DataFrame(masked_datasets)
+        dataset_dict[str(i)] = Dataset.from_pandas(df)
 
     return DatasetDict(dataset_dict)
 
@@ -209,6 +203,11 @@ def calculate_perplexities_for_model(model, data_loader):
 
     return calculate_perplexity(total_log_probs, total_masked_tokens)
 
+def remove_keys(example):
+    example.pop('text', None)
+    example.pop('paper_Id', None)
+    return example
+
 # MAIN CODE EXECUTION STARTS HERE
 
 args = sys.argv
@@ -232,7 +231,7 @@ model_dir1 = 'from' + str(modelfloor) + 'to' + str(modelceiling)
 config1 = RobertaConfig.from_pretrained(model_dir1)
 
 # Load the RoBERTa model
-model1 = RobertaModel(config1)
+model1 = RobertaForMaskedLM(config1)
 print('Model 1 loaded.')
 
 # Also load models 12 and 16 years in the future
@@ -240,8 +239,8 @@ model_dir2 = 'from' + str(modelfloor + 12) + 'to' + str(modelceiling + 12)
 model_dir3 = 'from' + str(modelfloor + 16) + 'to' + str(modelceiling + 16)
 config2 = RobertaConfig.from_pretrained(model_dir2)
 config3 = RobertaConfig.from_pretrained(model_dir3)
-model2 = RobertaModel(config2)
-model3 = RobertaModel(config3)
+model2 = RobertaForMaskedLM(config2)
+model3 = RobertaForMaskedLM(config3)
 
 print('Models 2 and 3 loaded.')
 
@@ -250,7 +249,7 @@ model2name = 'model' + str(modelfloor + 12) + '-' + str(modelceiling + 12)
 model3name = 'model' + str(modelfloor + 16) + '-' + str(modelceiling + 16)
 
 # Load the tokenizer
-tokenizer = RobertaTokenizer.from_pretrained('roberta-base')
+tokenizer = AutoTokenizer.from_pretrained('roberta-base')
 
 metadata = pd.read_csv(metadatapath, sep ='\t')   
 
@@ -282,6 +281,7 @@ for year in range(floor, ceiling + 1):
     for paper in paperIds_in_year:
         paper_dataset = LoadPaper(paper, rootfolder)
         tokenized_dataset = paper_dataset.map(tokenize_function, batched=True)
+        tokenized_dataset = tokenized_dataset.map(remove_keys, batched=True)
         grouped_dataset = tokenized_dataset.map(group_texts, batched=True)
 
         masked_dataset_dict = all_word_masking(grouped_dataset)
