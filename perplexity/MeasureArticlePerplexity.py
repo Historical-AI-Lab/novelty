@@ -18,6 +18,7 @@ from transformers import RobertaConfig, RobertaForMaskedLM, AutoTokenizer
 from datasets import Dataset, DatasetDict
 from transformers import default_data_collator
 from torch.utils.data import DataLoader
+from torch.cuda.amp import autocast
 
 def LoadPaper(paperId, rootfolder):
     '''
@@ -211,8 +212,9 @@ def calculate_perplexities_for_model(model, data_loader):
     for batch in data_loader:
         batch = {k: v.to(model.device) for k, v in batch.items() if isinstance(v, torch.Tensor)}
         with torch.no_grad():
-            outputs = model(**batch)
-            logits = outputs.logits
+            with autocast():
+                outputs = model(**batch)
+                logits = outputs.logits
 
         labels = batch['labels']
         mask = labels != -100
@@ -286,6 +288,11 @@ metadata = metadata[metadata['paperId'].str.len() > 2]
 
 print('Metadata loaded.')
 
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+model1.to(device)
+model2.to(device)
+model3.to(device)
+
 # Assuming the models are already loaded, put them in evaluation mode
 model1.eval()
 model2.eval()
@@ -294,9 +301,6 @@ model3.eval()
 # We will be storing the perplexities of each paper in a dictionary;
 # the key will be the paperId, and the value will be a list of perplexities
 # for each chunk of text in the paper. 
-m1_paper_perplexities = {}
-m2_paper_perplexities = {}
-m3_paper_perplexities = {}
 
 with open('PerplexitiesFrom' + str(floor) + 'To' + str(ceiling) + '.tsv', 'w') as file:
     file.write('paperId\tyear\tmodel\tindex\tperplexity\n')
@@ -323,26 +327,15 @@ for year in range(floor, ceiling + 1):
             m2_perplexities.append(calculate_perplexities_for_model(model2, data_loader))
             m3_perplexities.append(calculate_perplexities_for_model(model3, data_loader))
 
-        m1_paper_perplexities[paper] = m1_perplexities
-        m2_paper_perplexities[paper] = m2_perplexities
-        m3_paper_perplexities[paper] = m3_perplexities
-
-    # Save the perplexities to a file
-
-    with open('PerplexitiesFrom' + str(floor) + 'To' + str(ceiling) + '.tsv', 'a') as file:
-        for paper in m1_paper_perplexities.keys():
-            for i, perplexity in enumerate(m1_paper_perplexities[paper]):
+        with open('PerplexitiesFrom' + str(floor) + 'To' + str(ceiling) + '.tsv', 'a') as file:
+        
+            for i, perplexity in enumerate(m1_perplexities):
                 file.write(paper + '\t' + str(year) + '\t' + model1name + '\t' + str(i) + '\t' + str(perplexity) + '\n')
-            for i, perplexity in enumerate(m2_paper_perplexities[paper]):
+            for i, perplexity in enumerate(m2_perplexities):
                 file.write(paper + '\t' + str(year) + '\t' + model2name + '\t' + str(i) + '\t' + str(perplexity) + '\n')
-            for i, perplexity in enumerate(m3_paper_perplexities[paper]):
+            for i, perplexity in enumerate(m3_perplexities):
                 file.write(paper + '\t' + str(year) + '\t' + model3name + '\t' + str(i) + '\t' + str(perplexity) + '\n') 
 
-    print('Perplexities for year ', year, ' calculated and saved to file.')
-
-    # Reinitialize the perplexity dictionaries for m1, m2, and m3
-    m1_paper_perplexities = {}
-    m2_paper_perplexities = {}
-    m3_paper_perplexities = {}
+        print('Paper: ', paper)
 
 print('Done.')
