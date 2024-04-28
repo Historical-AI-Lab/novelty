@@ -310,11 +310,12 @@ with open('PerplexitiesFrom' + str(floor) + 'To' + str(ceiling) + '.tsv', 'w') a
 
 for year in range(floor, ceiling + 1):
     paperIds_in_year = metadata[metadata['year'] == year]['paperId']
+    print(f"Number of paperIds in year {year}: {len(paperIds_in_year)}")
     for paper in paperIds_in_year:
         paper_dataset = LoadPaper(paper, rootfolder)
-        tokenized_dataset = paper_dataset.map(tokenize_function, batched=True)
-        tokenized_dataset = tokenized_dataset.map(remove_keys, batched=True)
-        grouped_dataset = tokenized_dataset.map(group_texts, batched=True)
+        tokenized_dataset = paper_dataset.map(tokenize_function, batched=True, disable_tqdm=True)
+        tokenized_dataset = tokenized_dataset.map(remove_keys, batched=True, disable_tqdm=True)
+        grouped_dataset = tokenized_dataset.map(group_texts, batched=True, disable_tqdm=True)
 
         masked_dataset_dict = all_word_masking(grouped_dataset)
 
