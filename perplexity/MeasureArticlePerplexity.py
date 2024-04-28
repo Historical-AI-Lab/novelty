@@ -94,6 +94,26 @@ def group_texts(examples, chunk_size=256):
     result["labels"] = result["input_ids"].copy()
     return result
 
+def create_paired_list(items, offset=120):
+    n = len(items)
+    paired_list = []
+    used_indices = set()  # To keep track of which indices have been used
+    
+    # Create pairs where possible
+    for i in range(n):
+        pair_index = i + offset
+        if pair_index < n and i not in used_indices and pair_index not in used_indices:
+            # Pair the current item with the item 'offset' places ahead
+            paired_list.append([items[i], items[pair_index]])
+            used_indices.add(i)
+            used_indices.add(pair_index)
+        elif i not in used_indices:
+            # If no pair is possible, add the item as a singleton
+            paired_list.append([items[i]])
+            used_indices.add(i)
+    
+    return paired_list
+
 def all_word_masking(features):
     """
     Applies whole word masking to the input features, while multiplying them
@@ -134,22 +154,27 @@ def all_word_masking(features):
 
         # Mapping from word index to token indices
         mapping = {}
+        sequential_words = []
         for idx, word_id in enumerate(word_ids):
             if word_id is not None:
                 if word_id not in mapping:
                     mapping[word_id] = []
+                    sequential_words.append(word_id)
                 mapping[word_id].append(idx)
+
+        wordpairs = create_paired_list(sequential_words, offset=120)
 
         masked_datasets = []
 
         # Create masked versions: one mask per word
-        for word_index in mapping:
+        for wordpair in wordpairs:
             new_input_ids = input_ids.copy()
             new_labels = [-100] * len(input_ids)  # initially set all labels to -100
 
-            for token_index in mapping[word_index]:
-                new_input_ids[token_index] = tokenizer.mask_token_id
-                new_labels[token_index] = input_ids[token_index]  # Set the correct label
+            for word_index in wordpair:
+                for token_index in mapping[word_index]:
+                    new_input_ids[token_index] = tokenizer.mask_token_id
+                    new_labels[token_index] = input_ids[token_index]  # Set the correct label
 
             masked_datasets.append({"input_ids": new_input_ids, "labels": new_labels})
 
