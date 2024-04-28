@@ -18,6 +18,7 @@ from transformers import RobertaConfig, RobertaForMaskedLM, AutoTokenizer
 from datasets import Dataset, DatasetDict
 from transformers import default_data_collator
 from torch.utils.data import DataLoader
+from torch.cuda.amp import autocast
 
 def LoadPaper(paperId, rootfolder):
     '''
@@ -211,8 +212,9 @@ def calculate_perplexities_for_model(model, data_loader):
     for batch in data_loader:
         batch = {k: v.to(model.device) for k, v in batch.items() if isinstance(v, torch.Tensor)}
         with torch.no_grad():
-            outputs = model(**batch)
-            logits = outputs.logits
+            with autocast():
+                outputs = model(**batch)
+                logits = outputs.logits
 
         labels = batch['labels']
         mask = labels != -100
@@ -265,13 +267,13 @@ model_dir3 = 'from' + str(modelfloor + 16) + 'to' + str(modelceiling + 16)
 config2 = RobertaConfig.from_pretrained(model_dir2)
 config3 = RobertaConfig.from_pretrained(model_dir3)
 model2 = RobertaForMaskedLM(config2)
-# model3 = RobertaForMaskedLM(config3)
+model3 = RobertaForMaskedLM(config3)
 
 print('Models 2 and 3 loaded.')
 
 model1name = 'model' + str(modelfloor) + '-' + str(modelceiling)
 model2name = 'model' + str(modelfloor + 12) + '-' + str(modelceiling + 12)
-# model3name = 'model' + str(modelfloor + 16) + '-' + str(modelceiling + 16)
+model3name = 'model' + str(modelfloor + 16) + '-' + str(modelceiling + 16)
 
 # Load the tokenizer
 tokenizer = AutoTokenizer.from_pretrained('roberta-base')
@@ -290,12 +292,12 @@ device = torch.device("cuda")
 print(f"Device: {device}", flush = True)
 model1.to(device)
 model2.to(device)
-# model3.to(device)
+model3.to(device)
 
 # Assuming the models are already loaded, put them in evaluation mode
 model1.eval()
 model2.eval()
-# model3.eval()
+model3.eval()
 
 print('Models in evaluation mode.', flush = True)
 
@@ -326,7 +328,7 @@ for year in range(floor, ceiling + 1):
             # Calculate and store perplexities for each model
             m1_perplexities.append(calculate_perplexities_for_model(model1, data_loader))
             m2_perplexities.append(calculate_perplexities_for_model(model2, data_loader))
-            # m3_perplexities.append(calculate_perplexities_for_model(model3, data_loader))
+            m3_perplexities.append(calculate_perplexities_for_model(model3, data_loader))
 
         with open('PerplexitiesFrom' + str(floor) + 'To' + str(ceiling) + '.tsv', 'a') as file:
         
@@ -334,8 +336,8 @@ for year in range(floor, ceiling + 1):
                 file.write(paper + '\t' + str(year) + '\t' + model1name + '\t' + str(i) + '\t' + str(perplexity) + '\n')
             for i, perplexity in enumerate(m2_perplexities):
                 file.write(paper + '\t' + str(year) + '\t' + model2name + '\t' + str(i) + '\t' + str(perplexity) + '\n')
-            # for i, perplexity in enumerate(m3_perplexities):
-            #     file.write(paper + '\t' + str(year) + '\t' + model3name + '\t' + str(i) + '\t' + str(perplexity) + '\n') 
+            for i, perplexity in enumerate(m3_perplexities):
+                file.write(paper + '\t' + str(year) + '\t' + model3name + '\t' + str(i) + '\t' + str(perplexity) + '\n') 
 
         print(f'Paper: {paper}', flush = True)
     print(f'Year: {year}', flush = True)
