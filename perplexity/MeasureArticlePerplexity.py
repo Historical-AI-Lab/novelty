@@ -288,7 +288,7 @@ metadata = metadata[metadata['paperId'].str.len() > 2]
 print('Metadata loaded.')
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-print(f"Device: {device}")
+print(f"Device: {device}", flush = True)
 model1.to(device)
 model2.to(device)
 # model3.to(device)
@@ -298,7 +298,7 @@ model1.eval()
 model2.eval()
 # model3.eval()
 
-print('Models in evaluation mode.')
+print('Models in evaluation mode.', flush = True)
 
 # We will be storing the perplexities of each paper in a dictionary;
 # the key will be the paperId, and the value will be a list of perplexities
@@ -338,6 +338,6 @@ for year in range(floor, ceiling + 1):
             # for i, perplexity in enumerate(m3_perplexities):
             #     file.write(paper + '\t' + str(year) + '\t' + model3name + '\t' + str(i) + '\t' + str(perplexity) + '\n') 
 
-        print('Paper: ', paper)
-    print('Year: ', year)
+        print(f'Paper: {paper}', flush = True)
+    print(f'Year: {year}', flush = True)
 print('Done.')
