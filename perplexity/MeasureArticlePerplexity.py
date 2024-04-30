@@ -389,26 +389,25 @@ for year in range(floor, ceiling + 1):
         m3_novelties = []
         m4_novelties = []
 
-
         for key, masked_examples in masked_dataset_dict.items():
             data_loader = DataLoader(masked_examples, batch_size=32, collate_fn=default_data_collator)
 
             # Calculate and store novelties for each model
-            m1_novelties.append(calculate_contextual_novelty(model1, data_loader))
-            m2_novelties.append(calculate_contextual_novelty(model2, data_loader))
-            m3_novelties.append(calculate_contextual_novelty(model3, data_loader))
-            m4_novelties.append(calculate_contextual_novelty(model4, data_loader))
+            m1_novelties.append(calculate_perplexities_for_model(model1, data_loader))
+            m2_novelties.append(calculate_perplexities_for_model(model2, data_loader))
+            m3_novelties.append(calculate_perplexities_for_model(model3, data_loader))
+            m4_novelties.append(calculate_perplexities_for_model(model4, data_loader))
 
         with open('CNsFrom' + str(floor) + 'To' + str(ceiling) + '.tsv', 'a') as file:
         
             for i, novelty in enumerate(m1_novelties):
-            file.write(paper + '\t' + str(year) + '\t' + model1name + '\t' + str(i) + '\t' + str(novelty) + '\n')
+                file.write(paper + '\t' + str(year) + '\t' + model1name + '\t' + str(i) + '\t' + str(novelty) + '\n')
             for i, novelty in enumerate(m2_novelties):
-            file.write(paper + '\t' + str(year) + '\t' + model2name + '\t' + str(i) + '\t' + str(novelty) + '\n')
+                file.write(paper + '\t' + str(year) + '\t' + model2name + '\t' + str(i) + '\t' + str(novelty) + '\n')
             for i, novelty in enumerate(m3_novelties):
-            file.write(paper + '\t' + str(year) + '\t' + model3name + '\t' + str(i) + '\t' + str(novelty) + '\n') 
+                file.write(paper + '\t' + str(year) + '\t' + model3name + '\t' + str(i) + '\t' + str(novelty) + '\n') 
             for i, novelty in enumerate(m4_novelties):
-            file.write(paper + '\t' + str(year) + '\t' + model4name + '\t' + str(i) + '\t' + str(novelty) + '\n')
+                file.write(paper + '\t' + str(year) + '\t' + model4name + '\t' + str(i) + '\t' + str(novelty) + '\n')
 
         print(f'Paper: {paper}', flush = True)
     print(f'Year: {year}', flush = True)
