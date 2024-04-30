@@ -14,11 +14,13 @@
 import sys, torch
 import pandas as pd
 
-from transformers import RobertaConfig, RobertaForMaskedLM, AutoTokenizer
+from transformers import AutoModelForMaskedLM, AutoTokenizer
 from datasets import Dataset, DatasetDict
 from transformers import default_data_collator
 from torch.utils.data import DataLoader
 from torch.cuda.amp import autocast
+import numpy as np
+import torch.nn.functional as F
 
 def LoadPaper(paperId, rootfolder):
     '''
@@ -235,6 +237,73 @@ def remove_keys(example):
     example.pop('paper_Id', None)
     return example
 
+def calculate_contextual_novelty(model, data_loader):
+    """
+    Calculates cross-entropy losses for each word (group of adjacent masked tokens) in the dataset.
+
+    Args:
+        model: The pre-trained language model.
+        data_loader: DataLoader object providing batches of data.
+
+    Returns:
+        list: A list of cross-entropy losses, each corresponding to a masked word.
+    """
+    perplexities = []
+
+    with torch.no_grad():  # Disable gradient calculation
+        with autocast():  # Use automatic mixed precision
+            for batch in data_loader:
+                batch = {k: v.to(model.device) for k, v in batch.items() if isinstance(v, torch.Tensor)}
+                
+                outputs = model(**batch)
+                logits = outputs.logits
+                labels = batch['labels']
+
+                # Mask for tokens that are not special tokens (-100 in labels indicates padding or non-masked tokens)
+                mask = labels != -100
+
+                # Compute log probabilities
+                log_probs = F.log_softmax(logits, dim=-1)
+
+                # Iterate over each example in the batch
+                for idx in range(logits.size(0)):
+                    masked_indices = mask[idx].nonzero(as_tuple=True)[0]
+                    if len(masked_indices) == 0:
+                        continue
+
+                    # Group by words using contiguous masked regions
+                    start_idx = masked_indices[0].item()
+                    for j in range(1, len(masked_indices)):
+                        if masked_indices[j] != masked_indices[j - 1] + 1:
+                            # End of a word found, calculate the loss for this word
+                            word_labels = labels[idx, start_idx:masked_indices[j - 1] + 1]
+                            word_log_probs = log_probs[idx, start_idx:masked_indices[j - 1] + 1]
+                            
+                            # Gather log probabilities for actual token labels
+                            selected_log_probs = word_log_probs.gather(dim=-1, index=word_labels.unsqueeze(-1)).squeeze(-1)
+                            word_loss = -selected_log_probs.mean()  # Mean loss for the word
+                            word_losses.append(word_loss.item())
+
+                            # Set new start index for the next word
+                            start_idx = masked_indices[j].item()
+
+                    # Calculate loss for the last word in the sequence
+                    word_labels = labels[idx, start_idx:]
+                    word_logits = logits[idx, start_idx:]
+                    word_log_probs = log_probs[idx, start_idx:]
+                    selected_log_probs = word_log_probs.gather(dim=-1, index=word_labels.unsqueeze(-1)).squeeze(-1)
+                    word_perplexity = torch.exp(-selected_log_probs.mean()).item()
+                    perplexities.append(word_perplexity)
+
+    # Calculate the product of all perplexities
+    product = np.prod(perplexities)
+
+    # Take the nth root of the product
+    n = len(perplexities)
+    novelty = product ** (1/n)
+
+    return novelty
+
 # MAIN CODE EXECUTION STARTS HERE
 
 args = sys.argv
@@ -253,28 +322,16 @@ ceiling = modelceiling - 4
 assert ceiling - floor == 3
 
 model_dir1 = 'from' + str(modelfloor) + 'to' + str(modelceiling)
-
-# Load the configuration from the config.json file
-config1 = RobertaConfig.from_pretrained(model_dir1)
-
-# Load the RoBERTa model
-model1 = RobertaForMaskedLM(config1)
-print('Model 1 loaded.', flush=True)
-
-# Also load models 12 and 16 years in the future
 model_dir2 = 'from' + str(modelfloor + 12) + 'to' + str(modelceiling + 12)
 model_dir3 = 'from' + str(modelfloor + 16) + 'to' + str(modelceiling + 16)
 model_dir4 = 'from' + str(modelfloor - 12) + 'to' + str(modelceiling - 12)
 
-config2 = RobertaConfig.from_pretrained(model_dir2)
-config3 = RobertaConfig.from_pretrained(model_dir3)
-config4 = RobertaConfig.from_pretrained(model_dir4)
+model1 = AutoModelForMaskedLM.from_pretrained(model_dir1)
+model2 = AutoModelForMaskedLM.from_pretrained(model_dir2)
+model3 = AutoModelForMaskedLM.from_pretrained(model_dir3)
+model4 = AutoModelForMaskedLM.from_pretrained(model_dir4)
 
-model2 = RobertaForMaskedLM(config2)
-model3 = RobertaForMaskedLM(config3)
-model4 = RobertaForMaskedLM(config4)
-
-print('Models 2, 3, and 4 loaded.')
+print('Models 1, 2, 3, and 4 loaded.')
 
 model1name = 'model' + str(modelfloor) + '-' + str(modelceiling)
 model2name = 'model' + str(modelfloor + 12) + '-' + str(modelceiling + 12)
@@ -313,7 +370,7 @@ print('Models in evaluation mode.', flush = True)
 # the key will be the paperId, and the value will be a list of perplexities
 # for each chunk of text in the paper. 
 
-with open('PerplexitiesFrom' + str(floor) + 'To' + str(ceiling) + '.tsv', 'w') as file:
+with open('CNsFrom' + str(floor) + 'To' + str(ceiling) + '.tsv', 'w') as file:
     file.write('paperId\tyear\tmodel\tindex\tperplexity\n')
 
 for year in range(floor, ceiling + 1):
@@ -327,31 +384,31 @@ for year in range(floor, ceiling + 1):
 
         masked_dataset_dict = all_word_masking(grouped_dataset)
 
-        m1_perplexities = []
-        m2_perplexities = []
-        m3_perplexities = []
-        m4_perplexities = []
+        m1_novelties = []
+        m2_novelties = []
+        m3_novelties = []
+        m4_novelties = []
 
 
         for key, masked_examples in masked_dataset_dict.items():
             data_loader = DataLoader(masked_examples, batch_size=32, collate_fn=default_data_collator)
 
-            # Calculate and store perplexities for each model
-            m1_perplexities.append(calculate_perplexities_for_model(model1, data_loader))
-            m2_perplexities.append(calculate_perplexities_for_model(model2, data_loader))
-            m3_perplexities.append(calculate_perplexities_for_model(model3, data_loader))
-            m4_perplexities.append(calculate_perplexities_for_model(model4, data_loader))
+            # Calculate and store novelties for each model
+            m1_novelties.append(calculate_contextual_novelty(model1, data_loader))
+            m2_novelties.append(calculate_contextual_novelty(model2, data_loader))
+            m3_novelties.append(calculate_contextual_novelty(model3, data_loader))
+            m4_novelties.append(calculate_contextual_novelty(model4, data_loader))
 
-        with open('PerplexitiesFrom' + str(floor) + 'To' + str(ceiling) + '.tsv', 'a') as file:
+        with open('CNsFrom' + str(floor) + 'To' + str(ceiling) + '.tsv', 'a') as file:
         
-            for i, perplexity in enumerate(m1_perplexities):
-                file.write(paper + '\t' + str(year) + '\t' + model1name + '\t' + str(i) + '\t' + str(perplexity) + '\n')
-            for i, perplexity in enumerate(m2_perplexities):
-                file.write(paper + '\t' + str(year) + '\t' + model2name + '\t' + str(i) + '\t' + str(perplexity) + '\n')
-            for i, perplexity in enumerate(m3_perplexities):
-                file.write(paper + '\t' + str(year) + '\t' + model3name + '\t' + str(i) + '\t' + str(perplexity) + '\n') 
-            for i, perplexity in enumerate(m4_perplexities):
-                file.write(paper + '\t' + str(year) + '\t' + model4name + '\t' + str(i) + '\t' + str(perplexity) + '\n')
+            for i, novelty in enumerate(m1_novelties):
+            file.write(paper + '\t' + str(year) + '\t' + model1name + '\t' + str(i) + '\t' + str(novelty) + '\n')
+            for i, novelty in enumerate(m2_novelties):
+            file.write(paper + '\t' + str(year) + '\t' + model2name + '\t' + str(i) + '\t' + str(novelty) + '\n')
+            for i, novelty in enumerate(m3_novelties):
+            file.write(paper + '\t' + str(year) + '\t' + model3name + '\t' + str(i) + '\t' + str(novelty) + '\n') 
+            for i, novelty in enumerate(m4_novelties):
+            file.write(paper + '\t' + str(year) + '\t' + model4name + '\t' + str(i) + '\t' + str(novelty) + '\n')
 
         print(f'Paper: {paper}', flush = True)
     print(f'Year: {year}', flush = True)
