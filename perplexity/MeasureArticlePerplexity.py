@@ -323,19 +323,19 @@ assert ceiling - floor == 3
 
 model_dir1 = 'from' + str(modelfloor) + 'to' + str(modelceiling)
 model_dir2 = 'from' + str(modelfloor + 12) + 'to' + str(modelceiling + 12)
-model_dir3 = 'from' + str(modelfloor + 16) + 'to' + str(modelceiling + 16)
+# model_dir3 = 'from' + str(modelfloor + 16) + 'to' + str(modelceiling + 16)
 model_dir4 = 'from' + str(modelfloor - 12) + 'to' + str(modelceiling - 12)
 
 model1 = AutoModelForMaskedLM.from_pretrained(model_dir1)
 model2 = AutoModelForMaskedLM.from_pretrained(model_dir2)
-model3 = AutoModelForMaskedLM.from_pretrained(model_dir3)
+# model3 = AutoModelForMaskedLM.from_pretrained(model_dir3)
 model4 = AutoModelForMaskedLM.from_pretrained(model_dir4)
 
 print('Models 1, 2, 3, and 4 loaded.')
 
 model1name = 'model' + str(modelfloor) + '-' + str(modelceiling)
 model2name = 'model' + str(modelfloor + 12) + '-' + str(modelceiling + 12)
-model3name = 'model' + str(modelfloor + 16) + '-' + str(modelceiling + 16)
+# model3name = 'model' + str(modelfloor + 16) + '-' + str(modelceiling + 16)
 model4name = 'model' + str(modelfloor - 12) + '-' + str(modelceiling - 12)
 
 # Load the tokenizer
@@ -355,13 +355,13 @@ device = torch.device("cuda")
 print(f"Device: {device}", flush = True)
 model1.to(device)
 model2.to(device)
-model3.to(device)
+# model3.to(device)
 model4.to(device)
 
 # Assuming the models are already loaded, put them in evaluation mode
 model1.eval()
 model2.eval()
-model3.eval()
+# model3.eval()
 model4.eval()
 
 print('Models in evaluation mode.', flush = True)
@@ -386,7 +386,7 @@ for year in range(floor, ceiling + 1):
 
         m1_novelties = []
         m2_novelties = []
-        m3_novelties = []
+        # m3_novelties = []
         m4_novelties = []
 
         for key, masked_examples in masked_dataset_dict.items():
@@ -395,7 +395,7 @@ for year in range(floor, ceiling + 1):
             # Calculate and store novelties for each model
             m1_novelties.append(calculate_perplexities_for_model(model1, data_loader))
             m2_novelties.append(calculate_perplexities_for_model(model2, data_loader))
-            m3_novelties.append(calculate_perplexities_for_model(model3, data_loader))
+            # m3_novelties.append(calculate_perplexities_for_model(model3, data_loader))
             m4_novelties.append(calculate_perplexities_for_model(model4, data_loader))
 
         with open('CNsFrom' + str(floor) + 'To' + str(ceiling) + '.tsv', 'a') as file:
@@ -404,8 +404,8 @@ for year in range(floor, ceiling + 1):
                 file.write(paper + '\t' + str(year) + '\t' + model1name + '\t' + str(i) + '\t' + str(novelty) + '\n')
             for i, novelty in enumerate(m2_novelties):
                 file.write(paper + '\t' + str(year) + '\t' + model2name + '\t' + str(i) + '\t' + str(novelty) + '\n')
-            for i, novelty in enumerate(m3_novelties):
-                file.write(paper + '\t' + str(year) + '\t' + model3name + '\t' + str(i) + '\t' + str(novelty) + '\n') 
+            # for i, novelty in enumerate(m3_novelties):
+            #     file.write(paper + '\t' + str(year) + '\t' + model3name + '\t' + str(i) + '\t' + str(novelty) + '\n') 
             for i, novelty in enumerate(m4_novelties):
                 file.write(paper + '\t' + str(year) + '\t' + model4name + '\t' + str(i) + '\t' + str(novelty) + '\n')
 
