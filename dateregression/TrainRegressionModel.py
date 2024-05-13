@@ -181,7 +181,7 @@ for dataset in [tokenized_train, tokenized_test]:
     print()
 
 # Create an output directory, unless it already exists.
-output_dir = "novelty/dateregression/AdaptedRegressor"
+output_dir = "./AdaptedRegressor"
 
 if not os.path.exists(output_dir):
     print("Directory does not exist. Creating it.")
