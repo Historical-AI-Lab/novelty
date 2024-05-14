@@ -69,9 +69,7 @@ def load_model_and_tokenizer(input_dir, metadatapath):
     # Filter out paperIds with length less than 2
     metadata = metadata[metadata['paperId'].str.len() > 2]
 
-    print(metadata.shape)
-
-    tokenizer = AutoTokenizer.from_pretrained("roberta-base", truncation=True, max_length = 512)
+    tokenizer = AutoTokenizer.from_pretrained(input_dir, truncation=True, max_length = 512)
 
     return model, tokenizer, metadata
 
@@ -114,6 +112,7 @@ def LoadDataset(metadata, rootfolder, floor, ceiling):
                 years.append(float(year - 1900) / 10)
 
     df = pd.DataFrame({'paperId': papers, 'text': text_data, 'year': years})
+    print(df.shape)
 
     data = Dataset.from_pandas(df)
 
