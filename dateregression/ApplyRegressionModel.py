@@ -183,8 +183,8 @@ for batch in data_loader:
     mean_embeddings = torch.mean(last_hidden_state, dim=1)  # Average across tokens
     embeddings.append(mean_embeddings.cpu().numpy())
     ctr += 1
-    if ctr % 4 == 1:
-        print(ctr)
+    if ctr % 10 == 1:
+        print(ctr, flush=True)
 
 print(pearsonr(years, predicted_years))
 
