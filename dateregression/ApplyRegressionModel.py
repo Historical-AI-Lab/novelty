@@ -129,21 +129,24 @@ def preprocess_function(examples):
 
 # args = sys.argv
 
-# metadatapath = args[1]
-# floor = int(args[2])
-# ceiling = int(args[3])
-# rootfolder = args[4]
+metadatapath = args[1]
+floor = int(args[2])
+ceiling = int(args[3])
+rootfolder = args[4]
+modelfolder = args[5]
 
-input_dir = "novelty/dateregression/AdaptedRegressor"
+# input_dir = "novelty/dateregression/AdaptedRegressor"
 
-metadatapath = 'novelty/dateregression/regressionsample.tsv'
-rootfolder = 'novelty/perplexity/regressionchunks'
-floor = 1917
-ceiling = 1918
+# metadatapath = 'novelty/dateregression/regressionsample.tsv'
+# rootfolder = 'novelty/perplexity/regressionchunks'
+# floor = 1917
+# ceiling = 1918
 
 print('Current directory:', os.getcwd())
 
-model, tokenizer, metadata = load_model_and_tokenizer(input_dir, metadatapath)
+outpath = './regoutput/regembeddings' + str(floor) + '-' + str(ceiling) + '.tsv'
+
+model, tokenizer, metadata = load_model_and_tokenizer(modelfolder, metadatapath)
 print('Loaded model, tokenizer, and metadata')
 
 data_collator = DataCollatorWithPadding(tokenizer=tokenizer)
@@ -201,8 +204,6 @@ outframe = pd.DataFrame({
 # Add embeddings to DataFrame
 embeddings_df = pd.DataFrame(all_embeddings, columns=embedding_columns)
 outframe = pd.concat([outframe, embeddings_df], axis=1)
-
-outpath = 'novelty/dateregression/regembeddings' + str(floor) + '-' + str(ceiling) + '.tsv'
 
 # Save DataFrame to CSV
 outframe.to_csv(outpath, sep='\t', index=False)
