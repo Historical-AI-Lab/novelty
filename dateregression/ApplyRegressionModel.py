@@ -127,7 +127,7 @@ def preprocess_function(examples):
 
 ## MAIN CODE EXECUTION STARTS HERE
 
-# args = sys.argv
+args = sys.argv
 
 metadatapath = args[1]
 floor = int(args[2])
