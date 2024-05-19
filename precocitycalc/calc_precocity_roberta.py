@@ -169,9 +169,6 @@ for centerdate, spanmeta in spanstocalculate:
                 print('danger: ', i)
             if chunkid in data:
                 spandata[chunkid] = data[chunkid]
-            elif chunkid in chunkmap:
-                chunkid = chunkmap[chunkid]
-                spandata[chunkid] = data[chunkid]
             else:
                 break
         if row.year == centerdate and paperId in exclusions:

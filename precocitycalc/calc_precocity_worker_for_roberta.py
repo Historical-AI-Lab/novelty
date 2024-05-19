@@ -63,48 +63,48 @@ def z_transform(a_cosine):
     return z_transformed
 
 def getallchunks(paperId_list, chunksfordoc):
-	"""
-	Retrieves all chunks for the given paper IDs.
+    """
+    Retrieves all chunks for the given paper IDs.
 
-	Args:
-		paperId_list (list): A list of paper IDs.
-		chunksfordoc (dict): A dictionary containing chunks for each document.
+    Args:
+        paperId_list (list): A list of paper IDs.
+        chunksfordoc (dict): A dictionary containing chunks for each document.
 
-	Returns:
-		set: A set of all chunks.
+    Returns:
+        set: A set of all chunks.
 
-	"""
-	allchunks = set()
-	for paperId in paperId_list:
-		if paperId in chunksfordoc:
-			allchunks.update(chunksfordoc[paperId])
+    """
+    allchunks = set()
+    for paperId in paperId_list:
+        if paperId in chunksfordoc:
+            allchunks.update(chunksfordoc[paperId])
                
-	return allchunks
+    return allchunks
 
 def get_exclusions(paperId, exclusions, chunksfordoc):
     
-	'''
-	Accepts a paperId, a dict of exclusions, and a dict that maps
-	from docids to lists of chunkids. Returns a dict where keys
-	are filter_states and values are sets of chunkids that are
-	excluded from analysis for that filter_state. Note that the
+    '''
+    Accepts a paperId, a dict of exclusions, and a dict that maps
+    from docids to lists of chunkids. Returns a dict where keys
+    are filter_states and values are sets of chunkids that are
+    excluded from analysis for that filter_state. Note that the
     sets have a matryoshka structure: if a chunk is excluded
     for 'train' it's also excluded for 'trainauth', and a chunk
-	excluded from 'trainauth' will also be excluded
+    excluded from 'trainauth' will also be excluded
     from 'trainauthquote.'
     '''
 
-	exclude_for_this = dict()
-	exclude_for_this['no filter'] = set()
-	exclude_for_this['train'] = getallchunks(exclusions['train'])
-	if paperId in exclusions:
-		exclude_for_this['trainauth'] = exclude_for_this['train'].union(getallchunks(exclusions[paperId]['author overlaps']))
-		exclude_for_this['trainauthquote'] = exclude_for_this['trainauth'].union(exclusions[paperId]['chunks that quote'])
-	else:
-		exclude_for_this['trainauth'] = set()
-		exclude_for_this['trainauthquote'] = set()
+    exclude_for_this = dict()
+    exclude_for_this['no filter'] = set()
+    exclude_for_this['train'] = getallchunks(exclusions['train'])
+    if paperId in exclusions:
+        exclude_for_this['trainauth'] = exclude_for_this['train'].union(getallchunks(exclusions[paperId]['author overlaps']))
+        exclude_for_this['trainauthquote'] = exclude_for_this['trainauth'].union(exclusions[paperId]['chunks that quote'])
+    else:
+        exclude_for_this['trainauth'] = set()
+        exclude_for_this['trainauthquote'] = set()
     
-	return exclude_for_this
+    return exclude_for_this
      
 def calculate_a_year(package):
     '''
@@ -117,7 +117,7 @@ def calculate_a_year(package):
     2 meta              metadata DataFrame
     3 data              a dict where keys are chunkids and values are vectors
     4 exclusions        a dict where keys are paperIds and values are dicts
-						with keys 'author overlaps' and 'chunks that quote'
+                        with keys 'author overlaps' and 'chunks that quote'
                         "author overlaps" is a set of paperIds
                         "chunks that quote" is a set of chunkids
                         there is in addition one special key that instead of a paperId
@@ -142,11 +142,11 @@ def calculate_a_year(package):
 
     filter_states = ['no filter', 'train', 'trainauth', 'trainauthquote']
     
-	# Overall the "filtered" variable has four conditions:
-	# nofilter -- no filtering at all everything included
-	# train -- only training corpus excluded
-	# trainauth -- training corpus and author overlaps excluded
-	# trainauthquote -- training corpus, author overlaps, and cites/quotes excluded
+    # Overall the "filtered" variable has four conditions:
+    # nofilter -- no filtering at all everything included
+    # train -- only training corpus excluded
+    # trainauth -- training corpus and author overlaps excluded
+    # trainauthquote -- training corpus, author overlaps, and cites/quotes excluded
 
     timeradii2check = [-20, -10, 10, 20]
 
@@ -213,7 +213,7 @@ def calculate_a_year(package):
         
         exclude_for_this = get_exclusions(paperId, exclusions, chunksfordoc)
         
-		# exclude_for_this is a dict where keys are filter_states, and values
+        # exclude_for_this is a dict where keys are filter_states, and values
         # are sets of chunkids that are forbidden for that filter state
 
         distances = dict()    
@@ -257,10 +257,10 @@ def calculate_a_year(package):
 
                         for filtered in filter_states:
 
-							if chunkid in exclude_for_this[filtered]:
-                            	pass 
-							else:
-								distances[(p_idx, filtered, comp_date)].append(distance)
+                            if chunkid in exclude_for_this[filtered]:
+                                pass 
+                            else:
+                                distances[(p_idx, filtered, comp_date)].append(distance)
 
         novelties = dict()
         for p_idx in range(number_of_chunks):
