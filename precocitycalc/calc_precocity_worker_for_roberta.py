@@ -98,8 +98,8 @@ def get_exclusions(paperId, exclusions, chunksfordoc):
 	exclude_for_this['no filter'] = set()
 	exclude_for_this['train'] = getallchunks(exclusions['train'])
 	if paperId in exclusions:
-		exclude_for_this['trainauth'] = exclude_for_this['train'].update(getallchunks(exclusions[paperId]['author overlaps'])
-		exclude_for_this['trainauthquote'] = exclude_for_this['train'].update(exclusions[paperId]['chunks that quote'])
+		exclude_for_this['trainauth'] = exclude_for_this['train'].union(getallchunks(exclusions[paperId]['author overlaps']))
+		exclude_for_this['trainauthquote'] = exclude_for_this['trainauth'].union(exclusions[paperId]['chunks that quote'])
 	else:
 		exclude_for_this['trainauth'] = set()
 		exclude_for_this['trainauthquote'] = set()
