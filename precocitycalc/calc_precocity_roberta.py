@@ -79,7 +79,7 @@ files_in_training_set = set()
 
 traindf = pd.read_csv(traindocs, sep = '\t')
 exclusions['train'] = set(traindf.paperId)  # this will be a set of article ids
-
+print('There are ', len(exclusions['train']), ' articles to be excluded because they were used in training.')
 # then we load the article-level exclusions
 
 with open(article_level_exclude, encoding= 'utf-8') as f:
@@ -163,7 +163,7 @@ print('outputfile:', outputname)
 packages = []
 for centerdate, spanmeta in spanstocalculate:
     spandata = dict()
-    spanexclude = dict()
+    
     for paperId, row in spanmeta.iterrows():  # the index is paperId
         for i in range(1000):
             chunkid = paperId + '-' + str(i)
@@ -173,11 +173,8 @@ for centerdate, spanmeta in spanstocalculate:
                 spandata[chunkid] = data[chunkid]
             else:
                 break
-        if row.year == centerdate and paperId in exclusions:
-            spanexclude[paperId] = exclusions[paperId]
 
-
-    package = (centerdate, spanmeta, spandata, spanexclude, 'cosine')
+    package = (centerdate, spanmeta, spandata, exclusions, 'cosine')
     packages.append(package)
 
 del data, meta, exclusions
