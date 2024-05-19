@@ -107,9 +107,9 @@ chunkcounter = Counter()
 filelist = os.listdir(datafolder)
 for filename in filelist:
     if filename.startswith('regembeddings'):
-        fields = filename.split('.')[0].split('-')
-        start = int(fields[1])
-        end = int(fields[2])
+        fields = filename.replace('regembeddings', '').split('.')[0].split('-')
+        start = int(fields[0])
+        end = int(fields[1])
         if end >= startdate - 20 or start <= enddate + 20:
             datapath = os.path.join(datafolder, filename)
             with open(datapath, encoding = "utf-8") as f:
