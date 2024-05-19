@@ -96,9 +96,9 @@ def get_exclusions(paperId, exclusions, chunksfordoc):
 
     exclude_for_this = dict()
     exclude_for_this['no filter'] = set()
-    exclude_for_this['train'] = getallchunks(exclusions['train'])
+    exclude_for_this['train'] = getallchunks(exclusions['train'], chunksfordoc)
     if paperId in exclusions:
-        exclude_for_this['trainauth'] = exclude_for_this['train'].union(getallchunks(exclusions[paperId]['author overlaps']))
+        exclude_for_this['trainauth'] = exclude_for_this['train'].union(getallchunks(exclusions[paperId]['author overlaps'], chunksfordoc))
         exclude_for_this['trainauthquote'] = exclude_for_this['trainauth'].union(exclusions[paperId]['chunks that quote'])
     else:
         exclude_for_this['trainauth'] = set()
@@ -191,11 +191,6 @@ def calculate_a_year(package):
     doc_precocities = dict() 
 
     for paperId in paperstocheck:
-        paperauthors = meta.at[paperId, 'authors']
-        try:
-            paperlastnames = get_lowercase_last_names(paperauthors)
-        except:
-            paperlastnames = set()
 
         ctr += 1
         
@@ -235,14 +230,8 @@ def calculate_a_year(package):
                 continue
             comps = meta.index[meta.year == centerdate + comp_date].tolist()
             for comp_paper in comps:
-                comp_authors = meta.at[comp_paper, 'authors']
-                try:
-                    comp_lastnames = get_lowercase_last_names(comp_authors)
-                except:
-                    comp_lastnames = set()
 
-                comp_vectors = get_vectors(comp_paper, data, function_string, chunksfordoc)
-                author_overlap = any_overlap(paperlastnames, comp_lastnames)
+                comp_vectors = get_vectors(comp_paper, data, function_string, chunksfordoc)x
 
                 for c_idx, chunktuple in enumerate(comp_vectors):    # c_idx is not actually used
                     chunkid, c_vec = chunktuple
