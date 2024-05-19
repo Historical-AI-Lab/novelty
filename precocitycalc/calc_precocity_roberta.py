@@ -50,9 +50,10 @@ import random, sys, os
 from multiprocessing import Pool
 import calc_precocity_worker_for_roberta as cpw
 from ast import literal_eval
+from collections import Counter
 
 metapath = sys.argv[1]
-datapath = sys.argv[2]
+datafolder = sys.argv[2]
 chunk_level_exclude = sys.argv[3]
 startdate = int(sys.argv[4])
 enddate = int(sys.argv[5])
@@ -92,14 +93,37 @@ with open(article_level_exclude, encoding= 'utf-8') as f:
             exclusions[centerdoc]['chunks that quote'] = set()   # this will be a set of chunk ids
 
         exclusions[centerdoc]['author overlaps'].add(whattoexclude)
-            
 
-with open(datapath, encoding = "utf-8") as f:
-	for line in f:
-		fields = line.strip().split('\t')
-		chunkid = fields[0]
-		vector = np.array([float(x) for x in fields[1:]], dtype = np.float64)
-		data[chunkid] = vector
+# Then we load the needed data files. The data folder contains
+# a lot of files in the format
+# regembeddings<startdate>-<enddate>.tsv
+
+# We need to load all the ones that have an enddate that falls
+# 20 years or less before our startdate, or a startdate that falls
+# 20 years or less after our enddate.
+
+chunkcounter = Counter()
+
+filelist = os.listdir(datafolder)
+for filename in filelist:
+    if filename.startswith('regembeddings'):
+        fields = filename.split('.')[0].split('-')
+        start = int(fields[1])
+        end = int(fields[2])
+        if end >= startdate - 20 or start <= enddate + 20:
+            datapath = os.path.join(datafolder, filename)
+            with open(datapath, encoding = "utf-8") as f:
+                for line in f:
+                    fields = line.strip().split('\t')
+                    if fields[0] == 'paperId':
+                        continue
+                    paperid = fields[0]
+                    chunkcounter[paperid] += 1
+                    chunkid = paperid + '-' + str(chunkcounter[paperid] - 1)
+                    vector = np.array([float(x) for x in fields[3:]], dtype = np.float64)
+                    data[chunkid] = vector
+
+# Now we load the chunk-level exclusions
 
 with open(chunk_level_exclude, encoding = "utf-8") as f:
     for line in f:
