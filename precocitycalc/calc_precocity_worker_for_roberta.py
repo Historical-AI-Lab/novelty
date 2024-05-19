@@ -242,7 +242,11 @@ def calculate_a_year(package):
                             distance = entropy(p_vec, c_vec)
                             # always surprise of the paper relative to comparison
                         else:
-                            distance = z_transform(cosine(p_vec, c_vec))
+                            try:
+                                distance = z_transform(cosine(p_vec, c_vec))
+                            except:
+                                print(p_vec, c_vec)
+                                sys.exit(0)
 
                         for filtered in filter_states:
 
