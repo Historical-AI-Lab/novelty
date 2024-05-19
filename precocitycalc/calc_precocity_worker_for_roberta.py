@@ -59,7 +59,12 @@ def any_overlap(a, b):
         return False
 
 def z_transform(a_cosine):
-    z_transformed = 0.5 * np.log((1 + a_cosine) / (1 - a_cosine))
+    try:
+        z_transformed = 0.5 * np.log((1 + a_cosine) / (1 - a_cosine))
+    except:
+        print(a_cosine)
+        sys.exit(0)
+
     return z_transformed
 
 def getallchunks(paperId_list, chunksfordoc):
@@ -245,8 +250,8 @@ def calculate_a_year(package):
                             try:
                                 distance = z_transform(cosine(p_vec, c_vec))
                             except:
-                                print(p_vec, c_vec)
-                                sys.exit(0)
+                                # print(p_vec, c_vec)
+                                pass      
 
                         for filtered in filter_states:
 
