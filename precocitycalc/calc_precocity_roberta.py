@@ -57,7 +57,7 @@ datafolder = sys.argv[2]
 chunk_level_exclude = sys.argv[3]
 startdate = int(sys.argv[4])
 enddate = int(sys.argv[5])
-traindocs = sys.argv
+traindocs = sys.argv[6]
 article_level_exclude = sys.argv[7]
 
 def get_metadata(filepath):
