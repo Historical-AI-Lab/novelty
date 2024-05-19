@@ -178,7 +178,7 @@ for centerdate, spanmeta in spanstocalculate:
             spanexclude[paperId] = exclusions[paperId]
 
 
-    package = (centerdate, spanmeta, spandata, spanexclude, function_string)
+    package = (centerdate, spanmeta, spandata, spanexclude, 'cosine')
     packages.append(package)
 
 del data, meta, exclusions
