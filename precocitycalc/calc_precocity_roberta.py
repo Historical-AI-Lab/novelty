@@ -123,6 +123,8 @@ for filename in filelist:
                     vector = np.array([float(x) for x in fields[3:]], dtype = np.float64)
                     data[chunkid] = vector
 
+print('Data loaded.')
+
 # Now we load the chunk-level exclusions
 
 with open(chunk_level_exclude, encoding = "utf-8") as f:
@@ -148,7 +150,7 @@ for centerdate in range(startdate, enddate):
 
 outputname = 'precocity_roberta_' + str(startdate)
 summaryfile = 'robresults/' + outputname + 's_docs.tsv'
-print(outputname)
+print('outputfile:', outputname)
 
 # segments = []
 # increment = ((endposition - startposition) // numthreads) + 1
