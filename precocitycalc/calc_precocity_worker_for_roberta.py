@@ -231,7 +231,7 @@ def calculate_a_year(package):
             comps = meta.index[meta.year == centerdate + comp_date].tolist()
             for comp_paper in comps:
 
-                comp_vectors = get_vectors(comp_paper, data, function_string, chunksfordoc)x
+                comp_vectors = get_vectors(comp_paper, data, function_string, chunksfordoc)
 
                 for c_idx, chunktuple in enumerate(comp_vectors):    # c_idx is not actually used
                     chunkid, c_vec = chunktuple
