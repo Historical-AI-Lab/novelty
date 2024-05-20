@@ -62,8 +62,8 @@ def z_transform(a_cosine):
     try:
         z_transformed = 0.5 * np.log((1 + a_cosine) / (1 - a_cosine))
     except:
-        print(a_cosine)
-        sys.exit(0)
+        print(a_cosine, flush = True)
+        z_transformed = 0
 
     return z_transformed
 
@@ -252,7 +252,8 @@ def calculate_a_year(package):
                             except:
                                 # print(p_vec, c_vec)
                                 pass      
-
+                        if distance == 0:
+                            print('zero distance', paperId, comp_paper, flush = True)
                         for filtered in filter_states:
 
                             if chunkid in exclude_for_this[filtered]:
