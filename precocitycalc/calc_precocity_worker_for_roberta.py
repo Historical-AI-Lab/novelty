@@ -248,7 +248,8 @@ def calculate_a_year(package):
                             # always surprise of the paper relative to comparison
                         else:
                             try:
-                                distance = z_transform(cosine(p_vec, c_vec))
+                                distance = cosine(p_vec, c_vec)
+                                similarity = z_transform(1 - distance)
                             except:
                                 # print(p_vec, c_vec)
                                 pass      
@@ -259,7 +260,7 @@ def calculate_a_year(package):
                             if chunkid in exclude_for_this[filtered]:
                                 pass 
                             else:
-                                distances[(p_idx, filtered, comp_date)].append(distance)
+                                distances[(p_idx, filtered, comp_date)].append(similarity)
 
         novelties = dict()
         for p_idx in range(number_of_chunks):
