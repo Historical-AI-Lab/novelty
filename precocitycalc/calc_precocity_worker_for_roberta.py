@@ -191,7 +191,7 @@ def calculate_a_year(package):
 
     paperstocheck = meta.index[meta.year == centerdate].tolist()
 
-    print(len(paperstocheck), ' papers to check.')
+    print(len(paperstocheck), ' papers to check.', flush = True)
 
     doc_precocities = dict() 
 
@@ -200,7 +200,7 @@ def calculate_a_year(package):
         ctr += 1
         
         if ctr % 100 == 1:
-            print(centerdate, ctr)
+            print(centerdate, ctr, flush=True)
 
         papervectors = get_vectors(paperId, data, function_string, chunksfordoc)
 
@@ -248,19 +248,22 @@ def calculate_a_year(package):
                             # always surprise of the paper relative to comparison
                         else:
                             try:
-                                distance = cosine(p_vec, c_vec)
-                                similarity = z_transform(1 - distance)
-                            except:
-                                # print(p_vec, c_vec)
-                                pass      
+                                distance = cosine(p_vec, c_vec)  # this can range from 0 to 2
+                                distance = -1 * (z_transform(1 - distance)) # now it ranges from -inf to +inf
+                                # not properly a distance, but we're using it as one
+                            except RuntimeWarning as e:
+                                print(e, paperId, comp_paper, flush = True)
+                                pass 
+
                         if distance == 0:
                             print('zero distance', paperId, comp_paper, flush = True)
+
                         for filtered in filter_states:
 
                             if chunkid in exclude_for_this[filtered]:
                                 pass 
                             else:
-                                distances[(p_idx, filtered, comp_date)].append(similarity)
+                                distances[(p_idx, filtered, comp_date)].append(distance)
 
         novelties = dict()
         for p_idx in range(number_of_chunks):
