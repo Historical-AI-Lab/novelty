@@ -10,7 +10,7 @@
 # summarize and rephrase the anchor.
 
 import pandas as pd
-import random
+import random, os
 
 rootfolder = "/projects/ischoolichass/ichass/usesofscale/novelty/perplexity/cleanchunks/"
 
@@ -26,6 +26,9 @@ meta = meta[meta['paperId'].notnull() & (meta['paperId'] != '')]
 training_pairs = []
 
 for year in range(1900, 2018):
+
+    if year % 10 == 0:
+        print(year)
     this_year = meta[meta['year'] == year]
     n = 120
     if len(this_year) < 120:
@@ -34,6 +37,8 @@ for year in range(1900, 2018):
     for idx, row in this_year.iterrows():
         paper_id = row['paperId']
         path = rootfolder + paper_id + ".txt"
+        if not os.path.isfile(path):
+            continue
         with open(path, 'r') as f:
             textlines = f.readlines()
             textlines = [line.strip().split('\t')[1] for line in textlines]
