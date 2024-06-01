@@ -14,7 +14,7 @@ import random
 
 rootfolder = "/projects/ischoolichass/ichass/usesofscale/novelty/perplexity/cleanchunks/"
 
-meta = pd.read_csv("../metadata/LitMetadataWithS2.tsv")
+meta = pd.read_csv("../metadata/litmeta/LitMetadataWithS2.tsv")
 meta = meta[meta['paperId'].notnull() & (meta['paperId'] != '')]
 
 # We save the training pairs as a list of dictionaries, each with the keys
