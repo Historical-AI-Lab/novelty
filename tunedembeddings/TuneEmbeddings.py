@@ -37,7 +37,7 @@ logger.info("This log is flushed immediately.")
 # 1. load a model to finetune
 
 model = SentenceTransformer('all-distilroberta-v1')
-guide = SentenceTransformer('all-distilroberta-v1')
+# guide = SentenceTransformer('all-distilroberta-v1')
 
 # Check for CUDA availability
 if torch.cuda.is_available():
@@ -50,12 +50,14 @@ else:
 
 # Send models to the selected device
 model.to(device)
-guide.to(device)
+# guide.to(device)
 
 print(f'Device: {device}')
 
 # 2. load data for training
-raw_data = pd.read_csv('all_synthetic_training_pairs.tsv', sep='\t')
+datasource = 'all_synthetic_training_pairs.tsv'
+# datasource = 'novelty/tunedembeddings/all_synthetic_training_pairs.tsv'
+raw_data = pd.read_csv(datasource, sep='\t')
 # shuffle raw_data and then divide it into a test dataset of 2000 pairs
 # and a training dataset that has everything else
 raw_data = raw_data.sample(frac=1).reset_index(drop=True)
@@ -75,7 +77,7 @@ eval_dataset = Dataset.from_pandas(eval_data)
 
 # 3. define a loss function
 # loss = losses.CachedGISTEmbedLoss(model, guide, mini_batch_size=16)
-loss = losses.MultipleNegativesRankingLoss(model, guide)
+loss = losses.MultipleNegativesRankingLoss(model)
 
 # 4. define a function to compute the evaluation metrics
 
@@ -87,9 +89,11 @@ binary_acc_evaluator = BinaryClassificationEvaluator(
 )
 
 # 5. (Optional) Specify training arguments
+output_dir = "models/run_20000pairs"
+# output_dir = "novelty/tunedembeddings/models/run_20000pairs"
 args = SentenceTransformerTrainingArguments(
     # Required parameter:
-    output_dir="models/run_20000pairs",
+    output_dir= output_dir,
     # Optional training parameters:
     num_train_epochs=10,
     per_device_train_batch_size=64,
@@ -118,7 +122,9 @@ trainer = SentenceTransformerTrainer(
 trainer.train()
 
 # 8. Save the model
-model.save_pretrained("models/final_20000pairs")
+finaldir = "models/final_20000pairs"
+# finaldir = "novelty/tunedembeddings/models/final_20000pairs"
+model.save_pretrained(finaldir)
 
 #9. A final evaluation
 binary_acc_evaluator(model)
