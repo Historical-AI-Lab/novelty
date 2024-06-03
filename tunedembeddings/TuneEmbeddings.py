@@ -98,7 +98,7 @@ args = SentenceTransformerTrainingArguments(
     fp16=False,  # Set to False if you get an error that your GPU can't run on FP16
     bf16=False,  # Set to True if you have a GPU that supports BF16
 	evaluation_strategy= "epoch",
-    save_strategy= "epoch"
+    save_strategy= "epoch",
     batch_sampler=BatchSamplers.NO_DUPLICATES,  # MultipleNegativesRankingLoss benefits from no duplicate samples in a batch
 )
 print('Preparing to evaluate.', flush = True)
