@@ -2,7 +2,7 @@
 
 from sentence_transformers import SentenceTransformer
 import pandas as pd
-import os
+import os, sys
 
 # 1. Load a pretrained Sentence Transformer model
 model = SentenceTransformer('models/final_20000pairs')
@@ -14,12 +14,19 @@ rootfolder = "../perplexity/cleanchunks/"
 
 print('metadata loaded')
 
-paperIds = []
-chunknumbers = []
-paragraphs = []
+args = sys.argv
+if len(args) > 1:
+    start = int(args[1])
+    end = int(args[2])
+else:
+    print('Please provide start and end years for the embeddings. Must be multiples of 10.')
+    sys.exit(0)
 
-for decade in range(1950, 2020, 10):
+for decade in range(start, end, 10):
     print(decade, flush = True)
+    paperIds = []
+    chunknumbers = []
+    paragraphs = []
     this_decade = meta[(meta['year'] >= decade) & (meta['year'] < decade + 10)]
     for idx, row in this_decade.iterrows():
         paper_id = row['paperId']
