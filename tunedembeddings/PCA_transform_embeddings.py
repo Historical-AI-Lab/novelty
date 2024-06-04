@@ -15,6 +15,7 @@ for file_path in file_paths:
 
 # Concatenate the dataframes along the vertical axis
 data = pd.concat(dataframes, axis=0)
+print('Data shape:', data.shape)
 
 metadata = data.iloc[:, :2]
 data = data.iloc[:, 2:]
@@ -23,8 +24,10 @@ data = data.iloc[:, 2:]
 scaler = StandardScaler()
 data_scaled = scaler.fit_transform(data)
 
+print('Data scaled shape:', data_scaled.shape)
+
 # Perform PCA
-n_components = 300
+n_components = 350
 pca = PCA(n_components=n_components)
 
 # Fit PCA on the scaled data and transform it
@@ -38,7 +41,12 @@ explained_variance_ratio = pca.explained_variance_ratio_
 print("Explained variance by each component:", explained_variance_ratio)
 print("Total explained variance (proportion) by 300 components:", np.sum(explained_variance_ratio))
 
-# Rejoin metadata with transformed_data
 transformed_data = pd.DataFrame(transformed_data)
+
+# Reset indices to ensure unique indices before concatenation
+metadata.reset_index(drop=True, inplace=True)
+transformed_data.reset_index(drop=True, inplace=True)
+
+# Rejoin metadata with transformed_data
 transformed_data = pd.concat([metadata, transformed_data], axis=1)
 transformed_data.to_csv("tuned_300_columns.tsv", sep='\t', index=False) 
