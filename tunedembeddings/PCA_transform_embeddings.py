@@ -5,7 +5,7 @@ import pandas as pd
 import glob
 
 # Read all .tsv files in the "models/" folder
-file_paths = glob.glob("models/*.tsv")
+file_paths = glob.glob("embeddings/*.tsv")
 dataframes = []
 
 # Iterate over each file and read it as a dataframe
