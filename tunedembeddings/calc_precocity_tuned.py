@@ -53,7 +53,7 @@ from ast import literal_eval
 from collections import Counter
 
 metapath = sys.argv[1]
-datafolder = sys.argv[2]
+datapath = sys.argv[2]
 chunk_level_exclude = sys.argv[3]
 startdate = int(sys.argv[4])
 enddate = int(sys.argv[5])
