@@ -18,7 +18,7 @@ paperIds = []
 chunknumbers = []
 paragraphs = []
 
-for decade in range(1900, 1950, 10):
+for decade in range(1950, 2020, 10):
     print(decade, flush = True)
     this_decade = meta[(meta['year'] >= decade) & (meta['year'] < decade + 10)]
     for idx, row in this_decade.iterrows():
