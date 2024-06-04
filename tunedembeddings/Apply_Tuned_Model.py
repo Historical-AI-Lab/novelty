@@ -2,6 +2,7 @@
 
 from sentence_transformers import SentenceTransformer
 import pandas as pd
+import os
 
 # 1. Load a pretrained Sentence Transformer model
 model = SentenceTransformer('models/final_20000pairs')
@@ -11,12 +12,14 @@ meta = meta[meta['paperId'].notnull() & (meta['paperId'] != '')]
 
 rootfolder = "../perplexity/cleanchunks/"
 
+print('metadata loaded')
+
 paperIds = []
 chunknumbers = []
 paragraphs = []
 
 for decade in range(1900, 1950, 10):
-    print(decade)
+    print(decade, flush = True)
     this_decade = meta[(meta['year'] >= decade) & (meta['year'] < decade + 10)]
     for idx, row in this_decade.iterrows():
         paper_id = row['paperId']
@@ -30,6 +33,8 @@ for decade in range(1900, 1950, 10):
         paperIds.extend([paper_id] * numberofchunks)
         chunknumbers.extend(list(range(numberofchunks)))
         paragraphs.extend(textlines)
+    
+    print('paragraphs loaded', flush = True)
     
     embeddings = model.encode(paragraphs, batch_size = 128, device = 'cuda')
     numrows, numcols = embeddings.shape
