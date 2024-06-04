@@ -57,7 +57,7 @@ datapath = sys.argv[2]
 chunk_level_exclude = sys.argv[3]
 startdate = int(sys.argv[4])
 enddate = int(sys.argv[5])
-article_level_exclude = sys.argv[7]
+article_level_exclude = sys.argv[6]
 
 def get_metadata(filepath):
     '''
