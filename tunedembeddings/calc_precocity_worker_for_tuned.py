@@ -2,7 +2,6 @@ import pandas as pd
 import numpy as np
 import random, sys, os, math
 from scipy.stats import entropy
-from scipy.spatial.distance import cosine
 from collections import Counter
 import warnings
 
@@ -248,8 +247,8 @@ def calculate_a_year(package):
                             # always surprise of the paper relative to comparison
                         else:
                             try:
-                                distance = cosine(p_vec, c_vec)  # this can range from 0 to 2
-                                distance = -1 * (z_transform(1 - distance)) # now it ranges from -inf to +inf
+                                dotproduct = np.dot(p_vec, c_vec)  # this can range from -1 to 1
+                                distance = -1 * (z_transform(dotproduct)) # now it ranges from -inf to +inf
                                 # not properly a distance, but we're using it as one
                             except RuntimeWarning as e:
                                 print(e, paperId, comp_paper, flush = True)

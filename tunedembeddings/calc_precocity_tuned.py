@@ -104,8 +104,8 @@ with open(datapath, encoding = "utf-8") as f:
         paperid = fields[0]
         chunkdigits = fields[1]  # this will be a string
         chunkid = paperid + '-' + chunkdigits
-        vector = np.array([float(x) for x in fields[3:]], dtype = np.float32)
-        data[chunkid] = vector
+        normalized_vector = vector / np.linalg.norm(vector)  # this allows us to do dot product later instead of cosine
+        data[chunkid] = normalized_vector
 
 # filelist = os.listdir(datafolder)
 # for filename in filelist:

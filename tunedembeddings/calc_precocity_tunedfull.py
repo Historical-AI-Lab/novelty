@@ -122,7 +122,8 @@ for filename in filelist:
                     chunkdigits = fields[1]  # this will be a string
                     chunkid = paperid + '-' + chunkdigits
                     vector = np.array([float(x) for x in fields[3:]], dtype = np.float64)
-                    data[chunkid] = vector
+                    normalized_vector = vector / np.linalg.norm(vector)  # this allows us to do dot product later instead of cosine
+                    data[chunkid] = normalized_vector
 
 print('Data loaded.')
 
