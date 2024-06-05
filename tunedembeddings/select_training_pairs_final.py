@@ -159,3 +159,4 @@ for year in years_with_pairs.keys():
 
 df = pd.DataFrame(training_pairs)
 df.to_csv("training_pairs_final_set.tsv", sep = '\t', index = False)
+print(df.shape)  
