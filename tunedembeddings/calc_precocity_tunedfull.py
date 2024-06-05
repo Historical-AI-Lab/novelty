@@ -111,7 +111,7 @@ filelist = os.listdir(datafolder)
 for filename in filelist:
     if filename.endswith('.tsv'):
         decade = int(filename.replace('.tsv', ''))
-        if decade >= startdate - 30 and start <= enddate + 30:
+        if decade >= startdate - 30 and decade <= enddate + 30:
             datapath = os.path.join(datafolder, filename)
             with open(datapath, encoding = "utf-8") as f:
                 for line in f:
