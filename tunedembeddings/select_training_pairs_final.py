@@ -18,6 +18,7 @@ import math
 args = sys.argv
 
 N = args[1]   # number of pairs to select per year
+# we will use the minimum of this number and the 25th smallest year
 
 def select_pairs(num_chunks):
     num_pairs = math.ceil(num_chunks / 8)
@@ -149,7 +150,7 @@ for year in range(1900, 2018):
     yearsizes.append(len(training_pairs))
 
 number_of_yearly_pairs = sorted(yearsizes)
-maxsize = number_of_yearly_pairs[25]
+maxsize = min(N, number_of_yearly_pairs[25])
 print(f'Capping the number of pairs per year at {maxsize}')
 
 training_pairs = []
