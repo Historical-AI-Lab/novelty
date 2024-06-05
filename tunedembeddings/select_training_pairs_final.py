@@ -154,7 +154,7 @@ print(f'Capping the number of pairs per year at {maxsize}')
 
 training_pairs = []
 for year in years_with_pairs.keys():
-    training_pairs.extend(random.sample(years_with_pairs[year], min(len(years_with_pairs[year]), maxsize))
+    training_pairs.extend(random.sample(years_with_pairs[year], min(len(years_with_pairs[year]), maxsize)))
 
 df = pd.DataFrame(training_pairs)
 df.to_csv("training_pairs_final_set.tsv", sep = '\t', index = False)
