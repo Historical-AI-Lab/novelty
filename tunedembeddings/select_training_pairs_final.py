@@ -35,7 +35,12 @@ def select_pairs(num_chunks):
     
     while len(selected_pairs) < num_pairs:
         # Choose a random starting index from the available indices
-        start_index = random.choice(available_indices)
+        try:
+            start_index = random.choice(available_indices)
+        except:
+            print('available_indices:', available_indices)
+            print(num_chunks)
+            sys.exit()
         
         # Add the pair to the list
         selected_pairs.append((start_index, start_index + 1))
