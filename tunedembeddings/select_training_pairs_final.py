@@ -116,6 +116,7 @@ for year in range(1900, 2018):
             category = "single-synthetic"
             this_pair = {'paperId': paper_id, 'year': year, 'anchor': anchor_text, 'positive': positive_text, 'category': category}
             training_pairs.append(this_pair)
+            continue
 
         category_roll = random.random()
 
