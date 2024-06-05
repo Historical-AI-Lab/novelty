@@ -150,7 +150,7 @@ for centerdate in range(startdate, enddate):
     spanstocalculate.append((centerdate, df))
 
 outputname = 'precocity_tuned_' + str(startdate)
-summaryfile = 'results/' + outputname + 's_docs.tsv'
+summaryfile = 'fullresults/' + outputname + 's_docs.tsv'
 print('outputfile:', outputname)
 
 # segments = []
