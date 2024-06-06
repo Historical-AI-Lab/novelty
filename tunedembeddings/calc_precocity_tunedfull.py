@@ -1,11 +1,9 @@
-# Calculate precocity for RoBERTa embeddings
+# Calculate precocity for tuned SBERT embeddings
 
 # This is based on calculate_precocity,
-# but adapted in 2024 to process the RoBERTa
-# embeddings. The main significant change is that
-# the script takes a list of articles the regression
-# head was trained on, which can optionally be
-# excluded from calculation.
+# but adapted in 2024 to process
+# embeddings produced by fine-tuning a
+# Sentence Transformer model.
 
 # We also distinguish chunks that are excluded from processing because
 # they're by the same authors from those that are excluded because
@@ -13,12 +11,13 @@
 
 # Overall the "filtered" variable has four possible states:
 # nofilter -- no filtering at all everything included
-# train -- only training corpus excluded
+# train -- only training corpus excluded (not used here because
+#          the model was trained in an unsupervised way)
 # trainauth -- training corpus and author overlaps excluded
 # trainauthquote -- training corpus, author overlaps, and cites/quotes excluded
 
 # We don't create the sets of excluded chunks for those states here;
-# they're created in the worker script. However, we do create a dictionary
+# they're created in a worker script. However, we do create a dictionary
 # called "exclusions" that the worker script will use to determine
 # which chunks to exclude. It includes the set of articles used in training
 # under the key 'train' along with a sub-dictionary for each paperId
@@ -36,7 +35,7 @@
 
 # USAGE
 
-# python calculate_prec.py metapath datapath excludepath startdate enddate
+# python calculate_prec.py metapath datafolder chunkexcludepath startdate enddate articleexcludepath
 
 # where
 
@@ -151,7 +150,7 @@ for centerdate in range(startdate, enddate):
     spanstocalculate.append((centerdate, df))
 
 outputname = 'precocity_tuned_' + str(startdate)
-summaryfile = 'fullresults/' + outputname + 's_docs.tsv'
+summaryfile = 'finalresults/' + outputname + 's_docs.tsv'
 print('outputfile:', outputname)
 
 # segments = []
