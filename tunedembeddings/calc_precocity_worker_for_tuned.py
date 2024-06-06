@@ -142,7 +142,7 @@ def calculate_a_year(package):
     errors = Counter()
     centerdate, meta, data, exclusions, function_string = package
 
-    fractions2check = [1.0, 0.05]
+    fractions2check = [1.0, 0.1, 0.05]
 
     filter_states = ['no filter', 'train', 'trainauth', 'trainauthquote']
     
