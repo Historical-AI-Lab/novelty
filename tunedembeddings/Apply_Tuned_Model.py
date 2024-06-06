@@ -5,7 +5,7 @@ import pandas as pd
 import os, sys
 
 # 1. Load a pretrained Sentence Transformer model
-model = SentenceTransformer('models/final_20000pairs')
+model = SentenceTransformer('models/final_60000pairs/checkpoint-4175')
 
 meta = pd.read_csv("../metadata/litstudies/LitMetadataWithS2.tsv", sep = '\t')
 meta = meta[meta['paperId'].notnull() & (meta['paperId'] != '')]
@@ -15,7 +15,7 @@ rootfolder = "../perplexity/cleanchunks/"
 print('metadata loaded')
 
 args = sys.argv
-if len(args) > 1:
+if len(args) > 2:
     start = int(args[1])
     end = int(args[2])
 else:
@@ -52,7 +52,7 @@ for decade in range(start, end, 10):
 
     df = pd.DataFrame(data)
 
-    outpath = "embeddings/" + str(decade) + ".tsv"
+    outpath = "finalembeds/" + str(decade) + ".tsv"
     df.to_csv(outpath, sep = '\t', index = False)
     
 
