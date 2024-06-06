@@ -5,7 +5,7 @@ import pandas as pd
 import os, sys
 
 # 1. Load a pretrained Sentence Transformer model
-model = SentenceTransformer('models/final_60000pairs/checkpoint-4175')
+model = SentenceTransformer('models/run_60000pairs/checkpoint-4175')
 
 meta = pd.read_csv("../metadata/litstudies/LitMetadataWithS2.tsv", sep = '\t')
 meta = meta[meta['paperId'].notnull() & (meta['paperId'] != '')]
