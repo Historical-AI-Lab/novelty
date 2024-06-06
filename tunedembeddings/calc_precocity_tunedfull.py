@@ -112,8 +112,13 @@ for filename in filelist:
         decade = int(filename.replace('.tsv', ''))
         if decade >= startdate - 30 and decade <= enddate + 30:
             datapath = os.path.join(datafolder, filename)
+            nullcount = 0
+            print(datapath + ' loading.', flush = True)
             with open(datapath, encoding = "utf-8") as f:
                 for line in f:
+                    if '\x00' in line:
+                        line = line.replace('\x00', '')
+                        nullcount += 1
                     fields = line.strip().split('\t')
                     if fields[0] == 'paperId':
                         continue
@@ -123,7 +128,8 @@ for filename in filelist:
                     vector = np.array([float(x) for x in fields[2:]], dtype = np.float64)
                     normalized_vector = vector / np.linalg.norm(vector)  # this allows us to do dot product later instead of cosine
                     data[chunkid] = normalized_vector
-
+            if nullcount > 0:
+                print('Nulls:', nullcount)
 print('Data loaded.')
 
 # Now we load the chunk-level exclusions
