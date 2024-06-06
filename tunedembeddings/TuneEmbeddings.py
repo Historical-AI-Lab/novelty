@@ -55,21 +55,21 @@ model.to(device)
 print(f'Device: {device}')
 
 # 2. load data for training
-datasource = 'all_synthetic_training_pairs.tsv'
+datasource = 'final_pairs.tsv'
 # datasource = 'novelty/tunedembeddings/all_synthetic_training_pairs.tsv'
 raw_data = pd.read_csv(datasource, sep='\t')
 # shuffle raw_data and then divide it into a test dataset of 2000 pairs
 # and a training dataset that has everything else
 raw_data = raw_data.sample(frac=1).reset_index(drop=True)
-eval_data = raw_data.loc[0:1999, :]
-train_data = raw_data.loc[2000:, :]
+eval_data = raw_data.loc[0:2199, :]
+train_data = raw_data.loc[2200:, :]
 
-# Enlarge the eval data to contain 8000 false alignments after the 2000 correct ones
-anchor_extended = eval_data['anchor'].tolist() * 5
+# Enlarge the eval data to contain 11000 false alignments after the 2000 correct ones
+anchor_extended = eval_data['anchor'].tolist() * 6
 positive_extended = eval_data['positive'].tolist() + list(np.roll(eval_data['positive'].tolist(), 1)) + \
 	list(np.roll(eval_data['positive'].tolist(), 2)) + list(np.roll(eval_data['positive'].tolist(), 3)) + \
-	list(np.roll(eval_data['positive'].tolist(), 4))
-score = [1] * 2000 + [0] * 8000
+	list(np.roll(eval_data['positive'].tolist(), 4)) + list(np.roll(eval_data['positive'].tolist(), 5))
+score = [1] * 2200 + [0] * 11000
 eval_data = pd.DataFrame({'anchor': anchor_extended, 'positive': positive_extended, 'score': score})
 
 train_dataset = Dataset.from_pandas(train_data.loc[ :, ['anchor', 'positive']])
@@ -89,17 +89,17 @@ binary_acc_evaluator = BinaryClassificationEvaluator(
 )
 
 # 5. (Optional) Specify training arguments
-output_dir = "models/run_20000pairs"
-# output_dir = "novelty/tunedembeddings/models/run_20000pairs"
+output_dir = "models/run_60000pairs"
+
 args = SentenceTransformerTrainingArguments(
     # Required parameter:
     output_dir= output_dir,
     # Optional training parameters:
     num_train_epochs=10,
-    per_device_train_batch_size=64,
-    per_device_eval_batch_size=64,
+    per_device_train_batch_size=128,
+    per_device_eval_batch_size=128,
     warmup_ratio=0.1,
-    fp16=False,  # Set to False if you get an error that your GPU can't run on FP16
+    fp16 = True,  # Set to False if you get an error that your GPU can't run on FP16
     bf16=False,  # Set to True if you have a GPU that supports BF16
 	evaluation_strategy= "epoch",
     save_strategy= "epoch",
@@ -122,7 +122,7 @@ trainer = SentenceTransformerTrainer(
 trainer.train()
 
 # 8. Save the model
-finaldir = "models/final_20000pairs"
+finaldir = "models/final_60000pairs"
 # finaldir = "novelty/tunedembeddings/models/final_20000pairs"
 model.save_pretrained(finaldir)
 
