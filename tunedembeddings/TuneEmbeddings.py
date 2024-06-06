@@ -96,8 +96,8 @@ args = SentenceTransformerTrainingArguments(
     output_dir= output_dir,
     # Optional training parameters:
     num_train_epochs=10,
-    per_device_train_batch_size=64,
-    per_device_eval_batch_size=64,
+    per_device_train_batch_size=72,
+    per_device_eval_batch_size=72,
     warmup_ratio=0.1,
     fp16 = True,  # Set to False if you get an error that your GPU can't run on FP16
     bf16=False,  # Set to True if you have a GPU that supports BF16
