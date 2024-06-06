@@ -50,13 +50,26 @@ from multiprocessing import Pool
 import calc_precocity_worker_for_tuned as cpw
 from ast import literal_eval
 from collections import Counter
+import argparse
 
-metapath = sys.argv[1]
-datafolder = sys.argv[2]
-chunk_level_exclude = sys.argv[3]
-startdate = int(sys.argv[4])
-enddate = int(sys.argv[5])
-article_level_exclude = sys.argv[6]
+parser = argparse.ArgumentParser(description='Calculate precocity for tuned SBERT embeddings')
+parser.add_argument('--meta', '-m', help='Path to the metadata spreadsheet')
+parser.add_argument('--data', '-d', help='Path to the data folder')
+parser.add_argument('--chunkexclude', '-c', help='Path to the chunk exclusion file')
+parser.add_argument('--startdate', '-s', type=int, help='Start date (inclusive)')
+parser.add_argument('--enddate', '-e', type=int, help='End date (exclusive)')
+parser.add_argument('--articleexclude', '-a', help='Path to the article exclusion file')
+parser.add_argument('--outputfolder', '-o', help='Path to the output folder, should not end with a slash')
+
+args = parser.parse_args()
+
+metapath = args.meta
+datafolder = args.data
+chunk_level_exclude = args.chunkexclude
+startdate = args.startdate
+enddate = args.enddate
+article_level_exclude = args.articleexclude
+outputfolder = args.outputfolder
 
 def get_metadata(filepath):
     '''
@@ -156,7 +169,7 @@ for centerdate in range(startdate, enddate):
     spanstocalculate.append((centerdate, df))
 
 outputname = 'precocity_tuned_' + str(startdate)
-summaryfile = 'finalresults/' + outputname + 's_docs.tsv'
+summaryfile = outputfolder + '/' + outputname + 's_docs.tsv'
 print('outputfile:', outputname)
 
 # segments = []
