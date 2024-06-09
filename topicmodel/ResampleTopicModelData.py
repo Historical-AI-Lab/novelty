@@ -15,10 +15,16 @@ chunksperyear = dict()
 
 # we store data as chunkID -> text key-value pairs
 # at the same time
+errors = 0
 
 with open('../embeddingcode/litstudiesforLDA.txt', 'r') as f:
     for line in f:
-        chunkID, label, text = line.strip().split('\t')
+        try:
+            chunkID, label, text = line.strip().split('\t')
+        except:
+            errors += 1
+            if errors % 10 == 1:
+                print('Errors:', errors)
         data[chunkID] = text
         paperId = chunkID.split('-')[0]
         year = int(meta.loc[meta['paperId'] == paperId, 'year'].values[0])
