@@ -20,7 +20,7 @@ with open('../embeddingcode/litstudiesforLDA.txt', 'r') as f:
     for line in f:
         chunkID, label, text = line.strip().split('\t')
         data[chunkID] = text
-        paperId = chunk.split('-')[0]
+        paperId = chunkID.split('-')[0]
         year = int(meta.loc[meta['paperId'] == paperId, 'year'].values[0])
         if year not in chunksperyear:
             chunksperyear[year] = []
