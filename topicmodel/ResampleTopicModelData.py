@@ -7,7 +7,7 @@ import sys
 import pandas as pd
 import random
 
-meta = pd.read_csv('../metadata/litstudies/LitMetadataWithS2.tsv', sep='\t)
+meta = pd.read_csv('../metadata/litstudies/LitMetadataWithS2.tsv', sep='\t')
 meta = meta[~meta['paperId'].isnull() & (meta['paperId'] != '')]
 
 data = dict()
@@ -44,7 +44,7 @@ print('Resampling...')
 print()
 
 count = 0
-with open('ResamplesLitStudiesForLDA.txt', mode = 'w', encoding = 'utf-8') as f:
+with open('ResampledLitStudiesForLDA.txt', mode = 'w', encoding = 'utf-8') as f:
     for yr in chunksperyear:
         if len(chunksperyear[yr]) > cap:
             sample = random.sample(chunksperyear[yr], cap)
