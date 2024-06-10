@@ -229,7 +229,8 @@ def chunks_for_an_article(document_pages, dictionary):
 # J512209-1
 # etc
 
-MAXTOPROCESS = 1000 # This is a limit for testing. We will process at most this many articles.
+# MAXTOPROCESS = 1000 # This is a limit for testing. We will process at most this many articles.
+MAXTOPROCESS = 1000000  # This is the production limit, which should be higher than the number of articles in the file.
 
 notdone = 0
 errors = 0
