@@ -12,7 +12,7 @@ The format of the chunk file is that each line corresponds to a chunk, and has t
 
 chunkidx (an integer) + \t + chunktext + '\n'
 
-USAGE:
+```USAGE:
 
 python3 clean_and_chunk.py -s 3000 -d jsonl_file -m metadata_file -o outpath -l logfile
 
@@ -29,4 +29,4 @@ Where the command line arguments are, in order
 
 -o               Path to the *output folder* where chunkfiles will be written
 
--l               Path to the *logfile* where we will write errors and other messages
+-l               Path to the *logfile* where we will write errors and other messages```
