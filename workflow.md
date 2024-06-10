@@ -5,3 +5,8 @@ This will be a guide to the workflow that takes an article dataset from original
 
 Right now it's mostly a placeholder.
 
+broad outline
+-------------
+
+1. Match the JSTOR metadata with Semantic Scholar using a script in `/datasources`.
+2. Convert the JSTOR text into chunks of fewer than 512 tokens. This is currently complicated. With literary studies files we did the chunking with `embeddingcode/chunk_and_embed.py`, which simultaneously produces GTE embeddings. But then at a later stage of the process we decided to clean up words broken across a hyphen. We did *that* with `perplexity/CleanChunkFiles.py`. Probably what we should really do at this point is rewrite the chunking script so that it does the cleaning at the same time, and separate out the making-GTE-embeddings part as a separate stage. We may not always need to do it, since GTE is not performing especially well.
