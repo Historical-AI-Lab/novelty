@@ -265,7 +265,7 @@ with open(jsonlpath, encoding = 'utf-8') as f:
 
 		if 'identifier' in json_obj:
 			for idtype in json_obj['identifier']:
-				if idtype['name'] == 'local_doi':
+				if idtype['name'] == 'doi':
 					doi = idtype['value']
 					if doi in metadata.index:
 						paperId = metadata.at[doi, 'paperId']
