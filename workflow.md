@@ -9,5 +9,11 @@ broad outline
 -------------
 
 1. Match the JSTOR metadata with Semantic Scholar using a script in `/datasources`. Sarah, since you've done this more recently, maybe you can help me figure out what's the up-to-date way of doing this?
-2. Convert the JSTOR text into chunks of fewer than 512 tokens. This is currently complicated. With literary studies files we did the chunking with `embeddingcode/chunk_and_embed.py`, which simultaneously produces GTE embeddings. But then at a later stage of the process we decided to clean up words broken across a hyphen. We did *that* with `perplexity/CleanChunkFiles.py`. Probably what we should really do at this point is rewrite the chunking script so that it does the cleaning at the same time, and separate out the making-GTE-embeddings part as a separate stage. We may not always need to do it, since GTE is not performing especially well.
-3. The other thing that's an issue right now is that `chunk-and-embed` seems to be using the wrong signal to decide which articles to use. It's looking at the 'local doi' in the JSTOR metadata. But now that we have a fuller way of searching S2 for matches, we should probably just use all files that have a paperId?
+
+2. Convert the JSTOR text into chunks of fewer than 512 tokens. This was originally fused with the embedding process, but we have rewritten the process to be cleaner. Now you start with a script in the `../cleanandchunk` folder -- which, as the label suggests, starts by cleaning the data (fusing words that have been broken across hy- phens at a line break). Then it divides into sentences and groups sentences so they constitute chunks of fewer than 512 tokens. It puts these in a folder, with each article's chunks named after a paperId from Semantic Scholar. Articles that lack paperIds are not processed.
+
+3. *Sarah has rewritten the embedding script, described here.*
+
+4. To topic model the corpus, see the instructions in the `./topicmodel` folder. It's a two-stage process because we want a flattish distribution across time, but then have to return and use a "topic inferencer" to generate topic distributions for things that were left out of the initial model (since those years poked up above the cap of the flat distribution).
+
+5. *Text-reuse process described here.*
