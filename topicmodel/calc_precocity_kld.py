@@ -125,7 +125,7 @@ for filename in filelist:
                     nullcount += 1
                 fields = line.strip().split('\t')
                 if fields[0] == '#doc' or len(fields) < 3:
-                    nulls += 1
+                    nullcount += 1
                     continue
                 chunkid = fields[1]
                 vector = np.array([float(x) for x in fields[2:]], dtype = np.float64)
