@@ -124,7 +124,8 @@ for filename in filelist:
                     line = line.replace('\x00', '')
                     nullcount += 1
                 fields = line.strip().split('\t')
-                if fields[0] == '#doc':
+                if fields[0] == '#doc' or len(fields) < 3:
+                    nulls += 1
                     continue
                 chunkid = fields[1]
                 vector = np.array([float(x) for x in fields[2:]], dtype = np.float64)
