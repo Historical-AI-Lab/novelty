@@ -50,7 +50,7 @@ import pandas as pd
 import numpy as np
 import random, sys, os
 from multiprocessing import Pool
-import calc_precocity_worker_for_tuned as cpw
+import calc_precocity_worker_for_kld as cpw
 from ast import literal_eval
 from collections import Counter
 import argparse
@@ -146,6 +146,8 @@ with open(chunk_level_exclude, encoding = "utf-8") as f:
     for line in f:
         fields = line.strip().split('\t')
         centerdoc = fields[0]
+        if centerdoc in chunkmap:
+            centerdoc = chunkmap[centerdoc]
         if centerdoc not in exclusions:
             exclusions[centerdoc] = dict()
             exclusions[centerdoc]['author overlaps'] = set() # this will be a set of article ids
