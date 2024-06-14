@@ -112,7 +112,7 @@ final_dir = outputdir + '/final'
 
 args = SentenceTransformerTrainingArguments(
     # Required parameter:
-    output_dir= output_dir,
+    output_dir= outputdir,
     # Optional training parameters:
     num_train_epochs=10,
     per_device_train_batch_size=72,
