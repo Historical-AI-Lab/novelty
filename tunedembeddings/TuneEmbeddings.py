@@ -4,7 +4,7 @@
 # a pre-trained model on training pairs from lit studies.
 
 # This version June 2024.
-import logging
+import logging, argparse
 import torch, os
 import pandas as pd
 
@@ -34,6 +34,20 @@ logger = logging.getLogger(__name__)
 
 logger.info("This log is flushed immediately.")
 
+# Command line arguments include
+# -d    datasource  the path to the training data, a TSV file with columns 'anchor' and 'positive'
+# -o    outputdir   the path to the output directory
+
+# Parse command line arguments
+parser = argparse.ArgumentParser(description='Tune Embeddings')
+parser.add_argument('-d', '--datasource', type=str, help='Path to the training data (TSV file with columns "anchor" and "positive")')
+parser.add_argument('-o', '--outputdir', type=str, help='Path to the output directory')
+args = parser.parse_args()
+
+# Get the values of the command line arguments
+datasource = args.datasource
+outputdir = args.outputdir
+
 # 1. load a model to finetune
 
 model = SentenceTransformer('all-distilroberta-v1')
@@ -55,9 +69,14 @@ model.to(device)
 print(f'Device: {device}')
 
 # 2. load data for training
-datasource = 'final_pairs.tsv'
+
+# datasource is now specified as a command line argument
+# previously:
+# datasource = 'final_pairs.tsv' (leaving these lines here for reference)
 # datasource = 'novelty/tunedembeddings/all_synthetic_training_pairs.tsv'
+
 raw_data = pd.read_csv(datasource, sep='\t')
+
 # shuffle raw_data and then divide it into a test dataset of 2000 pairs
 # and a training dataset that has everything else
 raw_data = raw_data.sample(frac=1).reset_index(drop=True)
@@ -89,7 +108,7 @@ binary_acc_evaluator = BinaryClassificationEvaluator(
 )
 
 # 5. (Optional) Specify training arguments
-output_dir = "models/run_60000pairs"
+final_dir = outputdir + '/final'
 
 args = SentenceTransformerTrainingArguments(
     # Required parameter:
@@ -122,9 +141,8 @@ trainer = SentenceTransformerTrainer(
 trainer.train()
 
 # 8. Save the model
-finaldir = "models/final_60000pairs"
-# finaldir = "novelty/tunedembeddings/models/final_20000pairs"
-model.save_pretrained(finaldir)
+
+model.save_pretrained(final_dir)
 
 #9. A final evaluation
 binary_acc_evaluator(model)
