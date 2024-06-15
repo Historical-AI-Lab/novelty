@@ -35,7 +35,7 @@ rootfolder = "../perplexity/cleanchunks/"
 
 print('metadata loaded')
 
-for decade in range(start, end, 10):
+for decade in range(startyear, endyear, 10):
     print(decade, flush = True)
     paperIds = []
     chunknumbers = []
