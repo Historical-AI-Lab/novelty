@@ -12,7 +12,7 @@ resultfolder = 'nopara_results'
 
 decadefiles = dict()
 
-for decade in range(1900, 2020, 10):
+for decade in range(1920, 2000, 10):
     decadefiles[decade] = []
     for line in data:
         if 'fin1990' in line:
