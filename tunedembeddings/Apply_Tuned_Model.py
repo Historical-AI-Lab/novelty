@@ -3,6 +3,27 @@
 from sentence_transformers import SentenceTransformer
 import pandas as pd
 import os, sys
+import argparse
+
+# The command line arguments include
+# -m --modelpath  the path to the Sentence Transformer model
+# -s --startyear  the start year for embeddings (must be a multiple of 10)
+# -e --endyear    the end year for embeddings (must be a multiple of 10)
+# -o --outputpath the path to the output directory
+
+# Parse command-line arguments
+parser = argparse.ArgumentParser(description='Apply Sentence-Bert Model')
+parser.add_argument('-m', '--modelpath', type=str, help='the path to the Sentence Transformer model')
+parser.add_argument('-s', '--startyear', type=int, help='the start year for embeddings (must be a multiple of 10)')
+parser.add_argument('-e', '--endyear', type=int, help='the end year for embeddings (must be a multiple of 10)')
+parser.add_argument('-o', '--outputpath', type=str, help='the path to the output directory, should not end with slash')
+args = parser.parse_args()
+
+# Extract command-line arguments
+modelpath = args.modelpath
+startyear = args.startyear
+endyear = args.endyear
+outputpath = args.outputpath
 
 # 1. Load a pretrained Sentence Transformer model
 model = SentenceTransformer('models/run_60000pairs/checkpoint-4175')
@@ -13,14 +34,6 @@ meta = meta[meta['paperId'].notnull() & (meta['paperId'] != '')]
 rootfolder = "../perplexity/cleanchunks/"
 
 print('metadata loaded')
-
-args = sys.argv
-if len(args) > 2:
-    start = int(args[1])
-    end = int(args[2])
-else:
-    print('Please provide start and end years for the embeddings. Must be multiples of 10.')
-    sys.exit(0)
 
 for decade in range(start, end, 10):
     print(decade, flush = True)
@@ -52,24 +65,6 @@ for decade in range(start, end, 10):
 
     df = pd.DataFrame(data)
 
-    outpath = "finalembeds/" + str(decade) + ".tsv"
+    outpath = outputpath + "/" + str(decade) + ".tsv"
     df.to_csv(outpath, sep = '\t', index = False)
     
-
-
-
-
-
-        
-
-
-# The sentences to encode
-sentences = [
-    "The weather is lovely today.",
-    "It's so sunny outside!",
-    "He drove to the stadium.",
-]
-
-# 2. Calculate embeddings by calling model.encode()
-embeddings = model.encode(sentences)
-print(embeddings.shape)
