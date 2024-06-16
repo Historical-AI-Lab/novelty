@@ -26,7 +26,7 @@ endyear = args.endyear
 outputpath = args.outputpath
 
 # 1. Load a pretrained Sentence Transformer model
-model = SentenceTransformer('models/run_60000pairs/checkpoint-4175')
+model = SentenceTransformer(modelpath)
 
 meta = pd.read_csv("../metadata/litstudies/LitMetadataWithS2.tsv", sep = '\t')
 meta = meta[meta['paperId'].notnull() & (meta['paperId'] != '')]
