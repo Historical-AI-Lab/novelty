@@ -6,9 +6,9 @@
 with open('fin1990s.slurm', 'r') as file:
     data = file.readlines()
 
-prefix = 'nopara'
-datasource = 'nopara768'
-resultfolder = 'nopara_results'
+prefix = 'para20'
+datasource = 'para20768'
+resultfolder = 'para20_results'
 
 decadefiles = dict()
 
