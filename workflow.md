@@ -15,3 +15,5 @@ broad outline
 4. To topic model the corpus, see the instructions in the `./topicmodel` folder. It's a two-stage process because we want a flattish distribution across time, but then have to return and use a "topic inferencer" to generate topic distributions for things that were left out of the initial model (since those years poked up above the cap of the flat distribution).
 
 5. *Text-reuse process described here.*
+
+6. The most successful version of embedding we have so far requires fine-tuning on the corpus using sentence transformers. Datasets for fine-tuning can be generated, and the fine-tuning itself executed, using scripts in the `./tunedembeddings` folder.
