@@ -5,6 +5,10 @@
 # research question as we evaluate different methods
 # of measuring innovation.
 
+# Further revised in 2024 to make use of a speedup trick:
+# we normalize all vectors here, and then calculate
+# dot-product instead of cosine in the worker script.
+
 # USAGE
 
 # python calculate_prec.py metapath datapath excludepath startdate enddate function

@@ -201,7 +201,9 @@ def calculate_a_year(package):
                             distance = entropy(p_vec, c_vec)
                             # always surprise of the paper relative to comparison
                         else:
-                            distance = z_transform(cosine(p_vec, c_vec))
+                            dotproduct = np.dot(p_vec, c_vec)  # this can range from -1 to 1
+                            distance = -1 * (z_transform(dotproduct)) # now it ranges from -inf to +inf
+                            # distance = z_transform(cosine(p_vec, c_vec))   # This was the 2023 version, now deprecated
 
                         distances[(p_idx, False, comp_date)].append(distance)
                         all_counter += 1
