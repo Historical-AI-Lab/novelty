@@ -26,7 +26,7 @@ def read_file(docid, date):
     else:
         rootdir = '/projects/ichass/usesofscale/20c/'
 
-    pairpath, postfix = utils.pairtreepath(htid, rootdir)
+    pairpath, postfix = utils.pairtreepath(docid, rootdir)
 
     filename = pairpath + postfix + '/' + postfix + ".norm.txt"
     if os.path.exists(filename):
