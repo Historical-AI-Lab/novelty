@@ -2,6 +2,7 @@ import SonicScrewdriver as utils
 
 import argparse, os, shutil
 import pandas as pd
+from collections import Counter
 
 # Command-line arguments include
 # -i or --input: the list of docids to copy
@@ -40,7 +41,11 @@ def read_file(docid, date):
 
 def main():
     results = []
+    ctr = 0
     for idx, row in meta.iterrows():
+        ctr += 1
+        if ctr % 100 == 1:
+            print(ctr)
         docid = row['docid']
         date = int(row['firstpub'])
         if date > 1925:
