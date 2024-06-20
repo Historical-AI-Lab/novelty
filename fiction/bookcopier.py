@@ -42,11 +42,16 @@ def main():
     results = []
     for idx, row in meta.iterrows():
         docid = row['docid']
-        date = row['firstpub']
+        date = int(row['firstpub'])
+        if date > 1925:
+            continue
         result = read_file(docid, date)
         results.append(result)
     
     print(Counter(results))
     meta['fulltext'] = results
     meta.to_csv(os.path.join(outputfolder, 'books_added.tsv'), index = False, sep = '\t')
+
+if __name__ == '__main__':
+    main()
 
