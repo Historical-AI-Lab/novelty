@@ -10,7 +10,9 @@ decadefiles = dict()
 
 for decade in range(1910, 1985, 5):
     decadefiles[decade] = []
+    print(decade)
     newspan = str(decade) + '-' + str(decade + 4)[-2:]
+    print(decade, newspan)
     if newspan == '1950-54':
         continue
     for line in data:
@@ -19,7 +21,7 @@ for decade in range(1910, 1985, 5):
             decadefiles[decade].append(newline)
         elif 'fiction/doctopics' in line:
             newline = line.replace('1950', str(decade))
-            newline = newline.replace('1954', str(decade + 5))
+            newline = newline.replace('1955', str(decade + 5))
             decadefiles[decade].append(newline)
         else:
             decadefiles[decade].append(line)
