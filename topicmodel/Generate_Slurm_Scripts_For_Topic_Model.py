@@ -17,7 +17,7 @@ for decade in range(1910, 1985, 5):
     print(decade, newspan)
     for line in data:
         if '1950-54' in line:
-            newline = line.replace('1950-54', 'fic' + newspan)
+            newline = line.replace('1950-54', newspan)
             decadefiles[decade].append(newline)
         elif 'fiction/doctopics' in line:
             newline = line.replace('1950', str(decade))
