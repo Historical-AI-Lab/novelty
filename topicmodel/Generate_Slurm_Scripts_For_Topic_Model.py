@@ -10,11 +10,11 @@ decadefiles = dict()
 
 for decade in range(1910, 1985, 5):
     decadefiles[decade] = []
-    print(decade)
+    # print(decade)
     newspan = str(decade) + '-' + str(decade + 4)[-2:]
-    print(decade, newspan)
     if newspan == '1950-54':
         continue
+    print(decade, newspan)
     for line in data:
         if '1950-54' in line:
             newline = line.replace('1950-54', 'fic' + newspan)
@@ -27,5 +27,6 @@ for decade in range(1910, 1985, 5):
             decadefiles[decade].append(line)
 
 for key, value in decadefiles.items():
+    print(key, len(value))
     with open('fic' + newspan + '.slurm', 'w') as file:
         file.writelines(value)
