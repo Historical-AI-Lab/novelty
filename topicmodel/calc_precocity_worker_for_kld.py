@@ -16,21 +16,6 @@ with open('MainDictionary.txt', encoding = 'utf-8') as f:
 
 warnings.filterwarnings('error')
 
-def get_lowercase_last_names(author_names):
-    '''
-    #EDIT: add lowercase last names unless they're 'anonymous' 
-    or in a lexicon of 25000 common words
-    '''
-
-    global lexicon
-    lastnames = []
-    for name in author_names:
-        name = name.replace('\xa0', ' ')
-        if name != 'anonymous':
-            lastnames.append(name.split()[-1].lower())
-
-    return set([x for x in lastnames if x not in lexicon])
-
 def get_vectors(paperId, data, function_string, chunksfordoc):
     papervectors = []
     if function_string == 'cosine':

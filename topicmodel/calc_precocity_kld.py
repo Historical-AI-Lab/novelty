@@ -48,7 +48,7 @@
 
 import pandas as pd
 import numpy as np
-import random, sys, os
+import os
 from multiprocessing import Pool
 import calc_precocity_worker_for_kld as cpw
 from ast import literal_eval
@@ -74,17 +74,7 @@ enddate = args.enddate
 article_level_exclude = args.articleexclude
 outputfolder = args.outputfolder
 
-def get_metadata(filepath):
-    '''
-    Loads the metadata spreadsheet and applies literal_eval to the
-    authors column.
-    '''
-    meta = pd.read_csv(filepath, sep = '\t')
-    meta['authors'] = meta['authors'].apply(literal_eval)
-    
-    return meta
-
-meta = get_metadata(metapath)  # converts the author strings to lists
+meta = pd.read_csv(metapath, sep = '\t') 
 data = dict()
 exclusions = dict()
 files_in_training_set = set()
@@ -129,7 +119,8 @@ for filename in filelist:
                     continue
                 chunkid = fields[1]
                 vector = np.array([float(x) for x in fields[2:]], dtype = np.float64)
-                data[chunkid] = vector
+                normalized_vector = vector / np.linalg.norm(vector)   # this is added in 2024
+                data[chunkid] = normalized_vector
                 chunkindexes = [x for x in chunkid.split('-')[1].split('.')]
                 docid = chunkid.split('-')[0]
                 for idx in chunkindexes:
