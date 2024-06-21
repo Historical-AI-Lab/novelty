@@ -114,12 +114,12 @@ args = SentenceTransformerTrainingArguments(
     # Required parameter:
     output_dir= outputdir,
     # Optional training parameters:
-    num_train_epochs=10,
-    per_device_train_batch_size=72,
-    per_device_eval_batch_size=72,
+    num_train_epochs=9,
+    per_device_train_batch_size=80,
+    per_device_eval_batch_size=80,
     warmup_ratio=0.1,
     fp16 = True,  # Set to False if you get an error that your GPU can't run on FP16
-    bf16=False,  # Set to True if you have a GPU that supports BF16
+    bf16= False,  # Set to True if you have a GPU that supports BF16
 	evaluation_strategy= "epoch",
     save_strategy= "epoch",
     batch_sampler=BatchSamplers.NO_DUPLICATES,  # MultipleNegativesRankingLoss benefits from no duplicate samples in a batch
