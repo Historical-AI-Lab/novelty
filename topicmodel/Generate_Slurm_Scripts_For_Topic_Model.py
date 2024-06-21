@@ -26,7 +26,8 @@ for decade in range(1910, 1985, 5):
         else:
             decadefiles[decade].append(line)
 
-for key, value in decadefiles.items():
-    print(key, len(value))
+for decade, value in decadefiles.items():
+    print(decade, len(value))
+    newspan = str(decade) + '-' + str(decade + 4)[-2:]
     with open('fic' + newspan + '.slurm', 'w') as file:
         file.writelines(value)
