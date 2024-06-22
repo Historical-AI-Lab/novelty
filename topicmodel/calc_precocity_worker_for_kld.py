@@ -177,7 +177,7 @@ def calculate_a_year(package):
 
         ctr += 1
         
-        if ctr % 100 == 1:
+        if ctr % 30 == 2:
             print(centerdate, ctr, flush=True)
 
         papervectors = get_vectors(paperId, data, function_string, chunksfordoc)
