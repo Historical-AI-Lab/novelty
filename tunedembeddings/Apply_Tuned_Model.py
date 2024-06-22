@@ -10,6 +10,8 @@ import argparse
 # -s --startyear  the start year for embeddings (must be a multiple of 10)
 # -e --endyear    the end year for embeddings (must be a multiple of 10)
 # -o --outputpath the path to the output directory
+# -t --metadatapath the path to the metadata file
+# -r --rootfolder the path to the folder containing the text files
 
 # Parse command-line arguments
 parser = argparse.ArgumentParser(description='Apply Sentence-Bert Model')
@@ -17,6 +19,8 @@ parser.add_argument('-m', '--modelpath', type=str, help='the path to the Sentenc
 parser.add_argument('-s', '--startyear', type=int, help='the start year for embeddings (must be a multiple of 10)')
 parser.add_argument('-e', '--endyear', type=int, help='the end year for embeddings (must be a multiple of 10)')
 parser.add_argument('-o', '--outputpath', type=str, help='the path to the output directory, should not end with slash')
+parser.add_argument('-t', '--metadatapath', type=str, help='the path to the metadata file')
+parser.add_argument('-r', '--rootfolder', type=str, help='the path to the folder containing the text files')
 args = parser.parse_args()
 
 # Extract command-line arguments
@@ -24,16 +28,20 @@ modelpath = args.modelpath
 startyear = args.startyear
 endyear = args.endyear
 outputpath = args.outputpath
+metadatapath = args.metadatapath
+rootfolder = args.rootfolder
 
 # 1. Load a pretrained Sentence Transformer model
 model = SentenceTransformer(modelpath)
 
-meta = pd.read_csv("../metadata/litstudies/LitMetadataWithS2.tsv", sep = '\t')
+meta = pd.read_csv(metadatapath, sep = '\t')
 meta = meta[meta['paperId'].notnull() & (meta['paperId'] != '')]
 
-rootfolder = "../perplexity/cleanchunks/"
+if 'fiction' in metadatapath:
+    meta = meta[meta['SOURCE'] != 'extracted_features']
 
 print('metadata loaded')
+print(meta.shape)
 
 for decade in range(startyear, endyear, 10):
     print(decade, flush = True)
@@ -43,8 +51,12 @@ for decade in range(startyear, endyear, 10):
     this_decade = meta[(meta['year'] >= decade) & (meta['year'] < decade + 10)]
     for idx, row in this_decade.iterrows():
         paper_id = row['paperId']
-        path = rootfolder + paper_id + ".txt"
+        if 'FILENAME' in row:
+            path = rootfolder + row['FILENAME']
+        else:
+            path = rootfolder + paper_id + ".txt"
         if not os.path.isfile(path):
+            print('Missing file:', paper_id)
             continue
         with open(path, 'r') as f:
             textlines = f.readlines()
