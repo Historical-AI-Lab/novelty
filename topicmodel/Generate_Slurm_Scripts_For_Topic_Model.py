@@ -20,8 +20,8 @@ for decade in range(1910, 1985, 5):
             newline = line.replace('1950-54', newspan)
             decadefiles[decade].append(newline)
         elif 'fiction/doctopics' in line:
-            newline = line.replace('1950', str(decade))
-            newline = newline.replace('1955', str(decade + 5))
+            newline = newline.replace('-e 1955', "-e " + str(decade + 5))
+            newline = line.replace('-s 1950', '-s ' + str(decade))
             decadefiles[decade].append(newline)
         else:
             decadefiles[decade].append(line)
