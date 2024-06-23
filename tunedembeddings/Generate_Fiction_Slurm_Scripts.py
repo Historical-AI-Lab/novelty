@@ -18,8 +18,8 @@ for floor in range(1913, 2000, 3):
             newline = line.replace('1910-13', newspan)
             decadefiles[floor].append(newline)
         elif 'fic768' in line:
-            newline = line.replace('1910', str(floor))
             newline = line.replace('1913', str(floor + 3))
+            newline = line.replace('1910', str(floor))
             decadefiles[floor].append(newline)
         else:
             decadefiles[floor].append(line)
