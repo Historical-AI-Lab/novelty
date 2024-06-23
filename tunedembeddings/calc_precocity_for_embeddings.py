@@ -46,7 +46,7 @@ import pandas as pd
 import numpy as np
 import random, sys, os
 from multiprocessing import Pool
-import calc_precocity_worker_for_tuned as cpw
+import calc_precocity_worker_for_embeddings as cpw
 from ast import literal_eval
 from collections import Counter
 import argparse
