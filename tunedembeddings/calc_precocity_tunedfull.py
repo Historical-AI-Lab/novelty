@@ -42,7 +42,6 @@
 # startdate is inclusive
 # enddate exclusive
 
-
 import pandas as pd
 import numpy as np
 import random, sys, os
@@ -60,6 +59,7 @@ parser.add_argument('--startdate', '-s', type=int, help='Start date (inclusive)'
 parser.add_argument('--enddate', '-e', type=int, help='End date (exclusive)')
 parser.add_argument('--articleexclude', '-a', help='Path to the article exclusion file')
 parser.add_argument('--outputfolder', '-o', help='Path to the output folder, should not end with a slash')
+parser.add_argument('--prefix', '-p', help = 'Prefix for output file names')
 
 args = parser.parse_args()
 
@@ -70,6 +70,7 @@ startdate = args.startdate
 enddate = args.enddate
 article_level_exclude = args.articleexclude
 outputfolder = args.outputfolder
+prefix = args.prefix
 
 def get_metadata(filepath):
     '''
@@ -163,12 +164,29 @@ totalvols = meta.shape[0]
 
 spanstocalculate = []
 for centerdate in range(startdate, enddate):
-    df = meta.loc[(meta.year >= centerdate - 20) & (meta.year <= centerdate + 20) &
-    (~pd.isnull(meta.paperId)), : ]
-    df.set_index('paperId', inplace = True)
-    spanstocalculate.append((centerdate, df))
+    if 'SOURCE' in meta.columns:
+        df = meta.loc[(meta.year >= centerdate - 20) & (meta.year <= centerdate + 20) &
+        (meta['SOURCE'] != 'extracted_features'), : ]
+        df_greater = df[df['year'] > centerdate]
+        df_less = df[df['year'] < centerdate]
+        df_equal = df[df['year'] == centerdate]
+        paperstocheck = df_equal.shape[0]
+        if paperstocheck > 45:
+            df_equal_half1 = df_equal.iloc[:paperstocheck//2]
+            df_equal_half2 = df_equal.iloc[paperstocheck//2:]
+            df1 = pd.concat([df_less, df_equal_half1, df_greater])
+            df1.set_index('paperId', inplace = True)
+            df2 = pd.concat([df_less, df_equal_half2, df_greater])
+            df2.set_index('paperId', inplace = True)
+            spanstocalculate.append((centerdate, df1))
+            spanstocalculate.append((centerdate, df2))
+    else:
+        df = meta.loc[(meta.year >= centerdate - 20) & (meta.year <= centerdate + 20) &
+        (~pd.isnull(meta.paperId)), : ]
+        df.set_index('paperId', inplace = True)
+        spanstocalculate.append((centerdate, df))
 
-outputname = 'precocity_tuned_' + str(startdate)
+outputname = prefix + str(startdate)
 summaryfile = outputfolder + '/' + outputname + 's_docs.tsv'
 print('outputfile:', outputname)
 
@@ -185,9 +203,9 @@ for centerdate, spanmeta in spanstocalculate:
     spandata = dict()
     
     for paperId, row in spanmeta.iterrows():  # the index is paperId
-        for i in range(1000):
+        for i in range(10000):
             chunkid = paperId + '-' + str(i)
-            if i > 990:
+            if i > 9995:
                 print('danger: ', i)
             if chunkid in data:
                 spandata[chunkid] = data[chunkid]
