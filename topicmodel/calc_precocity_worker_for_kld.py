@@ -19,9 +19,9 @@ warnings.filterwarnings('error')
 def get_vectors(paperId, data, function_string, chunksfordoc):
     papervectors = []
     if function_string == 'cosine':
-        for i in range (0, 1000):
+        for i in range (0, 10000):
             chunkid = paperId + '-' + str(i)
-            if i > 990:
+            if i > 9990:
                 print('Dangerously long document.')
             if chunkid not in data:        
                 break
