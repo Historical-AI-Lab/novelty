@@ -78,7 +78,7 @@ def get_metadata(filepath):
     authors column.
     '''
     meta = pd.read_csv(filepath, sep = '\t')
-    meta['authors'] = meta['authors'].apply(literal_eval)
+    # meta['authors'] = meta['authors'].apply(literal_eval)
     
     return meta
 
