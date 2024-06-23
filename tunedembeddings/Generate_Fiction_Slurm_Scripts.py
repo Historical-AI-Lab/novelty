@@ -12,14 +12,14 @@ decadefiles = dict()
 
 for floor in range(1913, 2000, 3):
     decadefiles[floor] = []
-    newspan = str(floor) + '-' + str(floor + 3)
+    newspan = str(floor) + '-' + str(floor + 3)[-2:]
     for line in data:
         if '1910-13' in line:
             newline = line.replace('1910-13', newspan)
             decadefiles[floor].append(newline)
         elif 'fic768' in line:
             newline = line.replace('1910', str(floor))
-            newline = line.replace('1910', str(floor + 3))
+            newline = line.replace('1913', str(floor + 3))
             decadefiles[floor].append(newline)
         else:
             decadefiles[floor].append(line)
