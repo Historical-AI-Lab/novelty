@@ -23,7 +23,7 @@ So I wrote two scripts: `ResampleTopicModelData.py` and `ExcludedFromFlat.py`.
 
 The first of these, the resampler, selected a (relatively) flat distribution by counting the number of chunks per year in the original data and capping the new dataset at the number-per-year in the 40th-lowest year (40 from the bottom). This has the effect of producing a distribution that is flat from 1945 to 2015 or so, and tails off at either end, especially below 1945.
 
-The new, flat dataset was in `ResampledLitStudiesForLDA.txt`. I needed to convert this into a `.mallet` file for topic modeling. I did that by running `makeflatlitmodel.slurm` (note that I run it in the mallet folder on the campus cluster -- `/projects/ischoolichass/ichass/usesofscale/mallet`), not in the novelty repo.
+The new, flat dataset was in `ResampledLitStudiesForLDA.txt`. I needed to convert this into a `.mallet` file for topic modeling. I did that by running `makeflatmalletdata.slurm` (note that I run it in the mallet folder on the campus cluster -- `/projects/ischoolichass/ichass/usesofscale/mallet`), not in the novelty repo.
 
 This produced `LitstudiesFlat.mallet`. I modeled that using `makeflatlitmodel.slurm` (again in the mallet directory).
 
