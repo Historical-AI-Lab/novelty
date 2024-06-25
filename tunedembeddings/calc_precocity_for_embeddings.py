@@ -171,7 +171,7 @@ for centerdate in range(startdate, enddate):
 		df_less = df[df['year'] < centerdate]
 		df_equal = df[df['year'] == centerdate]
 		paperstocheck = df_equal.shape[0]
-		if paperstocheck > 80:
+		if paperstocheck > 70:
 			df_equal_half1 = df_equal.iloc[:paperstocheck//2]
 			df_equal_half2 = df_equal.iloc[paperstocheck//2:]
 			df1 = pd.concat([df_less, df_equal_half1, df_greater])
