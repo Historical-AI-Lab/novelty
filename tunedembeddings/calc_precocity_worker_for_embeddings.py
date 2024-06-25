@@ -5,31 +5,7 @@ from scipy.stats import entropy
 from collections import Counter
 import warnings
 
-lexicon = set()
-
-with open('MainDictionary.txt', encoding = 'utf-8') as f:
-    for line in f:
-        words = line.strip().split()
-        lexicon.add(words[0].lower())
-        if len(lexicon) >= 25000:
-            break
-
 warnings.filterwarnings('error')
-
-def get_lowercase_last_names(author_names):
-    '''
-    #EDIT: add lowercase last names unless they're 'anonymous' 
-    or in a lexicon of 25000 common words
-    '''
-
-    global lexicon
-    lastnames = []
-    for name in author_names:
-        name = name.replace('\xa0', ' ')
-        if name != 'anonymous':
-            lastnames.append(name.split()[-1].lower())
-
-    return set([x for x in lastnames if x not in lexicon])
 
 def get_vectors(paperId, data, function_string, chunksfordoc):
     papervectors = []
