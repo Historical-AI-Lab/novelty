@@ -93,6 +93,9 @@ def LoadTimeSlice(floor, ceiling, metadata, rootfolder):
 
         for paperId in paperIds:
             filepath = rootfolder + '/' + paperId + '.txt'
+            if not os.path.exists(filepath):
+                print('Missing file:', filepath)
+                continue
             with open(filepath, 'r') as file:
                 for line in file:
                     fields = line.strip().split('\t')
