@@ -127,7 +127,7 @@ def process_row(row):
             if isinstance(pubdates, tuple):
                 pubdates = list(pubdates)
         except (SyntaxError, ValueError):
-            print(f"Error parsing pubdates_str: {pubdates_str}, Error: {e}")
+            print(f"Error parsing pubdates_str: {pubdates_str}")
             pubdates = None
   
     if isinstance(pubdates_str, tuple):
@@ -184,23 +184,44 @@ def process_row(row):
 
     }
 
+#clean up pubdates
+def clean_pubdates(pubdates):
+    # If the pubdates are passed as a string that looks like a list, evaluate it
+    if isinstance(pubdates, str):
+        pubdates = literal_eval(pubdates)
+
+    # If the pubdates is a list, process each date
+    if isinstance(pubdates, list):
+        for i in range(len(pubdates)):
+            pubdate = pubdates[i]
+
+            # Check if the pubdate is in 'YYYYMMDD' format (length 8)
+            if len(pubdate) == 8 and pubdate.isdigit():
+                # Extract the year (first 4 digits) and replace the original pubdate with it
+                pubdates[i] = pubdate[:4]
+            else:
+                # Handle cases where the date is not in the expected format
+                pubdates[i] = pubdate  # You can modify this to suit your needs
+    return pubdates
+
+
 # Function to compute average publication date
-def compute_avg_pubdate(pubdates):
-    if pubdates is None:
-        return None
+# def compute_avg_pubdate(pubdates):
+#     if pubdates is None:
+#         return None
     # try:
-        # Convert the string representation to an actual tuple
-    pubdates_tuple = tuple(pubdates)
-    if pubdates_tuple is None:
-        return None
-    # Check if it's a tuple of integers
-    elif isinstance(pubdates_tuple, tuple) and all(isinstance(date, int) for date in pubdates_tuple):
-        return sum(pubdates_tuple) / len(pubdates_tuple)
-    else:
-            for date in pubdates_tuple:
-                date = int(date)
-                pubdates_tuple_2.add(date)
-                return sum(pubdates_tuple) / len(pubdates_tuple)
+    #     # Convert the string representation to an actual tuple
+    # pubdates_tuple = tuple(pubdates)
+    # if pubdates_tuple is None:
+    #     return None
+    # # Check if it's a tuple of integers
+    # elif isinstance(pubdates_tuple, tuple) and all(isinstance(date, int) for date in pubdates_tuple):
+    #     return sum(pubdates_tuple) / len(pubdates_tuple)
+    # else:
+    #         for date in pubdates_tuple:
+    #             date = int(date)
+    #             pubdates_tuple_2.add(date)
+    #             return sum(pubdates_tuple) / len(pubdates_tuple)
     # else:
     #     return None
     # # except (ValueError, SyntaxError):
@@ -314,6 +335,32 @@ def get_word_embeddings(words):
 def get_cosine_distance_bw_title_embeddings(VIAF_embedding, S2_embedding):
     cosine_dist = cosine(VIAF_embedding, S2_embedding)
     return cosine_dist
+def jaccard_distance_for_lists(list1, list2):
+    # Convert both lists into sets (to remove duplicates within each list)
+    set1 = set(list1)
+    set2 = set(list2)
+
+    # Calculate the intersection and union
+    intersection = len(set1.intersection(set2))
+    union = len(set1.union(set2))
+
+    # If both sets are empty, return 0 (no distance)
+    if union == 0:
+        return 0
+
+    # Jaccard similarity
+    jaccard_sim = intersection / union
+
+    # Jaccard distance is 1 - Jaccard similarity
+    return 1 - jaccard_sim
+
+
+def apply_jaccard(df, col1, col2):
+    # Apply the Jaccard distance function row-wise
+    df['jaccard_distance'] = df.apply(lambda row: jaccard_distance_for_lists(row[col1], row[col2]), axis=1)
+    return df
+
+
 
 
 ####
@@ -377,7 +424,7 @@ if __name__ == '__main__':
     # Iterate over the DataFrame rows
     for index, row in meta.iterrows():
         author = str(row['author'])
-        year = row['year']
+        year = row['S2years']
 
         # Use setdefault to initialize the list if the author is not already in the dictionary
         author_years.setdefault(author, []).append(year)
@@ -416,8 +463,11 @@ if __name__ == '__main__':
     df = result_df
     #%%
     df
+    df['cleaned_pubdates'] = df['pubdates'].apply(clean_pubdates)
 
     # Assuming df is your DataFrame
+    df.drop(columns=['S2Titles'], inplace=True)
+
     df = result_df.apply(process_row, axis=1, result_type='expand')
 
     # Print or use result_df as needed
@@ -437,7 +487,7 @@ if __name__ == '__main__':
 
     pubdates_tuple_2 = {}
 
-    df['avg_pubdate'] = df['S2_pubdates'].apply(lambda x: compute_avg_pubdate(x))
+    df['avg_pubdate'] = df['S2_pubdates'].apply(lambda x: find_avg_pubdate(x))
 
 
     #%%
@@ -509,6 +559,10 @@ if __name__ == '__main__':
     df[['lemma_overlap', 'overlapping_lemmas']] = df.apply(
         lambda row: pd.Series(calculate_lemma_overlap(row['VIAF_titlelist'], row['S2_titlelist'])),
         axis=1)
+
+    df_with_jaccard = apply_jaccard(df, 'S2_titlelist', 'VIAF_titlelist')
+
+    print(df_with_jaccard)
 
     #%%
     #add overlaps
@@ -702,8 +756,11 @@ if __name__ == '__main__':
     print(report)
 
     import pickle
+
+    model.fit(X, y)
     with open('viaf_classifier_sept23.pkl', 'wb') as file:
         pickle.dump(model, file)
     #%%
 print(df['cosine_distance'])
+
 
