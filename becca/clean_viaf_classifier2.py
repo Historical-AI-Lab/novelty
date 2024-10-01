@@ -123,7 +123,8 @@ def process_row(row):
     # if isinstance(pubdates_str, str) and pubdates_str.strip():
     if isinstance(pubdates_str, str):
         try:
-            pubdates = literal_eval(pubdates_str)
+            # pubdates = literal_eval(pubdates_str)
+            pubdates = pubdates_str.split(',')
             if isinstance(pubdates, tuple):
                 pubdates = list(pubdates)
         except (SyntaxError, ValueError):
@@ -188,7 +189,8 @@ def process_row(row):
 def clean_pubdates(pubdates):
     # If the pubdates are passed as a string that looks like a list, evaluate it
     if isinstance(pubdates, str):
-        pubdates = literal_eval(pubdates)
+        # pubdates = literal_eval(pubdates)
+        pubdates = pubdates.split(',')
 
     # If the pubdates is a list, process each date
     if isinstance(pubdates, list):
@@ -361,6 +363,36 @@ def apply_jaccard(df, col1, col2):
     return df
 
 
+def find_exact_matches_for_author(row):
+    matches = []
+
+    # Iterate over each row in the DataFrame
+    # for idx, row in df.iterrows():
+    author = row['author']
+
+    # Get titles from viaf_title_list and title_list
+    viaf_titles = row['VIAF_titlelist'] if isinstance(row['VIAF_titlelist'], list) else []
+    title_list = row['S2 titlelist'] if isinstance(row['S2 titlelist'], list) else [row['S2 titlelist']]
+
+    # Convert both lists to lowercase to make the comparison case-insensitive
+    viaf_titles_lower = set([str(title).lower() for title in viaf_titles])
+    title_list_lower = set([str(title).lower() for title in title_list])
+
+    # Find the intersection of titles between viaf_titles and title_list
+    common_titles = viaf_titles_lower.intersection(title_list_lower)
+
+    # If there are matching titles, add them to the results
+    if common_titles:
+        matches.append({
+            'author': author,
+            'matching_titles': list(common_titles)
+        })
+
+    return matches
+def count_matches(exact_title_match):
+    return len(exact_title_match)
+
+
 
 
 ####
@@ -442,6 +474,7 @@ if __name__ == '__main__':
     swapped_dict = {v: k for k, v in normalized_dict.items()}
 
     df['S2_pubdates'] = df['normalized_author'].apply(update_pubdates)
+    df['S2_pubdates'] = df['S2_pubdates'].apply(clean_pubdates)
     #%%
     # df['S2_pubdates'] = df['author'].map(author_years)
     #%%
@@ -463,16 +496,51 @@ if __name__ == '__main__':
     df = result_df
     #%%
     df
-    df['cleaned_pubdates'] = df['pubdates'].apply(clean_pubdates)
+    # df['cleaned_pubdates'] = df['S2_pubdates'].apply(clean_pubdates)
 
     # Assuming df is your DataFrame
     df.drop(columns=['S2Titles'], inplace=True)
 
     df = result_df.apply(process_row, axis=1, result_type='expand')
 
+
+
     # Print or use result_df as needed
     # print(result_df)
+    #lets normalize titles
+    # df['S2 titlelist'] = df['S2 titlelist'].apply(
+    #     lambda title_list: [normalize_text(title) for title in title_list])
+    # df['VIAF_titlelist'] = df['VIAF_titlelist'].apply(
+    #     lambda title_list: [normalize_text(title) for title in title_list])
+    # S2_set = set()
+    # VIAF_set = set()
+    # df['title_intersection'] = ""
+    # df['title_intersection'] = [[] for _ in range(len(df))]
+    # df['title_intersection'] = pd.Series(dtype=object)
 
+    # for idx, row in df.iterrows():
+    #     S2_set = set()
+    #     VIAF_set = set()
+    #     S2_titlelist = str(row['S2 titlelist']) if pd.notna(row['S2 titlelist']) else ''
+    #     VIAF_titlelist = str(row['VIAF_titlelist']) if pd.notna(row['VIAF_titlelist']) else ''
+    #     S2_titlelist = S2_titlelist.split(',')
+    #     VIAF_titlelist = VIAF_titlelist.split(',')
+    #     for title in S2_titlelist:
+    #         title = normalize_text(title)
+    #         S2_set.add(title)
+    #     for title in VIAF_titlelist:
+    #         title = normalize_text(title)
+    #         VIAF_set.add(title)
+    #     intersection = S2_set & VIAF_set
+    #     # Check if intersection is not empty before converting to list
+    #     if intersection:
+            # df.at[idx, 'title_intersection'] = list(intersection)  # Convert set to list
+            # df.at[idx,'title_intersection'] = [', '.join(titles) for titles in intersection]
+            # print(intersection)
+        # else:
+            # df.at[idx, 'title_intersection'] = ''  # Assign an empty list if no intersection
+
+    # Display the DataFrame to check results
     #%%
     df
     #%%
@@ -498,10 +566,15 @@ if __name__ == '__main__':
     #publication_age
     df['publication_age'] = df['avg_pubdate'] - df['birthyear']
 
+
     #%%
     df
     #%%
     df['publication_age'] = pd.to_numeric(df['publication_age'], errors='coerce')
+
+
+
+
 
     #%% md
     # Add status variable, and then convert it from string to numbers
@@ -559,15 +632,9 @@ if __name__ == '__main__':
     df[['lemma_overlap', 'overlapping_lemmas']] = df.apply(
         lambda row: pd.Series(calculate_lemma_overlap(row['VIAF_titlelist'], row['S2_titlelist'])),
         axis=1)
+    # add overlaps
 
-    df_with_jaccard = apply_jaccard(df, 'S2_titlelist', 'VIAF_titlelist')
-
-    print(df_with_jaccard)
-
-    #%%
-    #add overlaps
-
-    #add word overlap as a new feature
+    # add word overlap as a new feature
     import pandas as pd
     from nltk.corpus import stopwords
     import nltk
@@ -576,14 +643,57 @@ if __name__ == '__main__':
     nltk.download('stopwords')
     # Define stop words
     stop_words = set(stopwords.words('english'))
-
-    # Apply the function to each row and create two new columns
     df[['word_overlap_count', 'overlapping_words']] = df.apply(find_word_overlap, axis=1)
 
+
+
+    df['Jaccard_Distance'] = ""
+    df['exact_matches'] = ""
+    df['exact_match_count'] = ""
+
+    # df = apply_jaccard(df, 'S2_titlelist', 'VIAF_titlelist')
+    for idx, row in df.iterrows():
+        S2_titlelist = str(row['S2 titlelist']).split(',')
+        VIAF_titlelist = str(row['VIAF_titlelist']).split(',')
+        jaccard_distance = jaccard_distance_for_lists(S2_titlelist, VIAF_titlelist)
+        df.at[idx, 'Jaccard_Distance'] = jaccard_distance
+        exact_matches = find_exact_matches_for_author(row)
+        df.at[idx, 'exact_matches'] = exact_matches
+        df.at[idx, 'exact_match_count'] = len(exact_matches)
+
+    # matches = find_exact_matches_for_author(df)
+    # Output the results
+    # matches_list = []
+    # if matches:
+    #     for match in matches:
+    #         matches_list.append(
+    #             f"Author: {match['author']} has the following matching titles between s2 and viaf_title_list: {match['matching_titles']}")
+    #
+
+
+
+
+    # print(df_with_jaccard)
+
+    #%%
+
+
+    # Apply the function to each row and create two new columns
+    # df[['word_overlap_count', 'overlapping_words']] = df.apply(find_word_overlap, axis=1)
+
+    import json
+
+
+    # Function to find exact title matches between any two title lists
+
+
+    # Example usage with sample data
 
     #%%
 
     df['cosine_distance'] = ""
+
+
 
     for idx, row in df.iterrows():
         VIAF_embedding = row['VIAF_embeddings']
@@ -615,6 +725,10 @@ if __name__ == '__main__':
     #%%
     df['status'] = df['status'].apply(pd.to_numeric)
 
+    df['Jaccard_Distance'] = pd.to_numeric(df['Jaccard_Distance'], errors='coerce')
+    df['exact_match_count'] = pd.to_numeric(df['exact_match_count'], errors='coerce')
+    df['cosine_distance'] = pd.to_numeric(df['cosine_distance'], errors='coerce')
+
     #%%
     df
     #%%
@@ -635,7 +749,7 @@ if __name__ == '__main__':
 
     # X = df.drop(columns=['author','VIAF_titlelist','S2_titlelist','overlapping_words','selected_birthyear','overlapping_lemmas','mean_embedding','matched_title?','match','match?','title_list','record_enumerated_titles','S2titles','matched_title_list','normalized_author','common_words','S2_Author','notes','S2_pubdates','S2_Titlelist','selected_birthyear'])  # Drop the label and metadata columns
 
-    X = df.drop(columns=['author','VIAF_titlelist','S2_titlelist','overlapping_words','selected_birthyear','overlapping_lemmas','mean_embedding','match?','S2_pubdates','selected_birthyear','negative_status', 'S2 titlelist','S2_embeddings','VIAF_embeddings'])
+    X = df.drop(columns=['author','VIAF_titlelist','S2_titlelist','overlapping_words','selected_birthyear','overlapping_lemmas','mean_embedding','match?','S2_pubdates','selected_birthyear','negative_status', 'S2 titlelist','S2_embeddings','VIAF_embeddings','exact_matches'])
     y = df['match?']
 
     # Optional: If you want to split into training and test sets first
@@ -676,16 +790,16 @@ if __name__ == '__main__':
     #%%
     #filter methods of feature selection
     #correlations
-    corr_matrix = X.corr()  # Default is Pearson correlation
+    # corr_matrix = X.corr()  # Default is Pearson correlation
 
 
 
     #%%
-    import seaborn as sns
-    plt.figure(figsize=(10, 8))  # Set the figure size
-    sns.heatmap(corr_matrix, annot=True, cmap='coolwarm', vmin=-1, vmax=1)
-    plt.title('Correlation Heatmap')
-    plt.show()
+    # import seaborn as sns
+    # plt.figure(figsize=(10, 8))  # Set the figure size
+    # # sns.heatmap(corr_matrix, annot=True, cmap='coolwarm', vmin=-1, vmax=1)
+    # plt.title('Correlation Heatmap')
+    # plt.show()
 
     #%%
     type(X)
@@ -728,7 +842,7 @@ if __name__ == '__main__':
     # Convert predicted probabilities to class labels (0 or 1 based on threshold 0.5)
     # y_pred = (y_pred_proba[:, 1] >= 0.5).astype(int)
 
-    y_pred = (y_pred_proba[:, 1] >= 0.8).astype(int)
+    y_pred = (y_pred_proba[:, 1] >= 0.9).astype(int)
 
 
     # Generate classification report based on the true labels (y_train) and predicted labels (y_pred)
@@ -737,14 +851,14 @@ if __name__ == '__main__':
     # Print the classification report
     print(report)
     #%%
-    y_pred = (y_pred_proba[:, 1] >= 0.5).astype(int)
-
-
-    # Generate classification report based on the true labels (y_train) and predicted labels (y_pred)
-    report = classification_report(y, y_pred)
-
-    # Print the classification report
-    print(report)
+    # y_pred = (y_pred_proba[:, 1] >= 0.95).astype(int)
+    #
+    #
+    # # Generate classification report based on the true labels (y_train) and predicted labels (y_pred)
+    # report = classification_report(y, y_pred)
+    #
+    # #Print the classification report
+    # print(report)
     #%%
     # y_pred = (y_pred_proba[:, 1] >= 0.7).astype(int)
 
@@ -762,5 +876,6 @@ if __name__ == '__main__':
         pickle.dump(model, file)
     #%%
 print(df['cosine_distance'])
+# print(matches_list)
 
 

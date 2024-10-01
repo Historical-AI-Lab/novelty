@@ -210,7 +210,11 @@ def birth2maxdate(birth, pubdates):
         max_pubdate = pubdates
         birth2maxdate = max_pubdate - birth
         abs_birth2maxdate = abs(birth2maxdate)
-    return birth2maxdate, abs_birth2maxdate
+        try:
+            return birth2maxdate, abs_birth2maxdate
+        except:
+            return None, None
+
 
 
 
@@ -515,9 +519,16 @@ def process_row(row):
     #     pubdates = None
     if pubdates_str == '"':
         try:
-            pubdates = S2_data_dict[author]['year']
+            if author in S2_data_dict.keys():
+                pubdates = S2_data_dict[author]['year']
         except:
             pubdates = ''
+            unique_authors_to_search.append(author)
+    for author in unique_authors_to_search:
+        viaf_data = search_author(author)
+        authors_data[author] = viaf_data
+    with open(r'new_viaf_data_2.txt', 'w') as output_file:
+        json.dump(authors_data, output_file, indent=4)  # Use json.dump for structured output
 
         # if pubdates is None:
         # if pubdates is None or not isinstance(pubdates, list):
@@ -560,7 +571,30 @@ def process_row(row):
 
     }
 
+def jaccard_distance_for_lists(list1, list2):
+    # Convert both lists into sets (to remove duplicates within each list)
+    set1 = set(list1)
+    set2 = set(list2)
 
+    # Calculate the intersection and union
+    intersection = len(set1.intersection(set2))
+    union = len(set1.union(set2))
+
+    # If both sets are empty, return 0 (no distance)
+    if union == 0:
+        return 0
+
+    # Jaccard similarity
+    jaccard_sim = intersection / union
+
+    # Jaccard distance is 1 - Jaccard similarity
+    return 1 - jaccard_sim
+
+
+def apply_jaccard(df, col1, col2):
+    # Apply the Jaccard distance function row-wise
+    df['jaccard_distance'] = df.apply(lambda row: jaccard_distance_for_lists(row[col1], row[col2]), axis=1)
+    return df
 def clean_pubdates(pubdates):
     # If the pubdates are passed as a string that looks like a list, evaluate it
     if isinstance(pubdates, str):
@@ -583,6 +617,39 @@ def clean_pubdates(pubdates):
                     pubdates[i] = pubdate  # Handle invalid formats
     return pubdates
 
+def find_exact_matches_for_author(row):
+    matches = []
+
+    # Iterate over each row in the DataFrame
+    # for idx, row in df.iterrows():
+    author = row['author']
+
+    # Get titles from viaf_title_list and title_list
+    viaf_titles = row['VIAF_titlelist'] if isinstance(row['VIAF_titlelist'], list) else []
+    title_list = row['S2 titlelist'] if isinstance(row['S2 titlelist'], list) else [row['S2 titlelist']]
+
+    # Convert both lists to lowercase to make the comparison case-insensitive
+    viaf_titles_lower = set([str(title).lower() for title in viaf_titles])
+    title_list_lower = set([str(title).lower() for title in title_list])
+
+    # Find the intersection of titles between viaf_titles and title_list
+    common_titles = viaf_titles_lower.intersection(title_list_lower)
+
+    # If there are matching titles, add them to the results
+    if common_titles:
+        matches.append({
+            'author': author,
+            'matching_titles': list(common_titles)
+        })
+
+    return matches
+def count_matches(exact_title_match):
+    return len(exact_title_match)
+def extract_year(df, column_name):
+    # Apply a function to each row of the specified column
+    df[column_name] = df[column_name].apply(lambda x: int(x[:4]) if isinstance(x, str) and len(x) > 8 else x)
+    return df
+
 
 ####
 if __name__ == '__main__':
@@ -591,7 +658,7 @@ if __name__ == '__main__':
     pubdates_tuple_2 = set()
 
     df = pd.read_csv('all_search_results_df_18hr_sept17.csv')
-    df = df.iloc[:15]
+    df = df.iloc[:100]
     # Read the text file
     with open('new_viaf_data.txt', 'r') as file:
         authors_data = json.load(file)  # Use json.load to read the JSON
@@ -599,6 +666,8 @@ if __name__ == '__main__':
         # except json.JSONDecodeError as e:
         #     print(f"Error reading JSON data: {e}")
     new_viaf_dict = authors_data
+    with open('new_viaf_data2.txt', 'r') as file:
+        authors_data2 = json.load(file)
     # Convert the string representation of the dictionary back to a Python dictionary
     print(df.columns)
     # file_path = 'LitMetadataWithS2 (3).tsv'
@@ -711,12 +780,15 @@ if __name__ == '__main__':
     authors_data = {}
     for idx, row in df.iterrows():
         author = row['author']
-        if is_author_in_dict(author, S2_data_dict):
+        if author in S2_data_dict.keys():
             pubdate = S2_data_dict[author]['year']
             df.at[idx, 'S2_pubdates'] = pubdate
         else:
             if author not in unique_authors_to_search:
                 unique_authors_to_search.append(author)
+            # for author in unique_authors_to_search:
+            #         viaf_data = search_author(author)
+            #         authors_data[author] = viaf_data
 
     for author in unique_authors_to_search:
         viaf_data = search_author(author)
@@ -867,6 +939,20 @@ if __name__ == '__main__':
 
     # %%
 
+    df['Jaccard_Distance'] = ""
+    df['exact_matches'] = ""
+    df['exact_match_count'] = ""
+
+    # df = apply_jaccard(df, 'S2_titlelist', 'VIAF_titlelist')
+    for idx, row in df.iterrows():
+        S2_titlelist = str(row['S2 titlelist']).split(',')
+        VIAF_titlelist = str(row['VIAF_titlelist']).split(',')
+        jaccard_distance = jaccard_distance_for_lists(S2_titlelist, VIAF_titlelist)
+        df.at[idx, 'Jaccard_Distance'] = jaccard_distance
+        exact_matches = find_exact_matches_for_author(row)
+        df.at[idx, 'exact_matches'] = exact_matches
+        df.at[idx, 'exact_match_count'] = len(exact_matches)
+
     df['cosine_distance'] = ""
 
     for idx, row in df.iterrows():
@@ -891,10 +977,12 @@ if __name__ == '__main__':
     #     if row['VIAF_birthdate'] == '1949-06-01':
     #         row['VIAF_birthdate'] = '1949'
 
-    df.loc[df['VIAF_birthdate'] == '1949-06-01', 'VIAF_birthdate'] = '1949'
-    df.loc[df['S2_pubdates'] == '1949-06-01', 'S2_pubdates'] = '1949'
-    df.loc[df['birthyear'] == '1949-06-01', 'birthyear'] = '1949'
-
+    df.loc[df['VIAF_birthdate'] == '1949-06-01', 'VIAF_birthdate'] = 1949
+    df.loc[df['S2_pubdates'] == '1949-06-01', 'S2_pubdates'] = 1949
+    df.loc[df['birthyear'] == '1949-06-01', 'birthyear'] = 1949
+    df = extract_year(df, 'VIAF_birthdate')
+    df = extract_year(df, 'S2_pubdates')
+    df = extract_year(df, 'birthyear')
 
     df['pub_age'] = df['publication_age']
     # %%
@@ -902,9 +990,9 @@ if __name__ == '__main__':
     original_indices = df.index
     original_metadata = df[
         ['VIAF_titlelist',  'author', 'S2_titlelist', 'status', 'pub_age', 'avg_pubdate',
-         'VIAF_birthdate', 'overlapping_words', 'word_overlap_count', 'lemma_overlap', 'overlapping_lemmas']].copy()
+         'VIAF_birthdate', 'overlapping_words', 'word_overlap_count', 'lemma_overlap', 'overlapping_lemmas','exact_matches']].copy()
     print(df.columns.tolist())
-    columns_to_drop = ['S2 titlelist', 'S2_embeddings', 'S2_pubdates', 'VIAF_embeddings','S2_titlelist','VIAF_titlelist','author','mean_embedding','negative_status','overlapping_lemmas','overlapping_words']
+    columns_to_drop = ['S2 titlelist', 'S2_embeddings', 'S2_pubdates', 'VIAF_embeddings','S2_titlelist','VIAF_titlelist','author','mean_embedding','negative_status','overlapping_lemmas','overlapping_words','exact_matches']
 
     # Check which columns actually exist in the DataFrame before dropping
     existing_columns_to_drop = [col for col in columns_to_drop if col in df.columns]
