@@ -1,0 +1,222 @@
+{
+    "anne barbeau gardiner": [
+        {
+            "author": "anne barbeau gardiner",
+            "record_count": 2,
+            "record_enumerated": 0,
+            "viaf_title_list": [
+                "Ancient faith and modern freedom in John Dryden's The hind and the panther",
+                "The intellectual design of John Dryden's heroic plays, c1970:",
+                "Malice defeated, 1988:",
+                "matchless rogue"
+            ],
+            "birthdate": "1938",
+            "title_list": "A Witty French Preacher in the English Court, Dryden, and the Great Debate on the Real Presence, 1661-1688"
+        },
+        {
+            "author": "anne barbeau gardiner",
+            "record_count": 2,
+            "record_enumerated": 1,
+            "viaf_title_list": [],
+            "birthdate": "0",
+            "title_list": "A Witty French Preacher in the English Court, Dryden, and the Great Debate on the Real Presence, 1661-1688"
+        }
+    ],
+    "kate e tunstall": [
+        {
+            "author": "kate e tunstall",
+            "record_count": 1,
+            "record_enumerated": 0,
+            "viaf_title_list": [
+                "Blindness and enlightenment : an essay",
+                "Diderot and Rousseau : networks of Enlightenment",
+                "Diderot's \"promenade Vernet\", or the Salon as landscape garden",
+                "Les discours artistiques de l'amour \u00e0 l'\u00e2ge classique",
+                "Displacement, asylum, migration : the Oxford Amnesty lectures 2004",
+                "La figure du philosophe dans les lettres anglaises et fran\u00e7aises : XVIe-XVIIIe si\u00e8cles",
+                "Une histoire br\u00e8ve de la litt\u00e9rature fran\u00e7aise",
+                "Interdisciplinarity / Qu'est-ce que les Lumi\u00e8res ? / La reconnaissance au dix-huiti\u00e8me si\u00e8cle",
+                "L'\u00c2ge classique et les Lumi\u00e8res / Alain Viala. - 1 ed., 3e tir. - Paris, 2018.",
+                "L'aveugle et le philosophe ou Comment la c\u00e9cit\u00e9 donne \u00e0 penser",
+                "Letter on a blind",
+                "Litt\u00e9raire : pour Alain Viala.",
+                "\u00ab Ne nous engageons point dans les querelles \u00bb : A project for never-ending war ?",
+                "Neveu de Rameau.",
+                "Of a man born blind",
+                "Rameau's nephew",
+                "Self-evident truths? human rights and the Enlightenment",
+                "Women and Querelles in Early Modern France"
+            ],
+            "birthdate": "2000",
+            "title_list": NaN
+        }
+    ],
+    "kevin mclaughlin": [
+        {
+            "author": "kevin mclaughlin",
+            "record_count": 7,
+            "record_enumerated": 0,
+            "viaf_title_list": [
+                "The arcades project",
+                "Paperwork : fiction and mass mediacy in the Paper Age",
+                "Passagen-Werk",
+                "The philology of life : Walter Benjamin's critical program",
+                "Poetic force, 2014:",
+                "Points of departure Samuel Weber between spectrality and reading",
+                "Writing in parts : imitation and exchange in nineteenth-century literature"
+            ],
+            "birthdate": "1959",
+            "title_list": NaN
+        },
+        {
+            "author": "kevin mclaughlin",
+            "record_count": 7,
+            "record_enumerated": 1,
+            "viaf_title_list": [
+                "Online ad auctions: an experiment"
+            ],
+            "birthdate": "0",
+            "title_list": NaN
+        },
+        {
+            "author": "kevin mclaughlin",
+            "record_count": 7,
+            "record_enumerated": 2,
+            "viaf_title_list": [
+                "Date guide to the birds of the Hamilton area."
+            ],
+            "birthdate": "0",
+            "title_list": NaN
+        },
+        {
+            "author": "kevin mclaughlin",
+            "record_count": 7,
+            "record_enumerated": 3,
+            "viaf_title_list": [],
+            "birthdate": "0",
+            "title_list": NaN
+        },
+        {
+            "author": "kevin mclaughlin",
+            "record_count": 7,
+            "record_enumerated": 4,
+            "viaf_title_list": [
+                "Cybersecurity operations and fusion centers : a comprehensive guide to SOC and TIC strategy"
+            ],
+            "birthdate": "0",
+            "title_list": NaN
+        },
+        {
+            "author": "kevin mclaughlin",
+            "record_count": 7,
+            "record_enumerated": 5,
+            "viaf_title_list": [
+                "Duet, trumpets",
+                "Your obligations and rights under fencing laws in Virginia, 1988"
+            ],
+            "birthdate": "0",
+            "title_list": NaN
+        },
+        {
+            "author": "kevin mclaughlin",
+            "record_count": 7,
+            "record_enumerated": 6,
+            "viaf_title_list": [],
+            "birthdate": "1965",
+            "title_list": NaN
+        }
+    ],
+    "shari m huhndorf": [
+        {
+            "author": "shari m huhndorf",
+            "record_count": 2,
+            "record_enumerated": 0,
+            "viaf_title_list": [
+                "Going native : Indians in the American cultural imagination",
+                "Mapping the Americas / Shari M. Huhndorf. - Ithaca ; London, 2009.",
+                "Mapping the Americas : the transnational politics of contemporary native culture",
+                "Native lands : culture and gender in Indigenous territorial claims"
+            ],
+            "birthdate": "1965",
+            "title_list": "Nanook and His Contemporaries: Imagining Eskimos in American Culture, 1897-1922"
+        },
+        {
+            "author": "shari m huhndorf",
+            "record_count": 2,
+            "record_enumerated": 1,
+            "viaf_title_list": [],
+            "birthdate": "1965",
+            "title_list": "Nanook and His Contemporaries: Imagining Eskimos in American Culture, 1897-1922"
+        }
+    ],
+    "k m wheeler": [
+        {
+            "author": "k m wheeler",
+            "record_count": 2,
+            "record_enumerated": 0,
+            "viaf_title_list": [
+                "Case study approach to psychotherapy for advanced practice psychiatric nurses",
+                "The creative mind in Coleridge's poetry",
+                "German aesthetics and literary criticism, 1984:",
+                "Guide to twentieth-century women novelists",
+                "Modanisuto josei sakka : Katari no senryaku",
+                "\"Modernist\" women writers and narrative art",
+                "Romanticism, pragmatism, and deconstruction",
+                "Shandean humour in English and German literature and philosophy",
+                "Sources, processes, and methods in Coleridge's Biographia literaria, 1980:",
+                "'\u30e2\u30c0\u30cb\u30b9\u30c8'\u5973\u6027\u4f5c\u5bb6 : \u8a9e\u308a\u306e\u6226\u7565"
+            ],
+            "birthdate": "1949-06-01",
+            "title_list": NaN
+        },
+        {
+            "author": "k m wheeler",
+            "record_count": 2,
+            "record_enumerated": 1,
+            "viaf_title_list": [],
+            "birthdate": "0",
+            "title_list": NaN
+        }
+    ],
+    "susan gillman": [
+        {
+            "author": "susan gillman",
+            "record_count": 1,
+            "record_enumerated": 0,
+            "viaf_title_list": [
+                "American Mediterraneans : a study in geography, history, and race",
+                "Blood talk : American race melodrama and the culture of the occult",
+                "Dark twins, 1989:",
+                "Dark twins : imposture and identity in Mark Twain's America",
+                "Mark Twain's \"Pudd'nhead Wilson\" : race, conflict, and culture",
+                "Neither the time nor the place : the new nineteenth-century American studies",
+                "Next to the color line : gender, sexuality, and W.E.B. Du Bois",
+                "States of emergency / ed. by Russ Castronovo and Susan Gillman. - Chapel Hill, cop. 2009.",
+                "States of emergency : the object of American studies"
+            ],
+            "birthdate": "1952",
+            "title_list": NaN
+        }
+    ],
+    "marianna de marco torgovnick": [
+        {
+            "author": "marianna de marco torgovnick",
+            "record_count": 1,
+            "record_enumerated": 0,
+            "viaf_title_list": [
+                "America dreams American movies : film, culture, and the popular imagination",
+                "Closure in the novel",
+                "Crossing back, 2021:",
+                "Crossing Ocean Parkway, c1994:",
+                "Eloquent obsessions : writing cultural criticism",
+                "Gone primitive savage intellects, modern lives",
+                "Paix\u00f5es primitivas : homens, mulheres e a busca do \u00eaxtase",
+                "Primitive passions men, women, and the quest for ecstasy",
+                "Visual arts, pictorialism and the novel James, Lawrence, and Woolf",
+                "war complex World War II in our time"
+            ],
+            "birthdate": "1949-08-31",
+            "title_list": "Defining Interdisciplinarity"
+        }
+    ]
+}
