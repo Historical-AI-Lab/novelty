@@ -557,7 +557,8 @@ def process_pubdates_and_birth(pubdates_str, birth):
                 pubdates = [pubdates_str]  # Convert string to a single-element list
 
         else:
-            if pubdates_str != '' and pubdates_str != 'no date' or pubdates_str != 'no d':
+            # if pubdates_str != '' and pubdates_str != 'no date' or pubdates_str != 'no d':
+            if pubdates_str != '' and pubdates_str not in ['no date', 'no d'] and pubdates_str[:4].isdigit():
                 pubdates = int(pubdates_str[:4])  # Extract first 4 characters and convert to int if needed
 
     elif isinstance(pubdates_str, (tuple, list)):
@@ -594,7 +595,7 @@ def process_pubdates_and_birth(pubdates_str, birth):
 
 def process_row(row):
     birth = row['VIAF_birthdate']
-    pubdates_str = row['S2_pubdates']
+    pubdates_str = str(row['S2_pubdates'])
     if len(pubdates_str)>= 5:
         pubdates_str = pubdates_str[:4]
     if pubdates_str == 'no date' or pubdates_str == '' :
@@ -606,7 +607,10 @@ def process_row(row):
         else:
             pubdates_str = 0
         if isinstance(birth, str):
-            birth = int(birth)
+            if len(birth) > 4:
+                birth = int(birth[:4])
+            else:
+                birth = int(birth)
     author = str(row['author'])
     pubdates, birth = process_pubdates_and_birth(pubdates_str, birth)
 
