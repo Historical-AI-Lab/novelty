@@ -181,8 +181,9 @@ def birth2maxdate(birth, pubdates):
 
     # Check if it's a tuple of integers
     # if isinstance(pubdates_tuple, tuple) and all(isinstance(date, int) for date in pubdates_tuple):
-    if len(birth) >= 8:
-        birth = birth[:4]
+    if isinstance(birth, str):
+        if len(birth) >= 8:
+            birth = birth[:4]
     birth = int(birth)
     if isinstance(pubdates, list) or isinstance(pubdates, tuple):
         if len(pubdates) > 1:
@@ -190,6 +191,8 @@ def birth2maxdate(birth, pubdates):
             if max_pubdate is not None:
                 birth2maxdate = max_pubdate - birth
             abs_birth2maxdate = abs(birth2maxdate)
+            return birth2maxdate, abs_birth2maxdate
+
         elif len(pubdates) == 1:
             # if pubdates == '"' or pubdates == '':
             if author in unique_authors_to_search:
@@ -197,9 +200,12 @@ def birth2maxdate(birth, pubdates):
                     pubdates  = S2_data_dict[author]['year']
                     max_pubdate = find_max_pubdate(pubdates)
                     birth2maxdate = max_pubdate - birth
+                    abs_birth2maxdate = abs(birth2maxdate)
+
+                    return birth2maxdate, abs_birth2maxdate
                 else:
                     weird_cases_to_examine.append(author)
-                    return None, None
+                    return '',''
 
 
             # else:
@@ -224,8 +230,9 @@ def birth2mindate(birth, pubdates):
 
     # Check if it's a tuple of integers
     # if isinstance(pubdates_tuple, tuple) and all(isinstance(date, int) for date in pubdates_tuple):
-    if len(birth) >= 8:
-        birth = birth[:4]
+    if isinstance(birth, str):
+        if len(birth) >= 8:
+            birth = birth[:4]
     birth = int(birth)
     if isinstance(pubdates, list) or isinstance(pubdates, tuple):
         if len(pubdates) > 1:
@@ -285,73 +292,73 @@ def author_length(author):
     return len(author)
 
 
-# Master function to process each row
-def process_row(row):
-    birth = row['VIAF_birthdate']
-    pubdates_str = row['S2_pubdates']
-    author = str(row['author'])
-
-    # if isinstance(pubdates_str, str) and pubdates_str.strip():
-    if isinstance(pubdates_str, str):
-        # try:
-            pubdates = literal_eval(pubdates_str)
-            if isinstance(pubdates, tuple):
-                pubdates = list(pubdates)
-            if isinstance(pubdates, list):
-                pubdates = pubdates
-        # except (SyntaxError, ValueError):
-        #     print(f"Error parsing pubdates_str: {pubdates_str}, Error: {e}")
-            pubdates = None
-
-    if isinstance(pubdates_str, tuple):
-        pubdates = list(pubdates_str)
-    elif isinstance(pubdates_str, list):
-        pubdates = pubdates_str
-    # if pubdates is None:
-    #     pubdates = None
-    if pubdates_str is None:
-        pubdates = None
-
-        # if pubdates is None:
-        # if pubdates is None or not isinstance(pubdates, list):
-
-        return {
-            'birth2maxdate': None,
-            'abs_birth2maxdate': None,
-            'birth2mindate': None,
-            'abs_birth2mindate': None,
-            'negative_status': None,
-            'title_count': title_list_len(row['S2_Titlelist']),
-            'author_length': author_length(author),
-            'S2_pubdates': pubdates,
-            'birthyear': birth,
-            'S2 titlelist': row['S2_Titlelist'],
-            'VIAF_titlelist': row['VIAF_titlelist'],
-            'author': row['author']
-
-        }
-    birth2maxdate_value, absbirth2maxdate_value = birth2maxdate(birth, pubdates)
-    birth2mindate_value, absbirth2mindate_value = birth2mindate(birth, pubdates)
-    neg_status = any_negative(birth2maxdate_value, birth2mindate_value)
-    title_count = title_list_len(row['S2_Titlelist'])
-    author_len = author_length(row['author'])
-    avg_pubdate = find_avg_pubdate(pubdates)
-
-    return {
-        'birth2maxdate': birth2maxdate_value,
-        'abs_birth2maxdate': absbirth2maxdate_value,
-        'birth2mindate': birth2mindate_value,
-        'abs_birth2mindate': absbirth2mindate_value,
-        'negative_status': neg_status,
-        'title_count': title_count,
-        'author_length': author_len,
-        'S2_pubdates': pubdates,
-        'birthyear': birth,
-        'S2 titlelist': row['S2_Titlelist'],
-        'VIAF_titlelist': row['VIAF_titlelist'],
-        'author': row['author']
-
-    }
+# # Master function to process each row
+# def process_row(row):
+#     birth = row['VIAF_birthdate']
+#     pubdates_str = row['S2_pubdates']
+#     author = str(row['author'])
+#
+#     # if isinstance(pubdates_str, str) and pubdates_str.strip():
+#     if isinstance(pubdates_str, str):
+#         # try:
+#             pubdates = literal_eval(pubdates_str)
+#             if isinstance(pubdates, tuple):
+#                 pubdates = list(pubdates)
+#             if isinstance(pubdates, list):
+#                 pubdates = pubdates
+#         # except (SyntaxError, ValueError):
+#         #     print(f"Error parsing pubdates_str: {pubdates_str}, Error: {e}")
+#             pubdates = None
+#
+#     if isinstance(pubdates_str, tuple):
+#         pubdates = list(pubdates_str)
+#     elif isinstance(pubdates_str, list):
+#         pubdates = pubdates_str
+#     # if pubdates is None:
+#     #     pubdates = None
+#     if pubdates_str is None:
+#         pubdates = None
+#
+#         # if pubdates is None:
+#         # if pubdates is None or not isinstance(pubdates, list):
+#
+#         return {
+#             'birth2maxdate': None,
+#             'abs_birth2maxdate': None,
+#             'birth2mindate': None,
+#             'abs_birth2mindate': None,
+#             'negative_status': None,
+#             'title_count': title_list_len(row['S2_Titlelist']),
+#             'author_length': author_length(author),
+#             'S2_pubdates': pubdates,
+#             'birthyear': birth,
+#             'S2 titlelist': row['S2_Titlelist'],
+#             'VIAF_titlelist': row['VIAF_titlelist'],
+#             'author': row['author']
+#
+#         }
+#     birth2maxdate_value, absbirth2maxdate_value = birth2maxdate(birth, pubdates)
+#     birth2mindate_value, absbirth2mindate_value = birth2mindate(birth, pubdates)
+#     neg_status = any_negative(birth2maxdate_value, birth2mindate_value)
+#     title_count = title_list_len(row['S2_Titlelist'])
+#     author_len = author_length(row['author'])
+#     avg_pubdate = find_avg_pubdate(pubdates)
+#
+#     return {
+#         'birth2maxdate': birth2maxdate_value,
+#         'abs_birth2maxdate': absbirth2maxdate_value,
+#         'birth2mindate': birth2mindate_value,
+#         'abs_birth2mindate': absbirth2mindate_value,
+#         'negative_status': neg_status,
+#         'title_count': title_count,
+#         'author_length': author_len,
+#         'S2_pubdates': pubdates,
+#         'birthyear': birth,
+#         'S2 titlelist': row['S2_Titlelist'],
+#         'VIAF_titlelist': row['VIAF_titlelist'],
+#         'author': row['author']
+#
+#     }
 
 
 # Function to compute average publication date
@@ -489,87 +496,184 @@ def get_cosine_distance_bw_title_embeddings(VIAF_embedding, S2_embedding):
     cosine_dist = cosine(VIAF_embedding, S2_embedding)
     return cosine_dist
 
+#def process_pubdates_and_birth(pubdates_str ,birth):
+    # # if isinstance(pubdates_str, str) and pubdates_str.strip():
+    # if isinstance(pubdates_str, str):
+    #     # try:
+    #     #     pubdates = literal_eval(pubdates_str)
+    #     if len(pubdates_str) > 4:
+    #         if ',' in pubdates_str:
+    #             pubdates = pubdates_str.split(',')
+    #         else:
+    #             pubdates = list(pubdates_str)
+    #         if len(pubdates) == 1 and pubdates[0] != 'no date':
+    #             if len(pubdates[0]) >= 8:
+    #                 pubdates = (pubdates[0])[:4]
+    #             pubdates = int(pubdates[0])
+    #         if pubdates_str != '':
+    #             pubdates = int(pubdates_str)
+    # elif isinstance(pubdates_str, tuple):
+    #     pubdates = list(pubdates_str)
+    # elif isinstance(pubdates_str, list) and len(pubdates_str) > 1:
+    #     pubdates = pubdates_str
+    # elif isinstance(pubdates_str, int):
+    #     pubdates = pubdates_str
+    # elif pubdates_str == '':
+    #     pubdates = ''
+    #     # except (SyntaxError, ValueError):
+    #     #     print(f"Error parsing pubdates_str: {pubdates_str}, Error: {e}")
+    #
+    # if isinstance(pubdates_str, tuple):
+    #     pubdates = list(pubdates_str)
+    #     pubdates = pubdates[:4]
+    # elif isinstance(pubdates_str, list):
+    #     pubdates = pubdates_str
+    # elif isinstance(pubdates_str, int):
+    #     pubdates = pubdates_str
+    # # if pubdates is None:
+    # #     pubdates = None
+    # if pubdates_str == '"' or pubdates_str == "''":
+    #     try:
+    #         if author in S2_data_dict.keys():
+    #             pubdates = S2_data_dict[author]['year']
+    #     except:
+    #         pubdates = 0
+    # if isinstance(birth, str):
+    #     if len(birth) > 8:
+    #         birth = int(birth[:4])
+    #     else:
+    #         birth = int(birth)
+    #     return pubdates, birth
+def process_pubdates_and_birth(pubdates_str, birth):
+    pubdates = None  # Initialize pubdates to avoid UnboundLocalError
+
+    # Process pubdates_str based on its type
+    if isinstance(pubdates_str, str):
+        if len(pubdates_str) > 4:
+            if ',' in pubdates_str:
+                pubdates = pubdates_str.split(',')
+
+            else:
+                pubdates = [pubdates_str]  # Convert string to a single-element list
+
+        else:
+            if pubdates_str != '' and pubdates_str != 'no date' or pubdates_str != 'no d':
+                pubdates = int(pubdates_str[:4])  # Extract first 4 characters and convert to int if needed
+
+    elif isinstance(pubdates_str, (tuple, list)):
+        pubdates = list(pubdates_str)  # Convert tuple to list, if it's a tuple
+        if len(pubdates) == 1 and pubdates[0] != 'no date':
+            pubdates = int(pubdates[0][:4]) if len(pubdates[0]) >= 4 else pubdates[0]
+        else:
+            pubdates = pubdates
+
+    elif isinstance(pubdates_str, int):
+        pubdates = pubdates_str  # If already an int, no need to process further
+
+    elif pubdates_str == '':  # Handle empty string case
+        pubdates = ''
+
+    # Handle specific cases with special strings
+    if pubdates_str == '"' or pubdates_str == "''" or pubdates_str == '' or pubdates is None:
+        try:
+            if author in S2_data_dict.keys():
+                pubdates = S2_data_dict[author]['year']
+        except KeyError:
+            pubdates = 0
+
+    # Process birth date if it's a string
+    if isinstance(birth, str):
+        if len(birth) > 4:
+            birth = int(birth[:4])  # Only take the first 4 characters of the birth year
+        else:
+            birth = int(birth)
+
+    return pubdates, birth
+
+
 
 def process_row(row):
     birth = row['VIAF_birthdate']
     pubdates_str = row['S2_pubdates']
+    if len(pubdates_str)>= 5:
+        pubdates_str = pubdates_str[:4]
+    if pubdates_str == 'no date' or pubdates_str == '' :
+        # if row['S2_Year'] != 'NaN' and row['S2_Year'] != 'nan':
+        if pd.notna(row['S2_Year']):
+            pubdates_str = (str(row['S2_Year']))
+            pubdates_str = pubdates_str[:4]
+            pubdates_str = int(pubdates_str)
+        else:
+            pubdates_str = 0
+        if isinstance(birth, str):
+            birth = int(birth)
     author = str(row['author'])
+    pubdates, birth = process_pubdates_and_birth(pubdates_str, birth)
 
-    # if isinstance(pubdates_str, str) and pubdates_str.strip():
-    if isinstance(pubdates_str, str):
-        # try:
-        #     pubdates = literal_eval(pubdates_str)
-            pubdates = pubdates_str.split(',')
-            if isinstance(pubdates, tuple):
-                pubdates = list(pubdates)
-            elif isinstance(pubdates,list):
-                pubdates = pubdates
-        # except (SyntaxError, ValueError):
-        #     print(f"Error parsing pubdates_str: {pubdates_str}, Error: {e}")
+
+
+
+
+    #             unique_authors_to_search.append(author)
+    # for author in unique_authors_to_search:
+    #     viaf_data = search_author(author)
+    #     authors_data[author] = viaf_data
+    # with open(r'new_viaf_data_2.txt', 'w') as output_file:
+    #     json.dump(authors_data, output_file, indent=4)  # Use json.dump for structured output
+
+    if pubdates is None:
+
+
+        # if pubdates_str is None or birth is None or pubdates is None:
+        # if pubdates_str is None or birth is None or pubdates is None or pubdates == '':
+        #     print(pubdates, birth)
+            return {
+                    'birth2maxdate': None,
+                    'abs_birth2maxdate': None,
+                    'birth2mindate': None,
+                    'abs_birth2mindate': None,
+                    'negative_status': None,
+                    'title_count': title_list_len(row['S2_Titlelist']),
+                    'author_length': author_length(author),
+                    'S2_pubdates': None,
+                    'birthyear': None,
+                    'S2 titlelist': row['S2_Titlelist'],
+                    'VIAF_titlelist': row['VIAF_titlelist'],
+                    'author': row['author']}
+
+
+    else:
+        # if pubdates is not None and birth is not None:
+        if pubdates and birth:
+            test = birth2maxdate(birth, pubdates)
+            print(test)
+            # if pd.notna(birth):
+            #     if pd.notna(pubdates):
+            if pd.notna(test):
+                birth2maxdate_value, absbirth2maxdate_value = birth2maxdate(birth, pubdates)
+                birth2mindate_value, absbirth2mindate_value = birth2mindate(birth, pubdates)
+                neg_status = any_negative(birth2maxdate_value, birth2mindate_value)
+                title_count = title_list_len(row['S2_Titlelist'])
+                author_len = author_length(row['author'])
+                avg_pubdate = find_avg_pubdate(pubdates)
+
+                return {
+                    'birth2maxdate': birth2maxdate_value,
+                    'abs_birth2maxdate': absbirth2maxdate_value,
+                    'birth2mindate': birth2mindate_value,
+                    'abs_birth2mindate': absbirth2mindate_value,
+                    'negative_status': neg_status,
+                    'title_count': title_count,
+                    'author_length': author_len,
+                    'S2_pubdates': pubdates,
+                    'birthyear': birth,
+                    'S2 titlelist': row['S2_Titlelist'],
+                    'VIAF_titlelist': row['VIAF_titlelist'],
+                    'author': row['author']
+
+                }
             else:
-                pubdates = None
-
-    if isinstance(pubdates_str, tuple):
-        pubdates = list(pubdates_str)
-    elif isinstance(pubdates_str, list):
-        pubdates = pubdates_str
-    elif isinstance(pubdates_str, int):
-        pubdates = pubdates_str
-    # if pubdates is None:
-    #     pubdates = None
-    if pubdates_str == '"':
-        try:
-            if author in S2_data_dict.keys():
-                pubdates = S2_data_dict[author]['year']
-        except:
-            pubdates = ''
-            unique_authors_to_search.append(author)
-    for author in unique_authors_to_search:
-        viaf_data = search_author(author)
-        authors_data[author] = viaf_data
-    with open(r'new_viaf_data_2.txt', 'w') as output_file:
-        json.dump(authors_data, output_file, indent=4)  # Use json.dump for structured output
-
-        # if pubdates is None:
-        # if pubdates is None or not isinstance(pubdates, list):
-
-        return {
-            'birth2maxdate': None,
-            'abs_birth2maxdate': None,
-            'birth2mindate': None,
-            'abs_birth2mindate': None,
-            'negative_status': None,
-            'title_count': title_list_len(row['S2_Titlelist']),
-            'author_length': author_length(author),
-            'S2_pubdates': pubdates,
-            'birthyear': birth,
-            'S2 titlelist': row['S2_Titlelist'],
-            'VIAF_titlelist': row['VIAF_titlelist'],
-            'author': row['author']
-
-        }
-    birth2maxdate_value, absbirth2maxdate_value = birth2maxdate(birth, pubdates)
-    birth2mindate_value, absbirth2mindate_value = birth2mindate(birth, pubdates)
-    neg_status = any_negative(birth2maxdate_value, birth2mindate_value)
-    title_count = title_list_len(row['S2_Titlelist'])
-    author_len = author_length(row['author'])
-    avg_pubdate = find_avg_pubdate(pubdates)
-
-    return {
-        'birth2maxdate': birth2maxdate_value,
-        'abs_birth2maxdate': absbirth2maxdate_value,
-        'birth2mindate': birth2mindate_value,
-        'abs_birth2mindate': absbirth2mindate_value,
-        'negative_status': neg_status,
-        'title_count': title_count,
-        'author_length': author_len,
-        'S2_pubdates': pubdates,
-        'birthyear': birth,
-        'S2 titlelist': row['S2_Titlelist'],
-        'VIAF_titlelist': row['VIAF_titlelist'],
-        'author': row['author']
-
-    }
+                print('Test was NaN')
 
 def jaccard_distance_for_lists(list1, list2):
     # Convert both lists into sets (to remove duplicates within each list)
@@ -650,6 +754,16 @@ def extract_year(df, column_name):
     df[column_name] = df[column_name].apply(lambda x: int(x[:4]) if isinstance(x, str) and len(x) > 8 else x)
     return df
 
+def load_json(filepath):
+    """Load a JSON file."""
+    with open(filepath, 'r') as file:
+        return json.load(file)
+
+def save_json(data, filepath):
+    """Save data to a JSON file."""
+    with open(filepath, 'w') as file:
+        json.dump(data, file, indent=4)
+
 
 ####
 if __name__ == '__main__':
@@ -666,8 +780,9 @@ if __name__ == '__main__':
         # except json.JSONDecodeError as e:
         #     print(f"Error reading JSON data: {e}")
     new_viaf_dict = authors_data
-    with open('new_viaf_data2.txt', 'r') as file:
+    with open('new_viaf_data_2.txt', 'r') as file:
         authors_data2 = json.load(file)
+    new_viaf_dict2 = authors_data2
     # Convert the string representation of the dictionary back to a Python dictionary
     print(df.columns)
     # file_path = 'LitMetadataWithS2 (3).tsv'
@@ -713,6 +828,11 @@ if __name__ == '__main__':
     for author_name in new_viaf_dict.keys():
         if author_name not in unique_author_names:
             unique_author_names.append(author_name)
+
+    for author_name in new_viaf_dict2.keys():
+        if author_name not in unique_author_names:
+            unique_author_names.append(author_name)
+
 
 
     #create rows?
@@ -781,8 +901,10 @@ if __name__ == '__main__':
     for idx, row in df.iterrows():
         author = row['author']
         if author in S2_data_dict.keys():
-            pubdate = S2_data_dict[author]['year']
+            pubdate = S2_data_dict[author]['S2Years']
             df.at[idx, 'S2_pubdates'] = pubdate
+            pubdate2 = S2_data_dict[author]['year']
+            df.at[idx, 'S2_Year'] = pubdate2
         else:
             if author not in unique_authors_to_search:
                 unique_authors_to_search.append(author)
@@ -830,10 +952,24 @@ if __name__ == '__main__':
     # df['S2_pubdates'] = df['S2_pubdates'].apply(clean_pubdates)
 
 
+    # print(df.head(30))
+    df.to_csv('prior_to_processing_alldata_test_df.csv')
+
+    print('checking values of the row that was an issue so far')
+    # df['S2_Pubdates'][16]
+    print(df['VIAF_birthdate'][16])
+    print(df['S2_pubdates'][16])
+    print(df['S2_Year'][16])
+
+    print(df.index)
+
+    test_case = process_row(df.iloc[16])
+    print(test_case)
+
 
     df = df.apply(process_row, axis=1, result_type='expand')
 
-    print(unique_authors_to_search)
+    # print(unique_authors_to_search)
 
     df['avg_pubdate'] = df['S2_pubdates'].apply(find_avg_pubdate)
 
@@ -920,6 +1056,7 @@ if __name__ == '__main__':
     df[['lemma_overlap', 'overlapping_lemmas']] = df.apply(
         lambda row: pd.Series(calculate_lemma_overlap(row['VIAF_titlelist'], row['S2_titlelist'])),
         axis=1)
+
 
     # %%
     # add overlaps
@@ -1027,4 +1164,8 @@ if __name__ == '__main__':
     # # Step 5: Display the updated DataFrame
     # print(df)
     print(df)
+    df.to_csv('alldata_test_df.csv')
+    print(df.tail())
 
+    # print(S2_data_dict['roger stephenson'])
+    print(weird_cases_to_examine)
