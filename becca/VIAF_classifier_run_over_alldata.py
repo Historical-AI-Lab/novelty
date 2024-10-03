@@ -164,14 +164,19 @@ def find_min_pubdate(pubdates):
 
 
 def find_avg_pubdate(pubdates):
-    try:
-        if isinstance(pubdates, list) and all(isinstance(pubdate, int) for pubdate in pubdates):
-            avg_pubdate =  (sum(pubdates) / len(pubdates))
-        elif isinstance(pubdates, int):
+        if isinstance(pubdates, int):
             avg_pubdate = pubdates
-        return avg_pubdate
-    except:
-        return None
+            return avg_pubdate
+        if isinstance(pubdates, float):
+            pubdates = str(pubdates)
+            if len(pubdates) > 5:
+                pubdates = pubdates[:4]
+                pubdates = int(pubdates)
+                if isinstance(pubdates, list) and all(isinstance(pubdate, int) for pubdate in pubdates):
+                    avg_pubdate =  (sum(pubdates) / len(pubdates))
+
+                    return avg_pubdate
+
 
 
 weird_cases_to_examine = []
@@ -990,7 +995,7 @@ if __name__ == '__main__':
     for idx, row in df.iterrows():
         avg_pubdate = row['avg_pubdate']
         birth = str(row['birthyear'])
-        if len(birth) >= 8:
+        if len(birth) >= 5:
             birth = birth[:4]
             if avg_pubdate is None:
                 break
