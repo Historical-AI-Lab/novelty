@@ -93,9 +93,21 @@ def LoadTimeSlice(floor, ceiling, metadata, rootfolder):
 
         for paperId in paperIds:
             filepath = rootfolder + '/' + paperId + '.txt'
-            if not os.path.exists(filepath):
-                print('Missing file:', filepath)
-                continue
+
+            # A thing that frequently happens with the fiction paperIds is that the files
+            # are stored as filenames like 00003122.txt, but the metadata has them as 3122.
+            # So we check for that and adjust if necessary.
+            
+            if not os.path.exists(filepath): 
+                try:
+                    paperId = str(int(paperId)).zfill(8)
+                except ValueError:
+                    print('Missing file:', filepath)
+                    continue
+                filepath = rootfolder + '/' + paperId + '.txt'
+                if not os.path.exists(filepath):
+                    print('Missing file:', filepath)
+                    continue
             with open(filepath, 'r') as file:
                 for line in file:
                     fields = line.strip().split('\t')
