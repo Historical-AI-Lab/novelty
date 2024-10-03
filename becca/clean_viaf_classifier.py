@@ -13,6 +13,9 @@ import unicodedata
 import pprint
 import numpy as np
 import spacy
+import statsmodels
+import pickle
+
 
 import pandas as pd
 df_2 = pd.read_csv('new_labels_aug22.csv')
@@ -716,33 +719,39 @@ def bag_of_words(title):
     words = title.lower().split()
     return set([word for word in words if word not in stop_words])
 
-# Function to find and count word overlap
-def find_word_overlap(row):
-    try:
-        v_list = ast.literal_eval(row['VIAF_titlelist'])
-        s_list = ast.literal_eval(row['S2_titlelist'])
-        if isinstance(v_list, list):
+# # Function to find and count word overlap
+# def find_word_overlap(row):
+#     # try:
+#         v_list = ast.literal_eval(row['VIAF_titlelist'])
+#     if row['S2_titlelist'].notnull():
+#         s_list = ast.literal_eval(row['S2_titlelist'])
+#     if isinstance(v_list, list):
+#
+#         for title in v_list:
+#             title = str(title)
+#     if isinstance(s_list, list):
+#
+#         for title in s_list:
+#             title = str(title)
+#     if isinstance(v_list, list):
+#
+#         v_bag = bag_of_words(v_list)
+#     if isinstance(s_list, list):
+#
+#         s_bag = bag_of_words(s_list)
+#
+#     overlap = v_bag & s_bag
+# # except:
+#     overlap = ''
+#     overlap_series = pd.Series([len(overlap), list(overlap)])
+#     return overlap_series
 
-            for title in v_list:
-                title = str(title)
-        if isinstance(s_list, list):
+def count_common_words(common_words)
+    return len(common_words)
+df[['word_overlap_count']] = df.apply(count_common_words, axis=1)
 
-            for title in s_list:
-                title = str(title)
-        if isinstance(v_list, list):
-
-            v_bag = bag_of_words(v_list) 
-        if isinstance(s_list, list):
-
-            s_bag = bag_of_words(s_list) 
-
-        overlap = v_bag & s_bag
-    except:
-        overlap = ''
-    return pd.Series([len(overlap), list(overlap)])
-  
-# Apply the function to each row and create two new columns
-df[['word_overlap_count', 'overlapping_words']] = df.apply(find_word_overlap, axis=1)
+# # Apply the function to each row and create two new columns
+# df[['word_overlap_count', 'overlapping_words']] = df.apply(find_word_overlap, axis=1)
 
 
 # In[588]:
@@ -779,7 +788,7 @@ df['pub_age'] = df['publication_age']
 
 #store the metadata to examine later with the probabilities
 original_indices = df.index
-original_metadata = df[['VIAF_titlelist', 'selected_birthyear', 'author', 'S2_titlelist','status','pub_age','avg_pubdate', 'VIAF_birthdate','overlapping_words','word_overlap_count','lemma_overlap','overlapping_lemmas']].copy()
+original_metadata = df[['VIAF_titlelist', 'selected_birthyear', 'author', 'S2_titlelist','status','pub_age','avg_pubdate', 'VIAF_birthdate','common_words','word_overlap_count','lemma_overlap','overlapping_lemmas']].copy()
 
 
 
@@ -964,64 +973,64 @@ model = RandomForestClassifier(n_estimators=100, random_state=42, class_weight='
 
 # In[546]:
 
-
-import pandas as pd
-import numpy as np
-import statsmodels.api as sm
-from sklearn.datasets import make_regression
-
-# Create a sample dataset (or load your dataset)
-X, y = make_regression(n_samples=100, n_features=10, noise=0.1)
-df = pd.DataFrame(X, columns=[f'Feature_{i}' for i in range(X.shape[1])])
-df['Target'] = y
-
-# Forward Selection Function
-def forward_selection(data, target):
-    initial_features = []
-    best_features = initial_features.copy()
-    while True:
-        remaining_features = list(set(data.columns) - set(best_features))
-        best_pval = float('inf')
-        best_feature = None
-        
-        for feature in remaining_features:
-            model = sm.OLS(data[target], sm.add_constant(data[best_features + [feature]])).fit()
-            pval = model.pvalues[feature]
-            if pval < best_pval:
-                best_pval = pval
-                best_feature = feature
-                
-        if best_pval < 0.05:  # Adjust p-value threshold as needed
-            best_features.append(best_feature)
-        else:
-            break
-            
-    return best_features
-
-# Backward Selection Function
-def backward_selection(data, target):
-    features = data.columns.tolist()
-    while True:
-        model = sm.OLS(data[target], sm.add_constant(data[features])).fit()
-        pvals = model.pvalues.iloc[1:]  # Exclude the intercept
-        worst_pval = pvals.max()
-        
-        if worst_pval >= 0.05:  # Adjust p-value threshold as needed
-            worst_feature = pvals.idxmax()
-            features.remove(worst_feature)
-        else:
-            break
-            
-    return features
-
-# Applying Forward Selection
-forward_selected_features = forward_selection(df.drop(columns='Target'), 'Target')
-print("Forward Selected Features:", forward_selected_features)
-
-# Applying Backward Selection
-backward_selected_features = backward_selection(df.drop(columns='Target'), 'Target')
-print("Backward Selected Features:", backward_selected_features)
-
+#
+# import pandas as pd
+# import numpy as np
+# import statsmodels.api as sm
+# from sklearn.datasets import make_regression
+#
+# # Create a sample dataset (or load your dataset)
+# X, y = make_regression(n_samples=100, n_features=10, noise=0.1)
+# df = pd.DataFrame(X, columns=[f'Feature_{i}' for i in range(X.shape[1])])
+# df['Target'] = y
+#
+# # Forward Selection Function
+# def forward_selection(data, target):
+#     initial_features = []
+#     best_features = initial_features.copy()
+#     while True:
+#         remaining_features = list(set(data.columns) - set(best_features))
+#         best_pval = float('inf')
+#         best_feature = None
+#
+#         for feature in remaining_features:
+#             model = sm.OLS(data[target], sm.add_constant(data[best_features + [feature]])).fit()
+#             pval = model.pvalues[feature]
+#             if pval < best_pval:
+#                 best_pval = pval
+#                 best_feature = feature
+#
+#         if best_pval < 0.05:  # Adjust p-value threshold as needed
+#             best_features.append(best_feature)
+#         else:
+#             break
+#
+#     return best_features
+#
+# # Backward Selection Function
+# def backward_selection(data, target):
+#     features = data.columns.tolist()
+#     while True:
+#         model = sm.OLS(data[target], sm.add_constant(data[features])).fit()
+#         pvals = model.pvalues.iloc[1:]  # Exclude the intercept
+#         worst_pval = pvals.max()
+#
+#         if worst_pval >= 0.05:  # Adjust p-value threshold as needed
+#             worst_feature = pvals.idxmax()
+#             features.remove(worst_feature)
+#         else:
+#             break
+#
+#     return features
+#
+# # Applying Forward Selection
+# forward_selected_features = forward_selection(df.drop(columns='Target'), 'Target')
+# print("Forward Selected Features:", forward_selected_features)
+#
+# # Applying Backward Selection
+# backward_selected_features = backward_selection(df.drop(columns='Target'), 'Target')
+# print("Backward Selected Features:", backward_selected_features)
+#
 
 # In[ ]:
 
@@ -1191,3 +1200,7 @@ print(report)
 with open('viaf_classifier_sept23.pkl', 'wb') as file:
     pickle.dump(model, file)
 
+print(remaining_features)
+
+df_notnull2 = df.loc[df['birth2mindate'].notnull()]
+print(df_notnull2)
