@@ -97,7 +97,7 @@ def LoadTimeSlice(floor, ceiling, metadata, rootfolder):
             # A thing that frequently happens with the fiction paperIds is that the files
             # are stored as filenames like 00003122.txt, but the metadata has them as 3122.
             # So we check for that and adjust if necessary.
-            
+
             if not os.path.exists(filepath): 
                 try:
                     paperId = str(int(paperId)).zfill(8)
@@ -348,7 +348,7 @@ eval_dataset = eval_dataset.rename_columns(
 # shoulder period and the second four-year shoulder period. Otherwise the model will be
 # temporally biased.
 
-num_samples = min(20000, len(lm_datasets["first_train"]), len(lm_datasets["second_train"]))
+num_samples = min(25000, len(lm_datasets["first_train"]), len(lm_datasets["second_train"]))
 
 train_dataset = concatenate_datasets(
     [lm_datasets["first_train"].shuffle(seed=42).select(range(num_samples)),
