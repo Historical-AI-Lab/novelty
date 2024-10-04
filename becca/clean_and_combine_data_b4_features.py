@@ -743,6 +743,7 @@ if __name__ == '__main__':
     # Chunk processing parameters
     chunk_size = 2000  # Adjust the size as needed
     total_authors = len(unique_author_names)
+    print(total_authors)
 
     # Process in chunks
     for i in range(0, total_authors, chunk_size):
