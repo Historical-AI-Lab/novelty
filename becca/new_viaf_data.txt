@@ -1,4 +1,1131 @@
 {
+    "roger stephenson": [
+        {
+            "author": "roger stephenson",
+            "record_count": 3,
+            "record_enumerated": 0,
+            "viaf_title_list": [
+                "Friedrich Nietzsche and Weimar classicism, 2005:",
+                "Goethe 2000 : intercultural readings of his work : papers presented at the University of Glasgow's Centre for Intercultural Germanistics, 19-21 April 1999",
+                "Goethe's conception of knowledge and science",
+                "Goethe's wisdom literature, 1983",
+                "The persistence of myth as symbolic form : proceedings of an international conference held by the Centre for Intercultural Studies at the University of Glasgow, 16-18 September 2005",
+                "Studies in Weimar classicism : writing as symbolic form",
+                "The way of the world : a Festschrift for R. H. Stephenson"
+            ],
+            "birthdate": "1946-11-05",
+            "title_list": "Schiller as Philosopher: A Re-Examination@@@Schiller's 'On Grace and Dignity' in Its Cultural Context: Essays and a New Translation@@@Schiller und die Tradition des Erhabenen"
+        },
+        {
+            "author": "roger stephenson",
+            "record_count": 3,
+            "record_enumerated": 1,
+            "viaf_title_list": [
+                "Fate of pharmaceuticals and personal care products through municipal wastewater treatment processes, 2006:"
+            ],
+            "birthdate": "0",
+            "title_list": "Schiller as Philosopher: A Re-Examination@@@Schiller's 'On Grace and Dignity' in Its Cultural Context: Essays and a New Translation@@@Schiller und die Tradition des Erhabenen"
+        },
+        {
+            "author": "roger stephenson",
+            "record_count": 3,
+            "record_enumerated": 2,
+            "viaf_title_list": [],
+            "birthdate": "1850",
+            "title_list": "Schiller as Philosopher: A Re-Examination@@@Schiller's 'On Grace and Dignity' in Its Cultural Context: Essays and a New Translation@@@Schiller und die Tradition des Erhabenen"
+        }
+    ],
+    "george mcfadden": [
+        {
+            "author": "george mcfadden",
+            "record_count": 7,
+            "record_enumerated": 0,
+            "viaf_title_list": [
+                "Discovering the comic",
+                "Dryden : the public writer, 1660-1685",
+                "Greece / Cyprus / Italy / Tunisia"
+            ],
+            "birthdate": "1916",
+            "title_list": "\u201cLife Studies\u201d\u2014Robert Lowell's Comic Breakthrough"
+        },
+        {
+            "author": "george mcfadden",
+            "record_count": 7,
+            "record_enumerated": 1,
+            "viaf_title_list": [
+                "The inventive life of George H. McFadden, 2024:"
+            ],
+            "birthdate": "1907-04-21",
+            "title_list": "\u201cLife Studies\u201d\u2014Robert Lowell's Comic Breakthrough"
+        },
+        {
+            "author": "george mcfadden",
+            "record_count": 7,
+            "record_enumerated": 2,
+            "viaf_title_list": [
+                "Blocking and hitting",
+                "Good-night, Dinny, and God bless you [SR] 1919?:"
+            ],
+            "birthdate": "0",
+            "title_list": "\u201cLife Studies\u201d\u2014Robert Lowell's Comic Breakthrough"
+        },
+        {
+            "author": "george mcfadden",
+            "record_count": 7,
+            "record_enumerated": 3,
+            "viaf_title_list": [
+                "Short rotation intensive culture management ... 1985"
+            ],
+            "birthdate": "0",
+            "title_list": "\u201cLife Studies\u201d\u2014Robert Lowell's Comic Breakthrough"
+        },
+        {
+            "author": "george mcfadden",
+            "record_count": 7,
+            "record_enumerated": 4,
+            "viaf_title_list": [],
+            "birthdate": "1847-07-24",
+            "title_list": "\u201cLife Studies\u201d\u2014Robert Lowell's Comic Breakthrough"
+        },
+        {
+            "author": "george mcfadden",
+            "record_count": 7,
+            "record_enumerated": 5,
+            "viaf_title_list": [],
+            "birthdate": "0",
+            "title_list": "\u201cLife Studies\u201d\u2014Robert Lowell's Comic Breakthrough"
+        },
+        {
+            "author": "george mcfadden",
+            "record_count": 7,
+            "record_enumerated": 6,
+            "viaf_title_list": [],
+            "birthdate": "1941",
+            "title_list": "\u201cLife Studies\u201d\u2014Robert Lowell's Comic Breakthrough"
+        }
+    ],
+    "john l stewart": [
+        {
+            "author": "john l stewart",
+            "record_count": 10,
+            "record_enumerated": 0,
+            "viaf_title_list": [
+                "Circuit analysis of transmission lines",
+                "Circuit theory and design",
+                "Ernst Krenek : eine kritische Biographie",
+                "Ernst Krenek : the man and his music",
+                "The essay; a critical anthology.",
+                "Exposition for science and technical students",
+                "Fundamentals of signal theory",
+                "Horizons circled : reflections on my music",
+                "John Crowe Ransom",
+                "John Muir College, 1978:",
+                "A theory and physical model for cochlear mechanics",
+                "Top of the Pops (cl\u00e1r BBC)",
+                "\u0628\u0647\u062a\u0631\u06cc\u0646\u200c\u0647\u0627\u06cc \u067e\u0627\u067e",
+                "\u062a\u0648\u0628 \u0623\u0648\u0641 \u0630\u0627 \u0628\u0648\u0628\u0633",
+                "\u099f\u09aa \u0985\u09ac \u09a6\u09cd\u09af \u09aa\u09aa\u09cd\u200c\u09b8",
+                "\u0e17\u0e47\u0e2d\u0e1b\u0e2d\u0e2d\u0e1f\u0e40\u0e14\u0e2d\u0e30\u0e1b\u0e47\u0e2d\u0e1b\u0e2a\u0e4c",
+                "\ud0d1 \uc624\ube0c \ub354 \ud31d\uc2a4",
+                "\u30c8\u30c3\u30d7\u30fb\u30aa\u30d6\u30fb\u30b6\u30fb\u30dd\u30c3\u30d7\u30b9",
+                "\u6d41\u884c\u4e4b\u5dc5"
+            ],
+            "birthdate": "1917-11-07",
+            "title_list": "Robert Penn Warren and The Knot of History"
+        },
+        {
+            "author": "john l stewart",
+            "record_count": 10,
+            "record_enumerated": 1,
+            "viaf_title_list": [
+                "The Cattle of the Gold Coast",
+                "Forest Flora of North-West and Central India A Handbook of the Indigenous Trees and Shrubs of those Countries",
+                "Geologic map of the Panama Canal and vicinity, Republic of Panama",
+                "Handbook on Canadian company law",
+                "Mapa geol\u00f3gico del Canal de Panam\u00e1 y sus alrededores, Rep\u00fablica de Panam\u00e1, espagnol ; castillan",
+                "Punjab plants, comprising botanical and vernacular names, and uses of most of the trees, shrubs, and herbs of economical value, growing within the Province : intended as a hand-book for officers and residents in the Punjab"
+            ],
+            "birthdate": "1832",
+            "title_list": "Robert Penn Warren and The Knot of History"
+        },
+        {
+            "author": "john l stewart",
+            "record_count": 10,
+            "record_enumerated": 2,
+            "viaf_title_list": [
+                "The bionic ear, c1979:",
+                "Circuit analysis of transmission lines",
+                "Circuit theory and design",
+                "The forbidden diary : a B-24 navigator remembers",
+                "Fremont's greatest western exploration, c1999-:",
+                "Fundamentals of signal theory",
+                "Linie przesy\u0142owe / J. L. Stewart. - Warszawa, 1962.",
+                "Rheumatism in populations",
+                "The sulphonamides and antiobiotics in man and animals",
+                "Theorie und Entwurf elektrischer Netzwerke",
+                "A theory and physical model for cochlear mechanics"
+            ],
+            "birthdate": "1925",
+            "title_list": "Robert Penn Warren and The Knot of History"
+        },
+        {
+            "author": "john l stewart",
+            "record_count": 10,
+            "record_enumerated": 3,
+            "viaf_title_list": [
+                "Company law of Canada, 1962:",
+                "Fraser & Stewart"
+            ],
+            "birthdate": "1911",
+            "title_list": "Robert Penn Warren and The Knot of History"
+        },
+        {
+            "author": "john l stewart",
+            "record_count": 10,
+            "record_enumerated": 4,
+            "viaf_title_list": [
+                "Atlas and World War historical data of Franklin County, Indiana, 1925:"
+            ],
+            "birthdate": "0",
+            "title_list": "Robert Penn Warren and The Knot of History"
+        },
+        {
+            "author": "john l stewart",
+            "record_count": 10,
+            "record_enumerated": 5,
+            "viaf_title_list": [
+                "Ernst Krenek, c1991:CIP t.p. (John L. Stewart) data sheet (John Lincoln Stewart)"
+            ],
+            "birthdate": "0",
+            "title_list": "Robert Penn Warren and The Knot of History"
+        },
+        {
+            "author": "john l stewart",
+            "record_count": 10,
+            "record_enumerated": 6,
+            "viaf_title_list": [
+                "burden of time the fugitives and agrarians the Nashville groups of the 1920's and 1930's, and the writing of John Crowe Ransom, Allen Tate, and Robert Penn Warren"
+            ],
+            "birthdate": "0",
+            "title_list": "Robert Penn Warren and The Knot of History"
+        },
+        {
+            "author": "john l stewart",
+            "record_count": 10,
+            "record_enumerated": 7,
+            "viaf_title_list": [
+                "The cattle of the Gold Coast, 1937?:"
+            ],
+            "birthdate": "0",
+            "title_list": "Robert Penn Warren and The Knot of History"
+        },
+        {
+            "author": "john l stewart",
+            "record_count": 10,
+            "record_enumerated": 8,
+            "viaf_title_list": [],
+            "birthdate": "0",
+            "title_list": "Robert Penn Warren and The Knot of History"
+        },
+        {
+            "author": "john l stewart",
+            "record_count": 10,
+            "record_enumerated": 9,
+            "viaf_title_list": [],
+            "birthdate": "0",
+            "title_list": "Robert Penn Warren and The Knot of History"
+        }
+    ],
+    "howard levant": [
+        {
+            "author": "howard levant",
+            "record_count": 1,
+            "record_enumerated": 0,
+            "viaf_title_list": [
+                "The novels of John Steinbeck : a critical study"
+            ],
+            "birthdate": "0",
+            "title_list": "Tortilla Flat: the Shape of John Steinbeck's Career"
+        }
+    ],
+    "richard regosin": [
+        {
+            "author": "richard regosin",
+            "record_count": 2,
+            "record_enumerated": 0,
+            "viaf_title_list": [
+                "The matter of my book : Montaigne's \"Essais\" as the book of the self",
+                "Montaigne's unruly brood [...] / Richard L. Regosin. - Berkeley [etc.], 1996.",
+                "Montaigne's unruly brood : textual engendering and the challenge to paternal authority",
+                "The poetry of inspiration : Agrippa d'Aubign\u00e9's \"Les tragiques\""
+            ],
+            "birthdate": "1937",
+            "title_list": "D'Aubigne's Les Tragiques: A Protestant Apocalypse"
+        },
+        {
+            "author": "richard regosin",
+            "record_count": 2,
+            "record_enumerated": 1,
+            "viaf_title_list": [],
+            "birthdate": "0",
+            "title_list": "D'Aubigne's Les Tragiques: A Protestant Apocalypse"
+        }
+    ],
+    "j d jones": [
+        {
+            "author": "j d jones",
+            "record_count": 10,
+            "record_enumerated": 0,
+            "viaf_title_list": [
+                "Abrahami Couleii,... Poemata latina, in quibus continentur sex libri plantarum... et unus miscellaneorum (cum praefatione T. Sprat)",
+                "The Bishop of Rochester's letter to the ecclesiastical commissioners, before his dismission",
+                "Bishop of Rochester's second letter to the Earl of Dorset and Middlesex",
+                "Bishop of Rochester's second letter to the Right Honourable the Earl of Dorset and Middlesex, Lord Chamberlain of His Majesty's houshold.",
+                "Een brief van den bisschop van Rochester aen den zeer eerwaerdigen graef van Dorset [...]. Wegens zyne zittinge in de gewesene kerckelycke commissie.",
+                "De Canaria y de las otras islas nuevamente halladas en el oc\u00e9ano allende Espa\u00f1a (1341)",
+                "A discourse made by the Ld Bishop of Rochester : to the clergy of his diocese, at his visitation in the year 1695. Published at their Request.",
+                "History of the Royal-Society of London, for the Improving of Natural Knowledge",
+                "journey from Aleppo to Jerusalem",
+                "Letter from the Bishop of Rochester to ... the Earl of Dorset and Middlesex",
+                "L'Histoire de la soci\u00e9t\u00e9 royale de Londres, establie pour l'enrichissement de la science naturelle, escrite en anglois par Thomas Sprat et traduite en fran\u00e7ois.",
+                "Mr. Archdeacon, having received this order from the House of Lords, I desire ... that a copy of it be delivered to the several incumbents within your archdeaconry.",
+                "Observations on Mons. de Sorbiere's Voyage into England",
+                "Plague of Athens",
+                "Poems",
+                "Poetical works of Abraham Cowley ; in four volumes, from the text of Dr. Sprat etc. With the Life of the author",
+                "Poetry & prose.",
+                "The rehearsal, as it was acted at the Theatre-Royal.",
+                "The rehearsal. First acted 7 Dec. 1671. Published <? July> 1672. With illustrations from previous plays, etc. ...",
+                "A relation of the late wicked contrivance of Stephen Blackhead and Robert Young against the lives of several persons by forging an association under their hands",
+                "A reply unto the letter written to Mr. Henry Stubbe in defense of The history of the Royal Society : whereunto is added a Preface against Ecebolius Glanville, and an answer to the letter of Dr. Henry More, containing a reply to the untruthes he hath publish'd, and a censure of the cabbalo-pythagorical philosophy, by him promoted",
+                "A sermon preach'd at the anniversary meeting of the Sons of the Clergy : at the Cathedral Church of St. Paul, London, on the 6th of December, 1705. By Tho. Sprat.",
+                "A sermon preach'd before the King at White-Hall : December the 22d. 1678. By Thomas Sprat, D. D. Chaplain in Ordinary to His Majesty, Know Lord Bishop of Rochester. Published by his Majesties Special Command.",
+                "A sermon preach'd to the natives of the county of Dorset, residing in and about the cities of London and Westminster, at St. Mary Le Bowe, on Dec. 8, 1692, being the day of their anniversary feast",
+                "A sermon preached before the Artillery Company of London at St. Mary Le Bow, April 20, 1682",
+                "A sermon preached before the Honourable House of Commons at St. Margarets Westminster, January 30th 1677/8",
+                "A sermon preached before the King and Queen, at Whitehall, on Good-Friday, April 6, 1694",
+                "[Sermons preached on several occasions.",
+                "Some account of the life and writings of the Right Reverend Father in God, Thomas Sprat, D.D., late lord biship of Rochester, and dean of Westminster. With a true copy of his last will and testament",
+                "Three poems upon the death of the late usurper Oliver Cromwel, 1659 :",
+                "To the happie memory of the most renowned Prince Oliver, Lord Protector",
+                "To the Right Honourable my Lords of his Majesty's commission ecclesiastical : I most humbly intreat your Lordships favourable, of what I now write, that since your Lordships, are resolved to proceed against those, who have not complyed with the Kings Command, in reading his declarational. It is absolutely impossible, for me to serve His Majesty any longer, in this Commission ... I am your Lordships, most faithful, and obedient servant",
+                "true account and declaration of the horrid conspiracy against the late king, His present Majesty, and the government: as it was order'd to be published by His late Majesty.",
+                "De viris illustribus",
+                "A voyage to England, containing many things relating to the state of learning, religion, and other curiosities of that kingdom",
+                "Een waerachtigh verhael van de afgrijsselijcke t'samensweeringh tegen den laetstoverledene koningh van Engeland, sijn tegenwoordige Majesteyt ende regeeringh : Uytgegeven door speciale last van sijn overledene Majesteyt.",
+                "Works",
+                "The works of Mr. Abraham Cowley. Consisting of those which were formerly printed; and those which he design'd for the press. now published out of the author's original copies.",
+                "works of the British poets. With prefaces, biographical and critical. By Robert Anderson, M. D. Volume sixth ; containing Dryden, Rochester, Roscommon, Otway, Pomfret, Stepney, Philips (J.), Walsh, Smith, Duke, King, Sprat, and Halifax.",
+                "The Works Of The Poets Of Great Britain And Ireland."
+            ],
+            "birthdate": "1635",
+            "title_list": NaN
+        },
+        {
+            "author": "j d jones",
+            "record_count": 10,
+            "record_enumerated": 1,
+            "viaf_title_list": [
+                "The adventures of Gervase Becket : or the man who changed places",
+                "The apprentices;",
+                "Conn, Stewart : The King",
+                "Finlay, Ian Hamilton : Walking Through Seaweed and the Estate Hunters",
+                "Johnson, B.S.: You're Human Like the Rest of Them",
+                "The Knotty: a musical documentary;",
+                "L\u00e6regutter",
+                "MacBeth, George and Bingham, J.S.: The Doomsday Show",
+                "Mighty reservoy",
+                "Mooney and his caravans",
+                "Mooney og campingvognen",
+                "New english dramatists :",
+                "New plays",
+                "Night to make the angels weep",
+                "The restoration of Arnold Middleton",
+                "The samaritan",
+                "Spring-heeled Jack : complete text",
+                "Strippers : a play",
+                "Zigger Zagger",
+                "\u0627\u0644\u062e\u0632\u0627\u0646 \u0627\u0644\u0639\u0638\u064a\u0645",
+                "\u0644\u064a\u0644\u0629 \u062a\u0628\u0643\u0649 \u0627\u0644\u0645\u0644\u0627\u0626\u0643\u0629"
+            ],
+            "birthdate": "1932-02-24",
+            "title_list": NaN
+        },
+        {
+            "author": "j d jones",
+            "record_count": 10,
+            "record_enumerated": 2,
+            "viaf_title_list": [
+                "Augmentation de la temp\u00e9rature de fonctionnement d'une pile \u00e0 combustible par synth\u00e8se de nouveaux mat\u00e9riaux conducteurs protoniques",
+                "Catalysts for H2/O2 producer device.",
+                "Co-localized AFM/Raman characterization of multiphase polymer systems.",
+                "Conception et d\u00e9veloppement de membranes bipolaires avec interface tridimensionnelle.",
+                "Copper-containing monodisperse mesoporous silica nanospheres by a smart one-step approach.",
+                "D\u00e9veloppement d'un \u00e9lectrolyte solide pour application piles \u00e0 combustible fonctionnant entre 100\u00b0C et 200\u00b0C \u00e0 faible humidit\u00e9 relative : Le composite polyimide/SiO2-B2O3-P2O5",
+                "D\u00e9veloppement et optimisation de mat\u00e9riaux d'\u00e9lectrodes et d'\u00e9lectrolytes, pour cellules PCFC",
+                "Elaboration and characterisation of different proton conducting materials for an application as electrolyte in a proton ceramic fuel cell functioning between 400-700\u00b0C.",
+                "Elaboration de membranes composites et membranes hybrides \u00e0 base de poly\u00e9thercetone et de polybenzimidazole : Application pour pile \u00e0 combustible \u00e0 moyenne temp\u00e9rature (80-150\u00b0C)",
+                "Elaboration d'\u00e9lectrodes de piles \u00e0 combustible \u00e0 membrane par un proc\u00e9d\u00e9 de transfert de couches catalytiques",
+                "\u00c9tude de la d\u00e9gradation de membranes perfluorosulfon\u00e9es de pile \u00e0 combustible et d\u00e9veloppement d'approches de rem\u00e9diation.",
+                "\u00c9tude et optimisation des phases de d\u00e9marrage et d'arr\u00eat des piles \u00e0 combustible de type PEM haute temp\u00e9rature en vue de maximiser leur dur\u00e9e de vie",
+                "Fondements de la d\u00e9shydrog\u00e9nation partielle : \u00e9tude th\u00e9orique et exp\u00e9rimentale sur un nouveau combustible M\u00e9thode de traitement pour g\u00e9n\u00e9rer de l'hydrog\u00e8ne \u00e0 partir de Jet Fuel",
+                "G\u00e9n\u00e9ration d'hydrog\u00e8ne \u00e0 haute puret\u00e9 par d\u00e9shydrog\u00e9nation partial catalytique des carburants.",
+                "Hollow microspheres with a tungsten carbide kernel for PEMFC application",
+                "Impact and optimization of microporous ageing water management in fuel cells.",
+                "Impact et optimisation des microporeux sur le vieillissement et la gestion en eau en pile \u00e0 combustible",
+                "Improvment of diesel quality by catalytic processes.",
+                "Innovative catalysts for diesel improvement",
+                "Intercalation et \u00e9change ionique dans les oxydes de mangan\u00e8se lamellaires. Formation de m\u00e9sophases oxydes de mangan\u00e8se-alkylamine",
+                "Investigation of the electrocatalytic oxidation of ethanol under high temperature polymer electrolyte fuel cell conditions.",
+                "Ionomer membranes reinforced with electrospun nanofibres for fuel cell and electrolysis applications.",
+                "Mat\u00e9riaux pour \u00e9lectrolyseur \u00e0 membrane \u00e9lectrolyte protonique",
+                "Membranes ionom\u00e8res renforc\u00e9es par des nanofibres obtenues par \u00e9lectrofilage pour piles \u00e0 combustible et l'\u00e9lectrolyseur",
+                "nanocomposite electrodes for proton exchange membrane fuel cell at high temperature.",
+                "Nanostructured hybrid ionomer membranes for hydrogen PEMFC.",
+                "Negligible degradation upon in situ voltage cycling of a PEMFC using an electrospun niobium-doped tin oxide supported Pt cathode.",
+                "New Fluorinated co-polymers Bearing Azole functions (Imidazole, Benzimidazole or Triazole) for PEMFC membranes Working Under Low Relative Humidity.",
+                "Nouveaux copolym\u00e8res fluor\u00e9s porteurs de fonctions azole (imidazole, benzimidazole ou triazole) pour membranes pour piles \u00e0 combustible (PEMFC) fonctionnant en conditions quasi-anhydres",
+                "Nouveaux mat\u00e9riaux m\u00e9soporeux catalytiques et leur application pour l'am\u00e9lioration du gazole",
+                "Nouvelles \u00e9lectrodes pour \u00e9lectrolyseurs H2/O2",
+                "Novel mixed protonic-electronic materials : Development of selective membranes devoted for hydrogen separation.",
+                "Nursing staff appraisal in the Health Service : a study of the system : final report to the National Staff Committee for Nurses and Midwives, April 1976",
+                "Optimal microstructure architecture design of porous electrodes for solid oxide fuel cells.",
+                "Optimisation d'architecture d'\u00e9lectrode poreuse pour pile \u00e0 combustible \u00e0 oxyde solide",
+                "Optimized synthesis of Fe/N/C cathode catalysts for PEM fuel cells: a matter of iron-ligand coordination strength.",
+                "Oxydes et phosphates m\u00e9soporeux fonctionnels : pr\u00e9paration, caract\u00e9risation et application dans la conversion des oxydes d'azote",
+                "Performances et durabilit\u00e9 des membranes alternatives aux membranes PFSA",
+                "Preparation and characterisation of sulfonated polybenzimidazoles : Novel electrolyte membranes for fuel cells PEMFC.",
+                "Pr\u00e9paration de cathodes FeNC autosupport\u00e9es par filage \u00e9lectrostatique pour piles \u00e0 combustible.",
+                "PreTest NCLEX/CAT-RN : self-assessment and review",
+                "Production of hydrogen by catalytic partial dehydrogenation of hydrocarbon fuels",
+                "Promising aquivion composite membranes based on fluoroalkyl zirconium phosphate for fuel cell applications.",
+                "Proton-conducting Fuel Cell : Development, Optimisation of materialsElaboration of single cells operating in the 400-600 \u00b0C temperature range.",
+                "Self-standing Fe-N-C cathodes prepared by electrospinning for fuel cells",
+                "Single step elaboration of size-tuned Pt loaded titania nanofibres.",
+                "Strong metal-support interaction improves activity and stability of Pt electrocatalysts on doped metal oxides",
+                "Study of the degradation of perfluorosulfonic acid fuel cell membranes and development of mitigation strategy",
+                "Study of the dynamics of electrolytes based on redox ionic liquids for supercapacitor application.",
+                "Supports de Catalyseur Nanostructur\u00e9s pour Pile \u00e0 Combustible \u00e0 Membrane \u00c9changeuse de Protons",
+                "Sustainable wastewater treatment coupled to hydrogen production with microbial-electrochemical technology.",
+                "Synergy between molybdenum nitride and gold leading to platinum-like activity for hydrogen evolution",
+                "Synth\u00e8se et caract\u00e9risation de catalyseurs sans platine pour pile \u00e0 combustible PEM.",
+                "Synth\u00e8se et caract\u00e9risation de sph\u00e8res monodisperses de silice \u00e0 porosit\u00e9 radiale (multi)fonctionnelles et \u00e9tude de leur performance en catalyse en phase liquide et en vectorisation de principes actifs.",
+                "Synth\u00e8se et caract\u00e9risation d'hybrides organiques-inorganiques obtenus par intercalation de mol\u00e9cules \u00e9lectroactives dans le phosphate de zirconium",
+                "Synthesis and Characterization of Platinum-free Catalysts for Proton Exchange Membrane Fuel Cell",
+                "Technologie \u00e9lectro-microbienne pour le traitement des eaux us\u00e9es coupl\u00e9 \u00e0 la r\u00e9cup\u00e9ration d'hydrog\u00e8ne",
+                "Thin Metal Structures and Metal Oxide Supports for Durable Ultra-Low PGM Fuel Cell Cathodes.",
+                "Thomas Lodge and other Elizabethans",
+                "\"Twice around the moon\", 1996:",
+                "The vegetarian grill, 1992:",
+                "What we stood for : the story of a Revolutionary black woman"
+            ],
+            "birthdate": "0",
+            "title_list": NaN
+        },
+        {
+            "author": "j d jones",
+            "record_count": 10,
+            "record_enumerated": 3,
+            "viaf_title_list": [
+                "Brief van Tjitte Haring Redbad Piebenga (1935-2007) aan Durk van der Ploeg (1930-)",
+                "Ga eens Fries eten!!",
+                "Gedichten, voorgelezen door Tjitte Piebenga.",
+                "Har sliepen",
+                "hjerstich h\u00fbs",
+                "It lyk wurdt oantaast : (anatomy fan in houlik)",
+                "Myn s\u00eaftgrien famke",
+                "[Les oer Experimentele Po\u00ebzie foar Pedagogyske Akademy Mari\u00ebnburg",
+                "Ofskie",
+                "Omke Douwe (II)",
+                "Ook Luther liet het zich goed smaken",
+                "Op de flerken fan myn tinzen",
+                "Op 'e bonnefoai de wr\u00e2ld yn: l\u00easber",
+                "Op 'e kear",
+                "Op 'e skouders fan Dylan Thomas",
+                "Opmerkingen bij een vermeende radijs",
+                "Ossestaart",
+                "Pake, sa stadichoan",
+                "Paleo\u00f6nto\u00fbnlogyske",
+                "De pasjint",
+                "De pastoar",
+                "PC-koarts",
+                "Peaske 58",
+                "Peins",
+                "Pepita",
+                "[Personalia, b\u00fbsboekjes, kartonnen kaartsjes mei opskriften yn ferskillende talen, rapportboekje Rykskweekskoalle Ljouwert, 1953-1955",
+                "Peulvruchten",
+                "Poetysk proaza fan surrealist Josse de Haan. In prachtich krekt-net.",
+                "Profeet yn eigen l\u00e2n",
+                "Prym-19",
+                "Prym- 19 : tydskrift foar de geastlike restauraesje fan trotwaer-redakteuren en oare hampelmannen",
+                "[Radio-harkspul: D\u0300e Wierheit', mei begeliedend briefke oan Jo Smit",
+                "Rapsody yn stien foar Jerusalem",
+                "r\u00e9aksje",
+                "Reboeljegearkomste.",
+                "[Referaat oer Hessel Miedema, mei sitaten, literatuerlist en fotokopyen fan teksten fan Miedema",
+                "Reinder van der Leest hat in tige boarlik boartersb\u00fbkje skreaun",
+                "Reklame. Klymaet",
+                "Resept",
+                "r\u00e9veille foar bianca",
+                "Rigels dy't stadich iepengean. Dyk fan in deb\u00fat fan Eeltsje Hettinga",
+                "Rink van der Velde op syn b\u00east",
+                "De rook fan mesjester",
+                "Roundiel foar in nicht oan memme kant. It ljocht op dyn hier",
+                "Sammele wurk",
+                "Sawnfersen foar marida. harsliepen I, II. \u00fas nacht. har reade rok. bal\u00e2ns. de l\u00easte kear. en nou fierder",
+                "Schaal- en schelpdieren (1)",
+                "Shakespeare",
+                "Simmerjoun-sankje",
+                "Sinteklaes forpoft it lange",
+                "Skiifsjitte II",
+                "Skriuwen as \u00fatlitklep",
+                "Snelle gerechten",
+                "De snelle mammoet-burger",
+                "Spiegel van de surrealistische po\u00ebzie in het Nederlands",
+                "De stapstiennen fan in kameleon",
+                "Stel met Tjitte Piebenga's recepten uw eigen Kerst-menu samen",
+                "Sterke stikken",
+                "Stoarm",
+                "De Strikel hat in gesicht en Trotwaer is earmoedich",
+                "Sudah menjadi orang lain",
+                "Tarzan en de s\u00e9",
+                "[Tekenwurk",
+                "[Tekst oer: 'fersen foar marida', drukkerij Laverman Drachten",
+                "Thema fan Anne Wadman: It forliezerskip",
+                "De thermen fan Karratsjana",
+                "Tijdskriften",
+                "Tradysje",
+                "De trije greate slaedtsjes",
+                "Tsjerne farwol!",
+                "Twaslachtich dichtwurk",
+                "De twifelriedigens fan Willem Abma",
+                "Uit het bord geklapt",
+                "Uitgelezen Friese menu's...",
+                "Unmacht fan oerdriuwing",
+                "Ut de w\u00fbndere \u00fatdragerij : nije l\u00easfoarmen",
+                "Watze Cuperus it foarbyld fan de engagearre skriuwer",
+                "Weitsrop",
+                "W\u00ear hat dy Hettinga it oer?",
+                "Werom yn 'e tiid. Twa Piten en in Jan",
+                "De wierheid en de dreamskacht",
+                "Wind oerlibbet wol",
+                "Wjokslach yn Wifelljocht",
+                "Wrakseljend en wanmoedich. 'De h\u00fbnsdagen' fan Eppie Dam",
+                "Yn 'e aep \u00fatfanh\u00fbs",
+                "Yndianen en it kostbere momint",
+                "Ynstjoerd",
+                "Ynterview mei Jelle Krol oer de Samle Fersen fan Douwe Kalma en ynterviews mei Tsjerk Jehannes de Jong fan Mantgum en Pytsje Zwart-Radsma, Gjalt Zondergeld en Tjitte Piebenga oer Douwe Kalma",
+                "Ynterview mei Tjitte Piebenga oer 'Retoer juster' en 'It lyk wurdt oantaast'"
+            ],
+            "birthdate": "1935-08-12",
+            "title_list": NaN
+        },
+        {
+            "author": "j d jones",
+            "record_count": 10,
+            "record_enumerated": 4,
+            "viaf_title_list": [
+                "At the crossroads",
+                "Bantu studies ; a journal devoted to the scientific study of Bantu, Hottentot, and Bushman.",
+                "Bantu studies and general South African anthropology",
+                "Bushmen of the southern Kalahari",
+                "Cape franchise and Bantu status",
+                "Coopers Grammatica linguae anglicanae (1685)",
+                "An economic and social policy for the Union with special reference to the African people",
+                "The first liberal, c1990:",
+                "The future of South-West Africa.",
+                "J. D. Rheinallt Jones papers",
+                "Social and economic conditions of native life in the Union of South Africa : findings of the Native Economic Commission, 1930-1932",
+                "South Africa faces UNO",
+                "The union's burden of poverty",
+                "Village education in Africa: report of the Inter-territorial \"Jeanes\" conference, Salisbury, S. Rhodesia"
+            ],
+            "birthdate": "1884",
+            "title_list": NaN
+        },
+        {
+            "author": "j d jones",
+            "record_count": 10,
+            "record_enumerated": 5,
+            "viaf_title_list": [
+                "Creep and fracture of engineering materials and structures",
+                "Creep behaviour of crystalline solids",
+                "Creep of metals and alloys",
+                "Engineering approaches to high temperature design",
+                "Introduction to creep, 1993:",
+                "Technological and economic trends in the steel industries, 1982:"
+            ],
+            "birthdate": "1944-03-30",
+            "title_list": NaN
+        },
+        {
+            "author": "j d jones",
+            "record_count": 10,
+            "record_enumerated": 6,
+            "viaf_title_list": [
+                "A Clutch of curious characters, 1984:",
+                "The condition of muzak",
+                "Cybersex",
+                "The English assassin : a romance of entropy",
+                "giant book of dangerous women",
+                "Haunted Britain and Ireland",
+                "Love is strange",
+                "Mammoth book of murder",
+                "Mammoth book of women who kill",
+                "The Penguin book of erotic stories by women, 1996:",
+                "Solved! : famous mystery writers on classic true-crime cases",
+                "Still unsolved, 1990:",
+                "This fish is loaded : the book of surreal and bizarre humor"
+            ],
+            "birthdate": "1946",
+            "title_list": NaN
+        },
+        {
+            "author": "j d jones",
+            "record_count": 10,
+            "record_enumerated": 7,
+            "viaf_title_list": [
+                "AIDS : abstracts of the psychological and behavioral literature, 1983-1989",
+                "Homelessness",
+                "Negotiating disability, 2017:",
+                "New roads to faith. Black perspectives in Church education....",
+                "Prejudice and racism",
+                "The psychology of diversity, 2013:"
+            ],
+            "birthdate": "0",
+            "title_list": NaN
+        },
+        {
+            "author": "j d jones",
+            "record_count": 10,
+            "record_enumerated": 8,
+            "viaf_title_list": [
+                "Competition policy in the global trading system",
+                "Focus: The commission's white paper on private enforcement",
+                "The future of transnational antitrust - from comparative to common law",
+                "More common ground for international competition law ? : fourth ASCOLA Workshop on Comparative Law [in Washington DC on 16-17 June 2009]",
+                "Private antitrust in the global market : an essay on \"swimming without getting wet\"",
+                "Private enforcement of antitrust law in the EU, UK and USA",
+                "Unsichtbare Sch\u00e4tze der Kinotechnik : kinematographische Apparate aus 100 Jahren im Depot des Filmmuseums Potsdam",
+                "Unsichtbare Sch\u00e4tze der Kinotechnik / [texte: Christian Ilgner, Dietmar Linke (Restaurierung)]. - Berlin, 2001."
+            ],
+            "birthdate": "0",
+            "title_list": NaN
+        },
+        {
+            "author": "j d jones",
+            "record_count": 10,
+            "record_enumerated": 9,
+            "viaf_title_list": [
+                "ABC of colorectal diseases",
+                "Application of the method of lines to the solution of elliptic partial differential equations = Application de la m\u00e9thode des lignes \u00e0 la resolution d'\u00e9quations diff\u00e9rentiales partielles elliptiques / by D. J. Jones, J. C. South, Jr.",
+                "Catch comparison of lobster traps equipped with two types of escape mechanisms",
+                "Cone flow calculations",
+                "The interaction of lobster, scallop, and Irish moss fisheries off Borden, Prince Edward Island",
+                "A numerical determination of the bow shock wave in transonic axisymmetric flow about blunt bodies",
+                "Numerical solutions of the flow field for conical bodies in a supersonic stream",
+                "The Opelousas courier.",
+                "P-3 Orion : le chasseur des mers",
+                "Tables of inviscid supersonic flow about circular cones at incidence, <gamma> = 1.4",
+                "Three-dimensional flow separation of a plane, incompressible, laminar boundary layer caused by a half-delta wing on a flat plate",
+                "Time marching numerical solution of the dynamic response of nonlinear systems",
+                "Two-dimensional wind tunnel wall interference"
+            ],
+            "birthdate": "0",
+            "title_list": NaN
+        }
+    ],
+    "nicole jerr": [
+        {
+            "author": "nicole jerr",
+            "record_count": 5,
+            "record_enumerated": 0,
+            "viaf_title_list": [
+                "(The) scaffolding of sovereignty"
+            ],
+            "birthdate": "0",
+            "title_list": "Strauss, Jonathan.Private Lives, Public Deaths: Antigone and the Invention of Individuality. New York: Fordham University Press, 2013. $90.00 (cloth); $24.00 (paper). 216 pp."
+        },
+        {
+            "author": "nicole jerr",
+            "record_count": 5,
+            "record_enumerated": 1,
+            "viaf_title_list": [
+                "Ancient apostasy, modern drama : Henrik Ibsen's Emperor and Galilean"
+            ],
+            "birthdate": "0",
+            "title_list": "Strauss, Jonathan.Private Lives, Public Deaths: Antigone and the Invention of Individuality. New York: Fordham University Press, 2013. $90.00 (cloth); $24.00 (paper). 216 pp."
+        },
+        {
+            "author": "nicole jerr",
+            "record_count": 5,
+            "record_enumerated": 2,
+            "viaf_title_list": [],
+            "birthdate": "0",
+            "title_list": "Strauss, Jonathan.Private Lives, Public Deaths: Antigone and the Invention of Individuality. New York: Fordham University Press, 2013. $90.00 (cloth); $24.00 (paper). 216 pp."
+        },
+        {
+            "author": "nicole jerr",
+            "record_count": 5,
+            "record_enumerated": 3,
+            "viaf_title_list": [],
+            "birthdate": "0",
+            "title_list": "Strauss, Jonathan.Private Lives, Public Deaths: Antigone and the Invention of Individuality. New York: Fordham University Press, 2013. $90.00 (cloth); $24.00 (paper). 216 pp."
+        },
+        {
+            "author": "nicole jerr",
+            "record_count": 5,
+            "record_enumerated": 4,
+            "viaf_title_list": [],
+            "birthdate": "0",
+            "title_list": "Strauss, Jonathan.Private Lives, Public Deaths: Antigone and the Invention of Individuality. New York: Fordham University Press, 2013. $90.00 (cloth); $24.00 (paper). 216 pp."
+        }
+    ],
+    "martin kallich": [
+        {
+            "author": "martin kallich",
+            "record_count": 1,
+            "record_enumerated": 0,
+            "viaf_title_list": [
+                "The American Revolution through British eyes",
+                "The association of ideas and critical theory in eighteenth-century England : a history of a psychological method in English criticism",
+                "Conjecturae quaedam de sensu, motu, & idearum generatione",
+                "Heav'n's first law : rhetoric and order in Pope's Essay on man",
+                "Horace Walpole, 1971:",
+                "A letter from a clergyman to his friend, with an account of the Travels of Captain Lemuel Gulliver",
+                "The other end of the egg : religious satire in Gulliver's travels",
+                "The Psychological milieu of Lytton Strachey.",
+                "Various conjectures on the perception, motion, and generation of ideas / David Hartley. - Los Angeles, 1959."
+            ],
+            "birthdate": "1918-01-19",
+            "title_list": "The association of ideas and critical theory : Hobbes, Locke, and Addison : a portion of the association of ideas and critical theory in XVIII-century England : a history of a psychological method in English criticism"
+        }
+    ],
+    "peter w graham": [
+        {
+            "author": "peter w graham",
+            "record_count": 4,
+            "record_enumerated": 0,
+            "viaf_title_list": [
+                "Articulating the elephant man : Joseph Merrick and his interpreters",
+                "Brev",
+                "Byron's bulldog, 1984:",
+                "Darwin's sciences : how Charles Darwin voyaged from rocks to worms in his search for facts to explain how the earth, its geological features, and its inhabitants evolved",
+                "Disorderly eaters : texts in self-empowerment",
+                "Don Juan and Regency England",
+                "Essays on Byron in honour of Dr Peter Cochran : breaking the mould",
+                "Jane Austen & Charles Darwin : naturalists and novelists",
+                "Lord Byron",
+                "The portable Darwin",
+                "Psychiatry and literature, 1985",
+                "Works."
+            ],
+            "birthdate": "1951-02-11",
+            "title_list": "Falling for the Crawfords: Character, Contingency, and Narrative"
+        },
+        {
+            "author": "peter w graham",
+            "record_count": 4,
+            "record_enumerated": 1,
+            "viaf_title_list": [
+                "Constraints on bosonic dark matter from ultralow-field nuclear magnetic resonance",
+                "Cosmological Relaxation of the Electroweak Scale.",
+                "Hunt for magnetic signatures of hidden-photon and axion dark matter in the wilderness, 2023:",
+                "Limits on large extra dimensions based on observations of neutron stars with the Fermi-LAT",
+                "Searching for dark clumps with gravitational-wave detectors",
+                "Testing general relativity with atom interferometry"
+            ],
+            "birthdate": "1980",
+            "title_list": "Falling for the Crawfords: Character, Contingency, and Narrative"
+        },
+        {
+            "author": "peter w graham",
+            "record_count": 4,
+            "record_enumerated": 2,
+            "viaf_title_list": [
+                "How to make money on the stock exchange, 1969:"
+            ],
+            "birthdate": "0",
+            "title_list": "Falling for the Crawfords: Character, Contingency, and Narrative"
+        },
+        {
+            "author": "peter w graham",
+            "record_count": 4,
+            "record_enumerated": 3,
+            "viaf_title_list": [
+                "Transport licensing authority"
+            ],
+            "birthdate": "0",
+            "title_list": "Falling for the Crawfords: Character, Contingency, and Narrative"
+        }
+    ],
+    "andrew nicholson": [
+        {
+            "author": "andrew nicholson",
+            "record_count": 10,
+            "record_enumerated": 0,
+            "viaf_title_list": [
+                "Art and life, 1920-1931",
+                "Bonnie Scotland",
+                "Capari and Pomegranate",
+                "Chefchaouen, Morocco",
+                "Christmas Cacti",
+                "Cockley Moor, Cumbria",
+                "Croagh Patrick",
+                "Crystals",
+                "Cumberland Hills",
+                "Cumberland Landscape (Boothby) (also known as 'Field and Elm')",
+                "Daffodils and Hyacinths in a Norman Window",
+                "Dawn on the Loire",
+                "Day and Night, Paris",
+                "Easter Monday",
+                "Estuary",
+                "Evening at Boothby",
+                "Fireside",
+                "Flodigarry Island, Skye (recto)",
+                "Flower Piece",
+                "Flower tales",
+                "Flowers at a Window",
+                "Glimpse Upon Waking",
+                "Grape Hyacinth and Angels Tears",
+                "Hallbankgate (recto)",
+                "Harebells near Housesteads Camp",
+                "Hedgerow Flowers in a Jug",
+                "Honeysuckle and Sweetpeas",
+                "The Hunter\u2019s Moon",
+                "Influence and originality : landscapes c1920 to c1950",
+                "Janet and Jacob",
+                "Kate and Jake, Isle of Wight",
+                "Kate's flowers",
+                "Kathleen's Bunch II",
+                "L'Aloue (verso)",
+                "Landscape with Sheep",
+                "Moonlight and Lamplight",
+                "Moonshine",
+                "Mount Zara",
+                "Music of colour",
+                "Narcissi in Grey Pot",
+                "On the Road to Port Ligat",
+                "Passion Flower and Hibiscus",
+                "Pill Creek",
+                "Portrait of a Lady (possibly Mary Seymour) (verso)",
+                "Portrait of Christopher Nicholson",
+                "Primulas",
+                "Quarante Huit Quai d\u2019Auteuil",
+                "Recollect",
+                "Ren\u00e9\u2019s Room",
+                "Rhododendrons, Eigg",
+                "Road along the Roman Wall",
+                "Sam Graves (d.1924)",
+                "Sandpipers, Alnmouth",
+                "Seascape (Sea and Sand)",
+                "Seascape with Two Boats",
+                "Sketch of a Domed Building (verso)",
+                "Sound of Rhum from Bay of Laig, Isle of Eigg",
+                "St Ives Harbour",
+                "Still Life by a Window",
+                "Still Life with Flowers (verso)",
+                "Summer",
+                "Swans, Keel Lough, Donegal",
+                "Trees and Bluebells in a Hilly Landscape* (verso)",
+                "Unknown colour",
+                "View from a Window Ledge",
+                "View through a Window with Blue Curtains and a Chair",
+                "Violas in a Window",
+                "White Iris",
+                "Window-Sill, Lugano",
+                "Winifred Nicholson",
+                "Winter, Banks Head (recto)",
+                "Woman Playing the Piano"
+            ],
+            "birthdate": "1893-12-21",
+            "title_list": "Byron's Don Juan@@@Byron and the Eye of Appetite"
+        },
+        {
+            "author": "andrew nicholson",
+            "record_count": 10,
+            "record_enumerated": 1,
+            "viaf_title_list": [
+                "Beppo",
+                "complete miscellaneous prose",
+                "Correspondence.",
+                "Don Juan.",
+                "Don Juan, cantos X, XI, XII, and XVII manuscript : a facsimile of the original draft manuscripts in the University of London Library",
+                "letters of John Murray to Lord Byron",
+                "Mahler companion",
+                "Oeuvres choisies",
+                "OEuvres en prose",
+                "Poems",
+                "Poems 1807-1824 and Beppo : a facsimile of the original manuscripts in the British Library and in the Pforzheimer Collection of the New York Public Library",
+                "The talk show story by Michael Parkinson",
+                "Unknown colour : paintings, letters, writings by Winifred Nicholson",
+                "William Nicholson, painter paintings, woodcuts, writings, photographs",
+                "Works."
+            ],
+            "birthdate": "1948-02-27",
+            "title_list": "Byron's Don Juan@@@Byron and the Eye of Appetite"
+        },
+        {
+            "author": "andrew nicholson",
+            "record_count": 10,
+            "record_enumerated": 2,
+            "viaf_title_list": [
+                "Pathology of the lungs",
+                "Tumors of the lower respiratory tract",
+                "Tumors of the serosal membranes",
+                "WHO classification of tumours of the lung, pleura, thymus and heart"
+            ],
+            "birthdate": "0",
+            "title_list": "Byron's Don Juan@@@Byron and the Eye of Appetite"
+        },
+        {
+            "author": "andrew nicholson",
+            "record_count": 10,
+            "record_enumerated": 3,
+            "viaf_title_list": [
+                "Indian gods, heroes, and mythology",
+                "Lord \u015aiva's song : the \u012a\u015bvara G\u012bt\u0101",
+                "Pur\u0101\u1e47a",
+                "Unifying Hinduism : philosophy and identity in Indian intellectual history",
+                "\u0908\u0936\u094d\u0935\u0930\u0917\u0940\u0924\u093e"
+            ],
+            "birthdate": "1971-12-02",
+            "title_list": "Byron's Don Juan@@@Byron and the Eye of Appetite"
+        },
+        {
+            "author": "andrew nicholson",
+            "record_count": 10,
+            "record_enumerated": 4,
+            "viaf_title_list": [
+                "Cost benefit studies that support tackling musculoskeletal disorders, 2006:",
+                "A guide to manual materials handling",
+                "Health, safety, and ergonomics",
+                "Richtlijnen voor het manueel verplaatsen van lasten"
+            ],
+            "birthdate": "1953",
+            "title_list": "Byron's Don Juan@@@Byron and the Eye of Appetite"
+        },
+        {
+            "author": "andrew nicholson",
+            "record_count": 10,
+            "record_enumerated": 5,
+            "viaf_title_list": [
+                "Kiwi magic, c1998:"
+            ],
+            "birthdate": "1961-08-01",
+            "title_list": "Byron's Don Juan@@@Byron and the Eye of Appetite"
+        },
+        {
+            "author": "andrew nicholson",
+            "record_count": 10,
+            "record_enumerated": 6,
+            "viaf_title_list": [
+                "Integral bridges. -",
+                "Simple bridge design using prestressed beams, 1997:"
+            ],
+            "birthdate": "1961-03-22",
+            "title_list": "Byron's Don Juan@@@Byron and the Eye of Appetite"
+        },
+        {
+            "author": "andrew nicholson",
+            "record_count": 10,
+            "record_enumerated": 7,
+            "viaf_title_list": [
+                "Flute concerto (1926)",
+                "Konserter (1926)",
+                "Symphony no. 5"
+            ],
+            "birthdate": "0",
+            "title_list": "Byron's Don Juan@@@Byron and the Eye of Appetite"
+        },
+        {
+            "author": "andrew nicholson",
+            "record_count": 10,
+            "record_enumerated": 8,
+            "viaf_title_list": [
+                "Mitochondrial DNA mutations and respiratory chain dysfunction in idiopathic and connective tissue disease-related lung fibrosis"
+            ],
+            "birthdate": "0",
+            "title_list": "Byron's Don Juan@@@Byron and the Eye of Appetite"
+        },
+        {
+            "author": "andrew nicholson",
+            "record_count": 10,
+            "record_enumerated": 9,
+            "viaf_title_list": [
+                "Rupture of the vaginal wall with protrusion of small intestine in a woman of 63 years of age, 1907:"
+            ],
+            "birthdate": "1866-03-26",
+            "title_list": "Byron's Don Juan@@@Byron and the Eye of Appetite"
+        }
+    ],
+    "ruth chester": [
+        {
+            "author": "ruth chester",
+            "record_count": 2,
+            "record_enumerated": 0,
+            "viaf_title_list": [
+                "Ginling College"
+            ],
+            "birthdate": "0",
+            "title_list": NaN
+        },
+        {
+            "author": "ruth chester",
+            "record_count": 2,
+            "record_enumerated": 1,
+            "viaf_title_list": [
+                "Book: Purgatorio, 2016:"
+            ],
+            "birthdate": "0",
+            "title_list": NaN
+        }
+    ],
+    "audrey jaffe": [
+        {
+            "author": "audrey jaffe",
+            "record_count": 1,
+            "record_enumerated": 0,
+            "viaf_title_list": [
+                "affective life of the average man the Victorian novel and the stock-market graph",
+                "From Political Economy to Economics through Nineteenth-Century Literature Reclaiming the Social",
+                "Realism in retrospect",
+                "Scenes of sympathy identity and representation in Victorian fiction",
+                "Vanishing points Dickens, narrative, and the subject of omniscience",
+                "Victorian novel dreams of the real conventions and ideology"
+            ],
+            "birthdate": "1957",
+            "title_list": "Spectacular Sympathy: Visuality and Ideology in Dickens's A Christmas Carol"
+        }
+    ],
+    "j c lyons": [
+        {
+            "author": "j c lyons",
+            "record_count": 7,
+            "record_enumerated": 0,
+            "viaf_title_list": [
+                "14 nocy",
+                "Beacon Falls mysteries",
+                "Black sheep",
+                "Blind faith",
+                "Blink of an eye, c2006:",
+                "Blood stained",
+                "Broken",
+                "The color of lies",
+                "Confiance aveugle",
+                "Critical condition",
+                "Czterna\u015bcie nocy : powie\u015b\u0107 zespo\u0142owa : literacki projekt Authors Guild of America",
+                "Fight dirty",
+                "Fourteen days : a collaborative novel",
+                "Hart und Drake",
+                "Hollow bones",
+                "Hot water : a novel",
+                "Kill zone",
+                "Kritick\u00fd stav",
+                "Lifelines",
+                "Nerves of steel",
+                "Next widow",
+                "ombres du pass\u00e9",
+                "Perfekter Hass Roman",
+                "Podez\u0159el\u00e9 \u00famrt\u00ed",
+                "racines du sacrifice",
+                "Rock Bottom",
+                "Schlangenblut Thriller",
+                "Schweig still, mein totes Herz Roman",
+                "Snake skin",
+                "S\u00fc\u00dfes Gift Roman",
+                "Tot ist nur, wer vergessen ist : Roman ; [Thriller]",
+                "Toucher le fond",
+                "Urgent care",
+                "Urgentn\u00ed p\u00e9\u010de",
+                "Varovn\u00e9 p\u0159\u00edznaky",
+                "Warning signs",
+                "Watched",
+                "Wdowa / CJ Lyons. - Pozna\u0144, 2021.",
+                "Wenn der Tod mit s\u00fc\u00dfen Armen dich umf\u00e4ngt Roman ; [Thriller]",
+                "Ziende blind",
+                "Zone des Todes ein Lucy-Guardino-Thriller",
+                "Zwarte schapen : ze heeft hulp nodig. nu meteen..."
+            ],
+            "birthdate": "1964-01-03",
+            "title_list": "A Neglected Manuscript: Guillaume Colletet's Essay on Maurice Sc\u00e8ve"
+        },
+        {
+            "author": "j c lyons",
+            "record_count": 7,
+            "record_enumerated": 1,
+            "viaf_title_list": [
+                "A century of orchidaceous plants selected from Curtis's botanical magazine",
+                "John Lyons and his orchid manual, 1983:",
+                "Letter from [Brackman?] to John Charles Lyons, thanking him for the use of his house at Howth",
+                "Letter from H.J.Emmett, 5 Little Smith Street, Westminster, to J.C.Lyons, concerning a payment of a bill for \u00a316.9.2. and a demand",
+                "Notes on the Grand Juries Act, 1835, by John Lyons",
+                "Praktische Anweisung zur Cultur der tropischen Orchideen",
+                "Remarks on the management of orchidaceous plants",
+                "To the grand jury of the County of Westmeath.",
+                "vol. iii. Miscellaneous items"
+            ],
+            "birthdate": "1792",
+            "title_list": "A Neglected Manuscript: Guillaume Colletet's Essay on Maurice Sc\u00e8ve"
+        },
+        {
+            "author": "j c lyons",
+            "record_count": 7,
+            "record_enumerated": 2,
+            "viaf_title_list": [
+                "Brief French review grammar and composition",
+                "Eight French classic plays",
+                "A neglected manuscript, Guillaume Colletet' essay on Maurice Sce\u0300ve / John Corriden Lyons",
+                "Reading French, 1942:",
+                "The Works of Guillaume De Salluste Sieur Du Bartas."
+            ],
+            "birthdate": "1901",
+            "title_list": "A Neglected Manuscript: Guillaume Colletet's Essay on Maurice Sc\u00e8ve"
+        },
+        {
+            "author": "j c lyons",
+            "record_count": 7,
+            "record_enumerated": 3,
+            "viaf_title_list": [
+                "A history of the Hawaiian government survey with notes on land matters in Hawaii",
+                "Makua Laiana, 1953:"
+            ],
+            "birthdate": "1833",
+            "title_list": "A Neglected Manuscript: Guillaume Colletet's Essay on Maurice Sc\u00e8ve"
+        },
+        {
+            "author": "j c lyons",
+            "record_count": 7,
+            "record_enumerated": 4,
+            "viaf_title_list": [
+                "Hawaiian Government Survey; W. D. Alexander, Surveyor General, Oahu, Hawaiian Islands; map by C. J. Lyons, from trigonometic surveys by W. D. Alexander, C. J. Lyons, J. F. Brown, M. D. Monsarrat and Wm. Webster, finished map by Richd. Covington.",
+                "Hollow bones",
+                "Life lines",
+                "Pearl Lochs and Puuloa Entrance, Ewa, Oahu",
+                "Preliminary sketch showing the coast line of the Pearl Lochs, Oahu, Hawaiian Islands"
+            ],
+            "birthdate": "0",
+            "title_list": "A Neglected Manuscript: Guillaume Colletet's Essay on Maurice Sc\u00e8ve"
+        },
+        {
+            "author": "j c lyons",
+            "record_count": 7,
+            "record_enumerated": 5,
+            "viaf_title_list": [
+                "Linija \u017eivota"
+            ],
+            "birthdate": "0",
+            "title_list": "A Neglected Manuscript: Guillaume Colletet's Essay on Maurice Sc\u00e8ve"
+        },
+        {
+            "author": "j c lyons",
+            "record_count": 7,
+            "record_enumerated": 6,
+            "viaf_title_list": [],
+            "birthdate": "0",
+            "title_list": "A Neglected Manuscript: Guillaume Colletet's Essay on Maurice Sc\u00e8ve"
+        }
+    ],
     "marianna de marco torgovnick": [
         {
             "author": "marianna de marco torgovnick",
@@ -18,6 +1145,372 @@
             ],
             "birthdate": "1949-08-31",
             "title_list": "Defining Interdisciplinarity"
+        }
+    ],
+    "marsha siefert": [
+        {
+            "author": "marsha siefert",
+            "record_count": 2,
+            "record_enumerated": 0,
+            "viaf_title_list": [
+                "Extending the borders of Russian history : essays in honor of Alfred J. Rieber",
+                "Forced migration in Central and Eastern Europe 1939-1950",
+                "The formation of the Great Russian state : a study of Russian history in the thirteenth to fifteenth centuries",
+                "Imperial Russian project autocratic politics, economic development, and social fragmentation",
+                "Kurs russkoi istorii. Chast' 3",
+                "Merchants and entrepreneurs in Imperial Russia",
+                "Obrazovanie Velikorusskogo gosudarstva.",
+                "Perestro\u00efka at the crossroads",
+                "The politics of autocracy; letters of Alexander II to Prince A. I. Bari\ufe20a\ufe21tinski\u012d, 1857-1864.",
+                "Pri dvore dvuh imperatorov : vospominani\u00e2, dnevnik 1853-1882",
+                "Salami tactics revisited : the Hungarian Communists on the road to power",
+                "Stalin and the French Communist Party, 1941-1947",
+                "Stalin and the struggle for supremacy in Eurasia",
+                "Stalin as warlord",
+                "Storms over the Balkans during the Second World War",
+                "Struggle for the Eurasian borderlands from the rise of early modern empires to the end of the First World War",
+                "A study of the USSR and communism: an historical approach",
+                "To kill a tsar, 2010:",
+                "The USSR and communism: source readings and interpretations.",
+                "Zhdanov in Finland",
+                "\u041e\u0431\u0440\u0430\u0437\u043e\u0432\u0430\u043d\u0438\u0435 \u0412\u0435\u043b\u0438\u043a\u043e\u0440\u0443\u0441\u0441\u043a\u043e\u0433\u043e \u0433\u043e\u0441\u0443\u0434\u0430\u0440\u0441\u0442\u0432\u0430.",
+                "\u041f\u0440\u0438 \u0434\u0432\u043e\u0440\u0435 \u0434\u0432\u0443\u0445 \u0438\u043c\u043f\u0435\u0440\u0430\u0442\u043e\u0440\u043e\u0432 : \u0432\u043e\u0441\u043f\u043e\u043c\u0438\u043d\u0430\u043d\u0438\u044f-\u0434\u043d\u0435\u0432\u043d\u0438\u043a 1853-1882"
+            ],
+            "birthdate": "1931-10-01",
+            "title_list": NaN
+        },
+        {
+            "author": "marsha siefert",
+            "record_count": 2,
+            "record_enumerated": 1,
+            "viaf_title_list": [
+                "Extending the borders of Russian history essays in honor of Alfred J. Rieber",
+                "The Information gap : how computers and other new communication technologies affect the social distribution of power",
+                "Labor in state-socialist Europe, 1945-1989 contributions to a history of work",
+                "Mass culture and perestroika in the Soviet Union",
+                "World communications  : a handbook"
+            ],
+            "birthdate": "1949",
+            "title_list": NaN
+        }
+    ],
+    "greg carr": [
+        {
+            "author": "greg carr",
+            "record_count": 3,
+            "record_enumerated": 0,
+            "viaf_title_list": [
+                "Marvel's Black panther : a comic book biography, from Stan Lee to Ta-Nehisi Coates"
+            ],
+            "birthdate": "0",
+            "title_list": "Translation, Recovery, and \u201cEthnic\u201d Archives of Africana: Inscribing Meaning beyond Otherness"
+        },
+        {
+            "author": "greg carr",
+            "record_count": 3,
+            "record_enumerated": 1,
+            "viaf_title_list": [],
+            "birthdate": "0",
+            "title_list": "Translation, Recovery, and \u201cEthnic\u201d Archives of Africana: Inscribing Meaning beyond Otherness"
+        },
+        {
+            "author": "greg carr",
+            "record_count": 3,
+            "record_enumerated": 2,
+            "viaf_title_list": [
+                "SNCC 50th Anniversary Conference, Vol. 20, 2011:"
+            ],
+            "birthdate": "0",
+            "title_list": "Translation, Recovery, and \u201cEthnic\u201d Archives of Africana: Inscribing Meaning beyond Otherness"
+        }
+    ],
+    "fiona somerset": [
+        {
+            "author": "fiona somerset",
+            "record_count": 4,
+            "record_enumerated": 0,
+            "viaf_title_list": [
+                "Clerical discourse and lay audience in late medieval England",
+                "A companion to Lollardy",
+                "Feeling like saints / Fiona Somerset. - Ithaca ; London, cop. 2014.",
+                "Feeling like saints : Lollard writings after Wyclif",
+                "Four Wycliffite dialogues : dialogue between Jon and Richard, dialogue between a friar and a secular, dialogue between Reson and Gabbyng, dialogue between a clerk and a knight",
+                "Imaginary publics, 1995:",
+                "Media before 1800",
+                "Truth and tales : cultural mobility and medieval media",
+                "The vulgar tongue : medieval and postmedieval vernacularity",
+                "Wycliffite spirituality"
+            ],
+            "birthdate": "1967-06-04",
+            "title_list": "\"Mark Him Wel for He is on of po\": Training the \"Lewed\" Gaze to Discern Hypocrisy"
+        },
+        {
+            "author": "fiona somerset",
+            "record_count": 4,
+            "record_enumerated": 1,
+            "viaf_title_list": [
+                "Four Wycliffite dialogues",
+                "The history of Scotland"
+            ],
+            "birthdate": "1927",
+            "title_list": "\"Mark Him Wel for He is on of po\": Training the \"Lewed\" Gaze to Discern Hypocrisy"
+        },
+        {
+            "author": "fiona somerset",
+            "record_count": 4,
+            "record_enumerated": 2,
+            "viaf_title_list": [
+                "Clerical discourse and lay audience in late medieval England"
+            ],
+            "birthdate": "0",
+            "title_list": "\"Mark Him Wel for He is on of po\": Training the \"Lewed\" Gaze to Discern Hypocrisy"
+        },
+        {
+            "author": "fiona somerset",
+            "record_count": 4,
+            "record_enumerated": 3,
+            "viaf_title_list": [],
+            "birthdate": "0",
+            "title_list": "\"Mark Him Wel for He is on of po\": Training the \"Lewed\" Gaze to Discern Hypocrisy"
+        }
+    ],
+    "heledd hayes": [
+        {
+            "author": "heledd hayes",
+            "record_count": 1,
+            "record_enumerated": 0,
+            "viaf_title_list": [
+                "Education : guide to European organizations and programmes : a guide to European organizations involved in education, including individual programmes and projects",
+                "The management of compulsory education in England and Wales : an outline of responsibilities",
+                "Tomasi di Lampedusa, G. Y Llewpart, 1983:"
+            ],
+            "birthdate": "1900",
+            "title_list": "Claudio Tolomei: A Major Influence on Gruffydd Robert"
+        }
+    ],
+    "craig a berry": [
+        {
+            "author": "craig a berry",
+            "record_count": 3,
+            "record_enumerated": 0,
+            "viaf_title_list": [
+                "The Chicago Homer",
+                "J2EE design patterns applied",
+                "Translating desire in medieval and early modern literature"
+            ],
+            "birthdate": "1961-05-02",
+            "title_list": "Flying Sources: Classical Authority in Chaucer's Squire's Tale"
+        },
+        {
+            "author": "craig a berry",
+            "record_count": 3,
+            "record_enumerated": 1,
+            "viaf_title_list": [
+                "J2EE design patterns applied, c2002:"
+            ],
+            "birthdate": "0",
+            "title_list": "Flying Sources: Classical Authority in Chaucer's Squire's Tale"
+        },
+        {
+            "author": "craig a berry",
+            "record_count": 3,
+            "record_enumerated": 2,
+            "viaf_title_list": [],
+            "birthdate": "1961",
+            "title_list": "Flying Sources: Classical Authority in Chaucer's Squire's Tale"
+        }
+    ],
+    "svetlana boym": [
+        {
+            "author": "svetlana boym",
+            "record_count": 1,
+            "record_enumerated": 0,
+            "viaf_title_list": [
+                "Anio\u0142 historii : nostalgia i nowoczesno\u015b\u0107",
+                "Another freedom : the alternative history of an idea",
+                "Arteast exhibition",
+                "Arteast razstava",
+                "Budu\u0107nost nostalgije : (skra\u0107ena verzija)",
+                "Budu\u0161\u010dee nostal\u02b9gii / Svetlana Bojm",
+                "Common places",
+                "Death in quotation marks : cultural myths of the modern poet",
+                "Future of nostalgia",
+                "Gongtong ui jangso",
+                "Jednostavna istina : ruska pripovijetka XX. stolje\u0107a",
+                "Kosmos : a portrait of the Russian space age",
+                "Mitologija svakodnevnoga \u017eivota u Rusiji",
+                "Moscow Biennale of Contemporary Art : Bolshe Sveta, More light : [5th Moscow Biennale of Contemporary Art, 20.09 - 20.10.2013]",
+                "Obshchie mesta, 2022:",
+                "Ob\u015die mesta : mifologi\u00e2 povsednevnoj \u017eizni",
+                "The off-modern",
+                "Opeu modeon ui geonchuk",
+                "The origins of nostalgia : memories and reflections",
+                "Prihodnost nostalgije :  (odlomka)",
+                "Promises of the past :  a discontinuous history of art in former Eastern Europe : [Centre Pompidou, Galerie Sud and Espace 315, 14 April - 14 July 2010]",
+                "Ruins",
+                "[Ruski postmodernizam]",
+                "Salata s ruskim umakom",
+                "Sedem grehov",
+                "Seven sins",
+                "Sexuality and the body in Russian culture",
+                "Space is the place",
+                "The Svetlana Boym reader",
+                "Territories of terror mythologies and memories of the Gulag in contemporary Russian-American art exhibition, Boston university art gallery, October 24, 2006-January 14, 2007",
+                "Tobias Putrih & MOS : without out",
+                "Tre\u0107i val : knji\u017eevnost ruske dijaspore potkraj XX stolje\u0107a",
+                "Works. Selections",
+                "\u0411\u0443\u0434\u0443\u0449\u0435\u0435 \u043d\u043e\u0441\u0442\u0430\u043b\u044c\u0433\u0438\u0438",
+                "\u041e\u0431\u0449\u0438\u0435 \u043c\u0435\u0441\u0442\u0430 : \u043c\u0438\u0444\u043e\u043b\u043e\u0433\u0438\u044f \u043f\u043e\u0432\u0441\u0435\u0434\u043d\u0435\u0432\u043d\u043e\u0439 \u0436\u0438\u0437\u043d\u0438",
+                "\uacf5\ud1b5\uc758 \uc7a5\uc18c \ub7ec\uc2dc\uc544, \uc77c\uc0c1\uc758 \uc2e0\ud654\ub4e4",
+                "\uc624\ud504\ubaa8\ub358\uc758 \uac74\ucd95"
+            ],
+            "birthdate": "1959-04-29",
+            "title_list": "On Diasporic Intimacy: Ilya Kabakov's Installations and Immigrant Homes"
+        }
+    ],
+    "claire jarvis": [
+        {
+            "author": "claire jarvis",
+            "record_count": 3,
+            "record_enumerated": 0,
+            "viaf_title_list": [
+                "Exquisite masochism : marriage, sex, and the novel form",
+                "Getting around after 60 : a profile of Britain's older population",
+                "Getting around after 60 / by Claire Jarvis [et al.]. - London, 1996.",
+                "The long term effects of being ... 1994:",
+                "Statistics in geography and environmental science",
+                "Teach yourself palaeography : a guide for genealogists and local historians"
+            ],
+            "birthdate": "0",
+            "title_list": NaN
+        },
+        {
+            "author": "claire jarvis",
+            "record_count": 3,
+            "record_enumerated": 1,
+            "viaf_title_list": [
+                "Exquisite masochism : marriage, sex, and the novel form"
+            ],
+            "birthdate": "1977",
+            "title_list": NaN
+        },
+        {
+            "author": "claire jarvis",
+            "record_count": 3,
+            "record_enumerated": 2,
+            "viaf_title_list": [
+                "Making scenes, 2008:"
+            ],
+            "birthdate": "0",
+            "title_list": NaN
+        }
+    ],
+    "thomas kaminski": [
+        {
+            "author": "thomas kaminski",
+            "record_count": 9,
+            "record_enumerated": 0,
+            "viaf_title_list": [
+                "Ab jetzt ist Ruhe",
+                "Dreigroschenoper making of Barrie Kosky inszeniert Brecht-Weill am Berliner Ensemble",
+                "Hyl\u00e4tty mies matkustaa pohjoiseen",
+                "irrt\u00fcmlichen Abenteuer des Herrn Godot",
+                "Ja nyt hiljaisuus romaani suurenmoisesta perheest\u00e4ni",
+                "Lieber woanders",
+                "Moment mal! Was die Zeit mit uns macht",
+                "Samuel Fischer, Verlag",
+                "Short stories f\u00fcr Haus Lange Haus Esters",
+                "Tach [Marion Brasch klebt Sachen ins Internet]",
+                "Threepenny Opera - making of",
+                "Wunderlich f\u00e4hrt nach Norden Roman"
+            ],
+            "birthdate": "1961-03-11",
+            "title_list": "Johnson, James, and the \"Medicinal Dictionary\""
+        },
+        {
+            "author": "thomas kaminski",
+            "record_count": 9,
+            "record_enumerated": 1,
+            "viaf_title_list": [
+                "Blut der G\u00f6tter Roman",
+                "D\u00e4mon wider Willen Roman",
+                "Dicke rote M\u00e4nner",
+                "Gezeitenwelt",
+                "goblin",
+                "Kobolde gek\u00fcrzte Lesung ; Fantasy",
+                "Kobolde Roman",
+                "schwarze Auge",
+                "Traumbeben",
+                "Treibgut : elfter Roman aus der aventurischen Spielewelt",
+                "Uomo e demone"
+            ],
+            "birthdate": "1953-07-02",
+            "title_list": "Johnson, James, and the \"Medicinal Dictionary\""
+        },
+        {
+            "author": "thomas kaminski",
+            "record_count": 9,
+            "record_enumerated": 2,
+            "viaf_title_list": [
+                "Debates in Parliament, 2012:",
+                "The early career of Samuel Johnson",
+                "Synth\u00e8se de d\u00e9riv\u00e9s de la 4-(m\u00e9thylnitroasamino)-1-(3-pyridyl)-1-butanone (NNK)",
+                "Verlagsverzeichnis Gottfried Vollmer : 1790 - 1806"
+            ],
+            "birthdate": "1977-01-18",
+            "title_list": "Johnson, James, and the \"Medicinal Dictionary\""
+        },
+        {
+            "author": "thomas kaminski",
+            "record_count": 9,
+            "record_enumerated": 3,
+            "viaf_title_list": [],
+            "birthdate": "0",
+            "title_list": "Johnson, James, and the \"Medicinal Dictionary\""
+        },
+        {
+            "author": "thomas kaminski",
+            "record_count": 9,
+            "record_enumerated": 4,
+            "viaf_title_list": [
+                "Laboratory manual to accompany rehabilitation techniques for sports medicine and athletic training / William E. Prentice ; prepared by Thomas W. Kaminski, 2004:"
+            ],
+            "birthdate": "0",
+            "title_list": "Johnson, James, and the \"Medicinal Dictionary\""
+        },
+        {
+            "author": "thomas kaminski",
+            "record_count": 9,
+            "record_enumerated": 5,
+            "viaf_title_list": [],
+            "birthdate": "1971",
+            "title_list": "Johnson, James, and the \"Medicinal Dictionary\""
+        },
+        {
+            "author": "thomas kaminski",
+            "record_count": 9,
+            "record_enumerated": 6,
+            "viaf_title_list": [
+                "Hooked on Galapagos birds [VR] c2006:"
+            ],
+            "birthdate": "0",
+            "title_list": "Johnson, James, and the \"Medicinal Dictionary\""
+        },
+        {
+            "author": "thomas kaminski",
+            "record_count": 9,
+            "record_enumerated": 7,
+            "viaf_title_list": [],
+            "birthdate": "0",
+            "title_list": "Johnson, James, and the \"Medicinal Dictionary\""
+        },
+        {
+            "author": "thomas kaminski",
+            "record_count": 9,
+            "record_enumerated": 8,
+            "viaf_title_list": [],
+            "birthdate": "1950",
+            "title_list": "Johnson, James, and the \"Medicinal Dictionary\""
         }
     ]
 }
