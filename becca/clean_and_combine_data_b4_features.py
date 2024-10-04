@@ -671,12 +671,13 @@ if __name__ == '__main__':
     rows = []
     for index, row in meta.iterrows():
         author = row['author']
-        author = normalize_text(author)
+        # author = normalize_text(author)
         # author = literal_eval(author)
         if ',' in author:
             author_list = author.split(',')
             # author_list = literal_eval(author_list)
             for author in author_list:
+                author = normalize_text(author)
                 new_row = {
                     'author': author,
                     'journal': row['journal'],
