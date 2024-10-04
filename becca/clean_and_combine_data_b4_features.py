@@ -32,6 +32,8 @@ import pandas as pd
 
 # %%
 
+
+
 def normalize_text(text):
     """
     Normalize the text by converting to lowercase, preserving commas and spaces,
@@ -105,13 +107,14 @@ def search_author(author_name):
                             viaf_title_list.append(title)
 
 
-            title_list = df.loc[df['author'] == author_name, 'title_list'].iloc[0]
+            # title_list = df.loc[df['author'] == author_name, 'title_list'].iloc[0]
 
             search_results.append({'author': author_name, 'record_count': len(records),
                                    'record_enumerated': idx, 'viaf_title_list': viaf_title_list,
-                                   'birthdate': birthdate, 'title_list': title_list})
+                                   'birthdate': birthdate})
     except Exception as e:
-        processing_errors.append(f'Processing Error for {author_name}: {e}')
+        print(f'Processing Error for {author_name}: {e}')
+        processing_errors.append(author_name)
 
     return search_results
 
@@ -256,8 +259,6 @@ def clean_up_pubdates(pubdates):
             if len(pubdates) >= 8:
                 pubdates = clean_pubdates(pubdates)
             return pubdates
-
-
 
 def any_negative(birth2maxdate, birth2mindate):
     if birth2maxdate is not None and birth2mindate is not None:
@@ -607,33 +608,19 @@ def save_json(data, filepath):
 ####
 if __name__ == '__main__':
 
-
+    df = pd.DataFrame(columns=['author', 'record_enumerated', 'VIAF_birthdate', 'S2_pubdates', 'S2_Year', 'VIAF_titlelist', 'S2_titlelist'])
     pubdates_tuple_2 = set()
+    #
+    # df = pd.read_csv('all_search_results_df_18hr_sept17.csv')
+    # df = df.iloc[:100]
 
-    df = pd.read_csv('all_search_results_df_18hr_sept17.csv')
-    df = df.iloc[:100]
-    # Read the text file
-    with open('new_viaf_data.txt', 'r') as file:
-        authors_data = json.load(file)  # Use json.load to read the JSON
-            # print(authors_data)  # Optionally print the loaded data
-        # except json.JSONDecodeError as e:
-        #     print(f"Error reading JSON data: {e}")
-    new_viaf_dict = authors_data
-    # with open('new_viaf_data_2.txt', 'r') as file:
-    #     authors_data2 = json.load(file)
-    # new_viaf_dict2 = authors_data2
-    # Convert the string representation of the dictionary back to a Python dictionary
-    print(df.columns)
-    # file_path = 'LitMetadataWithS2 (3).tsv'
-    # meta = pd.read_csv(file_path, sep='\t')
     with open('viaf_classifier_sept23.pkl', 'rb') as file:
         loaded_model = pickle.load(file)
     print(loaded_model.feature_names_in_)
 
-    df['VIAF_birthdate'] = df['birthdate']
-    df['S2_titlelist'] = df['title_list']
-    df['VIAF_titlelist'] = df['viaf_title_list']
-    # df = df.drop(['Unnamed: 0'])
+    # df['VIAF_birthdate'] = df['birthdate']
+    # df['S2_titlelist'] = df['title_list']
+    # df['VIAF_titlelist'] = df['viaf_title_list']
 
     #remember that these are the entries for each unique author name?
     #need to add back S2 pubdates by authorname therefore?
@@ -643,35 +630,39 @@ if __name__ == '__main__':
 
     # Use the explode method to expand the authors column
     meta_exploded = meta.explode('authors')
-
     meta = meta_exploded
+
+    # meta = meta[:100
+    #        ]
+    #just for testing purposes
 
     for idx, row in meta.iterrows():
         author = str(row['author'])
         author_clean = normalize_text(author)
         meta.at[idx, 'author'] = author_clean
     # %%
-    df_search_results = pd.read_csv('search_results_2.csv')
+    # df_search_results = pd.read_csv('search_results_2.csv')
     #this above is just to save us a step of having to
     #go through and seperate out lists of authors names again
     #and associate with their original metadata
 
     unique_author_names = []
 
-    for author_name in df_search_results['author']:
-        if author_name not in unique_author_names:
-            unique_author_names.append(author_name)
-
-    # new_viaf_dict = {}
-
-    for author_name in new_viaf_dict.keys():
-        if author_name not in unique_author_names:
-            unique_author_names.append(author_name)
-
-    # for author_name in new_viaf_dict2.keys():
+    # for author_name in df_search_results['author']:
+    #     if author_name not in unique_author_names:
+    #         unique_author_names.append(author_name)
+    #
+    # # new_viaf_dict = {}
+    #
+    # for author_name in df['author']:
     #     if author_name not in unique_author_names:
     #         unique_author_names.append(author_name)
 
+    for author_name in meta['author']:
+
+
+        if author_name not in unique_author_names:
+            unique_author_names.append(author_name)
 
 
     #create rows?
@@ -707,12 +698,9 @@ if __name__ == '__main__':
 
             }
             rows.append(row_orig)
-    S2_data_dict = {}
 
-    # for author_name in unique_author_names:
-    #     for row in rows:
-    #         if author_name == row['author']:
-    #             S2_data_dict[author_name] = row
+
+
 
     # Step 1: Create a dictionary mapping author names to their rows
     rows_dict = {row['author']: row for row in rows}
@@ -729,257 +717,66 @@ if __name__ == '__main__':
             return True
 
 
+
     df['S2_pubdates'] = ""
     unique_authors_to_search = []
     authors_data = {}
-    for idx, row in df.iterrows():
-        author = row['author']
-        if author in S2_data_dict.keys():
-            pubdate = S2_data_dict[author]['S2Years']
-            df.at[idx, 'S2_pubdates'] = pubdate
-            pubdate2 = S2_data_dict[author]['year']
-            df.at[idx, 'S2_Year'] = pubdate2
-        else:
-            if author not in unique_authors_to_search:
-                unique_authors_to_search.append(author)
-            # for author in unique_authors_to_search:
-            #         viaf_data = search_author(author)
-            #         authors_data[author] = viaf_data
-
-    for author in unique_authors_to_search:
-        viaf_data = search_author(author)
-        authors_data[author] = viaf_data
-
-    # with open(r'new_viaf_data.txt', 'w') as output_file:
-    #     json.dump(authors_data, output_file, indent=4)  # Use json.dump for structured output
-
-
-    # df['S2_pubdates'] = ""
-    # df['S2Years'] = df['S2_pubdates']
-    # df['S2_pubdates'] = df['S2Years']
-
-    df['S2_Titlelist'] = ""
-    for idx, row in df.iterrows():
-        author = row['author']
-        if is_author_in_dict(author, S2_data_dict):
-            df.at[idx, 'S2_Titlelist'] = S2_data_dict[author]['S2titles']
-
-    print(df.head())
-
-
-    # print(df.head(30))
-    df.to_csv('prior_to_processing_alldata_test_df.csv')
-
-    df['avg_pubdate'] = df['S2_pubdates'].apply(find_avg_pubdate)
 
     # %%
-    df_notnull = df.loc[df['avg_pubdate'].notnull()]
-    # %%
-    df_notnull
-
-    # %%
-    # publication_age
-    df['publication_age'] = ""
-    # df['publication_age'] = df['avg_pubdate'] - df['birthyear']
-    for idx, row in df.iterrows():
-        avg_pubdate = row['avg_pubdate']
-        birth = str(row['VIAF_birthdate'])
-        if len(birth) >= 5:
-            birth = birth[:4]
-        else:
-            continue
-        if avg_pubdate is None:
-            break
-        else:
-            pub_age = avg_pubdate - int(birth)
-            df.at[idx, 'publication_age'] = pub_age
-
-    print('checking values of the row that was an issue so far')
-    # df['S2_Pubdates'][16]
-    print(df['VIAF_birthdate'][16])
-    print(df['S2_pubdates'][16])
-    print(df['S2_Year'][16])
-
-    print(df.index)
-
-    test_case = process_row(df.iloc[16])
-    print(test_case)
-
-
-    df = df.apply(process_row, axis=1, result_type='expand')
-
-    # print(unique_authors_to_search)
-
-
-
-    # %%
-    df
-    # %%
-    df['publication_age'] = pd.to_numeric(df['pub_age'], errors='coerce')
-
-    # %% md
-    # Add status variable, and then convert it from string to numbers
-    # %%
-    df['status'] = ""
-
-    for idx, row in df.iterrows():
-        if row['publication_age'] < 0:
-            df.at[idx, 'status'] = 'not_born'
-        elif row['publication_age'] > 100:
-            df.at[idx, 'status'] = 'zombie'
-        elif row['publication_age'] < 9:
-            df.at[idx, 'status'] = 'toddler'
-        else:
-            df.at[idx, 'status'] = '0'
-
-    # %%
-    df.loc[df['status'] != '0']
-    # %%
-    df['status'] = df['status'].str.replace('zombie', '1')
-    df['status'] = df['status'].fillna('0')
-    df['status'] = df['status'].str.replace('not_born', '2')
-    df['status'] = df['status'].str.replace('toddler', '3')
-
-    # %%
-    # df.loc[df['status'] == '2']
-    # %% md
-
-
-    # Now S2 and VIAF titlelist embeddings
-    # %%
-    # embeddings
-
-    from sentence_transformers import SentenceTransformer
-
-    # Load the pre-trained model
-    model = SentenceTransformer('all-MiniLM-L6-v2')
-
-    # Generate embeddings for each row in the DataFrame
-    df['S2_embeddings'] = df['S2 titlelist'].apply(get_embeddings)
-    df['VIAF_embeddings'] = df['VIAF_titlelist'].apply(get_embeddings)
-    # %%
-    df['S2_titlelist'] = df['S2 titlelist']
-    # %%
-
-    # %%
-
-    # Function to lemmatize text and return a set of lemmatized words
-    import spacy
-
-    nlp = spacy.load("en_core_web_sm")
-
-    df[['lemma_overlap', 'overlapping_lemmas']] = df.apply(
-        lambda row: pd.Series(calculate_lemma_overlap(row['VIAF_titlelist'], row['S2_titlelist'])),
-        axis=1)
-
-
-    # %%
-
     import pandas as pd
-    from nltk.corpus import stopwords
-    import nltk
+    import os
 
-    # Download stopwords from NLTK if you haven't already
-    nltk.download('stopwords')
-    # Define stop words
-    stop_words = set(stopwords.words('english'))
+    # Path to save the results
+    results_file = 'search_results_3.csv'
 
-    # Apply the function to each row and create two new columns
-    df[['word_overlap_count', 'overlapping_words']] = df.apply(find_word_overlap, axis=1)
+    # Load existing results if the file exists
+    if os.path.exists(results_file):
+        all_search_results_df = pd.read_csv(results_file)
+    else:
+        all_search_results_df = pd.DataFrame()
 
-    # %%
+    # Get the unique author names, skipping those already processed
+    if not all_search_results_df.empty:
+        processed_authors = all_search_results_df['author'].unique()
+        unique_author_names = [name for name in unique_author_names if name not in processed_authors]
 
-    df['Jaccard_Distance'] = ""
-    df['exact_matches'] = ""
-    df['exact_match_count'] = ""
+    # Chunk processing parameters
+    chunk_size = 2000  # Adjust the size as needed
+    total_authors = len(unique_author_names)
 
-    # df = apply_jaccard(df, 'S2_titlelist', 'VIAF_titlelist')
-    for idx, row in df.iterrows():
-        S2_titlelist = str(row['S2 titlelist']).split(',')
-        VIAF_titlelist = str(row['VIAF_titlelist']).split(',')
-        jaccard_distance = jaccard_distance_for_lists(S2_titlelist, VIAF_titlelist)
-        df.at[idx, 'Jaccard_Distance'] = jaccard_distance
-        exact_matches = find_exact_matches_for_author(row)
-        df.at[idx, 'exact_matches'] = exact_matches
-        df.at[idx, 'exact_match_count'] = len(exact_matches)
+    # Process in chunks
+    for i in range(0, total_authors, chunk_size):
+        chunk = unique_author_names[i:i + chunk_size]
+        all_search_results = []
 
-    df['cosine_distance'] = ""
+        for author_name in chunk:
+            search_results = search_author(author_name)
+            all_search_results.extend(search_results)
 
-    for idx, row in df.iterrows():
-        VIAF_embedding = row['VIAF_embeddings']
-        S2_embedding = row['S2_embeddings']
-        cosine_dist = get_cosine_distance_bw_title_embeddings(S2_embedding, VIAF_embedding)
-        df.at[idx, 'cosine_distance'] = cosine_dist
-    # %%
-    # embed overlapping word meaning
-    import spacy
-    import numpy as np
+        # Convert list of dictionaries to DataFrame
+        chunk_df = pd.DataFrame(all_search_results)
 
-    # Load the spaCy model
-    nlp = spacy.load("en_core_web_sm")
+        # Append to existing results
+        all_search_results_df = pd.concat([all_search_results_df, chunk_df], ignore_index=True)
 
-    df['mean_embedding'] = df['overlapping_words'].apply(get_word_embeddings)
+        # Save the updated results to the file
+        all_search_results_df.to_csv(results_file, index=False)
+        author_missing_from_S2 = []
 
-    # %%
-    # rename to keep track of where birthdate data came from
-    # df['VIAF_birthdate'] = df['birthyear']
-    # for idx, row in df.iterrows():
-    #     if row['VIAF_birthdate'] == '1949-06-01':
-    #         row['VIAF_birthdate'] = '1949'
+        print(f"Processed authors {i + 1} to {min(i + chunk_size, total_authors)}")
+        all_search_results_df['S2_titlelist'] = ""
+        for idx, row in all_search_results_df.iterrows():
+            author = row['author']
+            if author in S2_data_dict:
+                S2titles = S2_data_dict[author]['S2titles']
+                all_search_results_df.at[idx, 'S2_titlelist'] = S2titles
+                pubdate = S2_data_dict[author]['S2Years']
+                all_search_results_df.at[idx, 'S2_pubdates'] = pubdate
+                pubdate2 = S2_data_dict[author]['year']
+                all_search_results_df.at[idx, 'S2_Year'] = pubdate2
+            else:
+                author_missing_from_S2.append(author)
 
-    df.loc[df['VIAF_birthdate'] == '1949-06-01', 'VIAF_birthdate'] = 1949
-    df.loc[df['S2_pubdates'] == '1949-06-01', 'S2_pubdates'] = 1949
-    # df.loc[df['birthyear'] == '1949-06-01', 'birthyear'] = 1949
-    df = extract_year(df, 'VIAF_birthdate')
-    df = extract_year(df, 'S2_pubdates')
-    # df = extract_year(df, 'birthyear')
 
-    df['pub_age'] = df['publication_age']
-    # %%
-    # store the metadata to examine later with the probabilities
-    original_indices = df.index
-    original_metadata = df[
-        ['VIAF_titlelist',  'author', 'S2_titlelist', 'status', 'pub_age', 'avg_pubdate',
-         'VIAF_birthdate', 'overlapping_words', 'word_overlap_count', 'lemma_overlap', 'overlapping_lemmas','exact_matches']].copy()
-    print(df)
-    print(df.columns.tolist())
-    df['birthyear'] = df['VIAF_birthdate']
-    columns_to_drop = ['S2 titlelist', 'S2_embeddings', 'S2_pubdates', 'VIAF_embeddings','S2_titlelist','VIAF_titlelist','author','mean_embedding','negative_status','overlapping_lemmas','overlapping_words','exact_matches', 'avg_pubdate', 'VIAF_birthdate']
-    # Check which columns actually exist in the DataFrame before dropping
-    existing_columns_to_drop = [col for col in columns_to_drop if col in df.columns]
+        all_search_results_df.to_csv('all_search_results_VIAF_S2_Oct.csv')
 
-    # Drop existing columns
-    df.drop(columns=existing_columns_to_drop, inplace=True)
-    print("\nData types in df:")
-    print(df.dtypes)
-
-    df['birth2mindate'] = pd.to_numeric(df['birth2mindate'], errors='coerce')
-    df['birth2maxdate'] = pd.to_numeric(df['birth2maxdate'], errors='coerce')
-
-    df['abs_birth2mindate'] = pd.to_numeric(df['abs_birth2mindate'], errors='coerce')
-
-    df['abs_birth2maxdate'] = pd.to_numeric(df['abs_birth2maxdate'], errors='coerce')
-
-    # %%
-    pd.to_numeric(df['birth2mindate'], errors='coerce')
-    # %%
-    pd.to_numeric(df['birth2mindate'], errors='coerce')
-    # %%
-    # %%
-    print("\nData types in df:")
-    print(df.dtypes)
-    # df = df.drop([['S2 titlelist', 'S2_embeddings', 'S2_pubdates','S2_titlelist','VIAF_embeddings']])
-    # Step 3: Run the loaded model over the new data
-    predictions = loaded_model.predict(df)
-
-    # Step 4: Add predictions as a new column in the DataFrame
-    df['predictions'] = predictions
-
-    # # Step 5: Display the updated DataFrame
-    # print(df)
-    print(df)
-    df.to_csv('alldata_test_df.csv')
-    print(df.tail())
-
-    # print(S2_data_dict['roger stephenson'])
-    print(weird_cases_to_examine)
