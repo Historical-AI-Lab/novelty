@@ -2,6 +2,7 @@
 import pandas as pd
 import clean_and_combine_data_b4_features
 import json
+import pickle
 
 def normalize_text(text):
     """
@@ -378,31 +379,32 @@ def process_pubdates_and_birth(pubdates_str, birth,author):
             # if pubdates_str != '' and pubdates_str != 'no date' or pubdates_str != 'no d':
             if pubdates_str != '' and pubdates_str not in ['no date', 'no d'] and pubdates_str[:4].isdigit():
                 pubdates = int(pubdates_str[:4])  # Extract first 4 characters and convert to int if needed
-
-    elif isinstance(pubdates_str, (tuple, list)):
-        pubdates = list(pubdates_str)  # Convert tuple to list, if it's a tuple
-        if len(pubdates) == 1 and pubdates[0] != 'no date':
-            pubdates = int(pubdates[0][:4]) if len(pubdates[0]) >= 4 else pubdates[0]
-        else:
-            pubdates = pubdates
-
-    elif isinstance(pubdates_str, int):
-        pubdates = pubdates_str  # If already an int, no need to process further
-
-    elif pubdates_str == '':  # Handle empty string case
-        pubdates = ''
-
-    # Handle specific cases with special strings
-    if pubdates_str == '"' or pubdates_str == "''" or pubdates_str == '' or pubdates is None:
-        try:
-            if author in S2_data_dict.keys():
-                pubdates = S2_data_dict[author]['year']
-        except KeyError:
-            pubdates = 0
+    #
+    # elif isinstance(pubdates_str, (tuple, list)):
+    #     pubdates = list(pubdates_str)  # Convert tuple to list, if it's a tuple
+    #     if len(pubdates) == 1 and pubdates[0] != 'no date':
+    #         pubdates = int(pubdates[0][:4]) if len(pubdates[0]) >= 4 else pubdates[0]
+    #     else:
+    #         pubdates = pubdates
+    #
+    # elif isinstance(pubdates_str, int):
+    #     pubdates = pubdates_str  # If already an int, no need to process further
+    #
+    # elif pubdates_str == '':  # Handle empty string case
+    #     pubdates = ''
+    #
+    # # Handle specific cases with special strings
+    # if pubdates_str == '"' or pubdates_str == "''" or pubdates_str == '' or pubdates is None:
+    #     try:
+    #         if author in S2_data_dict.keys():
+    #             pubdates = S2_data_dict[author]['year']
+    #     except KeyError:
+    #         pubdates = 0
 
     # Process birth date if it's a string
     if isinstance(birth, str):
-        if len(birth) > 4:
+        birth = birth.replace('-', '')
+        if len(birth) > 5:
             birth = int(birth[:4])  # Only take the first 4 characters of the birth year
         else:
             birth = int(birth)
@@ -580,8 +582,12 @@ def load_json(filepath):
 
 
 if __name__ == '__main__':
-    with open('S2_data_dict.txt', 'r') as file:
-        S2_data_dict = json.load(json_file)
+    # with open('S2_data_dict.txt', 'r') as file:
+    #     S2_data_dict = json.load(json_file)
+    #load the model for predictions
+    with open('viaf_classifier_sept23.pkl', 'rb') as file:
+        loaded_model = pickle.load(file)
+    print(loaded_model.feature_names_in_)
 
     df = pd.read_csv('search_results_3.csv')
     print(df.head())
