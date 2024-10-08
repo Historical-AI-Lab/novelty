@@ -35,7 +35,22 @@ def LoadPaper(paperId, rootfolder):
         The root folder containing the text files
     '''
     
+    # A thing that frequently happens with the fiction paperIds is that the files
+    # are stored as filenames like 00003122.txt, but the metadata has them as 3122.
+    # So we check for that and adjust if necessary.
+
     filepath = rootfolder + '/' + paperId + '.txt'
+    if not os.path.exists(filepath): 
+        try:
+            paperId = str(int(paperId)).zfill(8)
+        except ValueError:
+            print('Missing file:', filepath)
+            continue
+        filepath = rootfolder + '/' + paperId + '.txt'
+        if not os.path.exists(filepath):
+            print('Missing file:', filepath)
+            continue
+    
     all_paper_Ids = []
     text_data = []
     
