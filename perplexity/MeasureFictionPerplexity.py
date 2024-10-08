@@ -45,11 +45,11 @@ def LoadPaper(paperId, rootfolder):
             paperId = str(int(paperId)).zfill(8)
         except ValueError:
             print('Missing file:', filepath)
-            continue
+            return None
         filepath = rootfolder + '/' + paperId + '.txt'
         if not os.path.exists(filepath):
             print('Missing file:', filepath)
-            continue
+            return None
     
     all_paper_Ids = []
     text_data = []
@@ -393,6 +393,8 @@ for year in range(floor, ceiling + 1):
     print(f"Number of paperIds in year {year}: {len(paperIds_in_year)}")
     for paper in paperIds_in_year:
         paper_dataset = LoadPaper(paper, rootfolder)
+        if paper_dataset is None:
+            continue
         tokenized_dataset = paper_dataset.map(tokenize_function, batched=True)
         tokenized_dataset = tokenized_dataset.map(remove_keys, batched=True)
         grouped_dataset = tokenized_dataset.map(group_texts, batched=True)
