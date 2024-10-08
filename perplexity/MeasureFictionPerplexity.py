@@ -11,7 +11,7 @@
 # arguments, and together give us the name of the model to be used. (It will have been
 # trained on the first four and last four years of the twelve-year period.)
 
-import sys, torch
+import sys, torch, os
 import pandas as pd
 
 from transformers import AutoModelForMaskedLM, AutoTokenizer
