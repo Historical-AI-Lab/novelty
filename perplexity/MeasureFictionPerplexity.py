@@ -64,6 +64,8 @@ def LoadPaper(paperId, rootfolder):
             text_data.append(text)
 
     df = pd.DataFrame({'paper_Id': all_paper_Ids, 'text': text_data})
+    if len(df) > 5:
+        df = df.sample(frac= 0.25 , random_state=42).reset_index(drop=True)
     return Dataset.from_pandas(df)
 
 def tokenize_function(examples):
