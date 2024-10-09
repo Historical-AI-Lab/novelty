@@ -137,6 +137,10 @@ def LoadTimeSlice(floor, ceiling, metadata, rootfolder):
         'second_test': second_test
     })
 
+    for key, dataset in dataset_dict.items():
+        print(f"Dataset: {key}", flush=True)
+        print(f"Columns: {dataset.column_names}", flush=True)
+
     return dataset_dict
 
 def tokenize_function(examples):
@@ -274,8 +278,15 @@ print('Loaded model, tokenizer, and metadata')
 dataset_dict = LoadTimeSlice(floor, ceiling, metadata, rootfolder)
 print('Successfully loaded dataset for', floor, 'to', ceiling)
 
+columns_to_remove = ["text", "paper_Id", '__index_level_0__']
+existing_columns = [col for col in columns_to_remove if col in dataset_dict["first_train"].column_names]
+
+if len(existing_columns) < len(columns_to_remove):
+    missing_columns = set(columns_to_remove) - set(existing_columns)
+    print(f"Warning: The following columns are missing and will not be removed: {missing_columns}")
+
 tokenized_datasets = dataset_dict.map(
-    tokenize_function, batched=True, remove_columns=["text", "paper_Id", '__index_level_0__']
+    tokenize_function, batched=True, remove_columns=existing_columns
 )
 
 ## NOTE: the following parameter could be adjusted.
