@@ -137,6 +137,10 @@ def LoadTimeSlice(floor, ceiling, metadata, rootfolder):
         'second_test': second_test
     })
 
+    for key, dataset in dataset_dict.items():
+        print(f"Dataset: {key}", flush=True)
+        print(f"Columns: {dataset.column_names}", flush=True)
+
     return dataset_dict
 
 def tokenize_function(examples):
