@@ -140,6 +140,8 @@ def LoadTimeSlice(floor, ceiling, metadata, rootfolder):
     for key, dataset in dataset_dict.items():
         print(f"Dataset: {key}", flush=True)
         print(f"Columns: {dataset.column_names}", flush=True)
+        if '__index_level_0__' not in dataset.column_names:
+            dataset = dataset.add_column('__index_level_0__', [''] * len(dataset))
 
     return dataset_dict
 
