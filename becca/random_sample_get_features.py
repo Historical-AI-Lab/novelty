@@ -608,12 +608,26 @@ if __name__ == '__main__':
 
 
 
-    # df = pd.read_csv('random_sample_search_results_VIAF_S2_Oct.csv', dtype ={'author':'str', 'record_count':'Int8','record_enumerated':'Int8','viaf_title_list':'str','birthdate':'Int16', 'S2_titlelist':'str', 'S2_pubdates':'str', 'S2_Year':'Int16', 'VIAF_birthdate':'Int16', 'VIAF_titlelist':'str'}, usecols = lambda col: col not in ['Search Parameters'])
-    df = pd.read_csv('random_sample_search_results_VIAF_S2_Oct.csv')
+    df = pd.read_csv('random_sample_search_results_VIAF_S2_Oct.csv', dtype ={'author':'str', 'record_count':'Int8','record_enumerated':'Int8','viaf_title_list':'str','birthdate':'str', 'S2_titlelist':'str', 'S2_pubdates':'str', 'S2_Year':'str', 'VIAF_birthdate':'Int16', 'VIAF_titlelist':'str'}, usecols = lambda col: col not in ['Search Parameters'])
+    # df = pd.read_csv('random_sample_search_results_VIAF_S2_Oct.csv')
+    # Extract the first 4 characters and convert to Int16
+    def extract_year(year_str):
+        if isinstance(year_str, str) and len(year_str) >= 4:
+            try:
+                return pd.Int16Dtype().type(int(year_str[:4]))  # Convert to Int16
+            except ValueError:
+                return None  # or handle the error as needed
+        return None
+
+
+    # Apply the function to the relevant columns
+    df['birthdate'] = df['birthdate'].apply(extract_year)
+    df['S2_pubdates'] = df['S2_pubdates'].apply(extract_year)
+    df['VIAF_birthdate'] = df['birthdate'].apply(extract_year)
 
     print(df.head(30))
     print(df.columns)
-    df['VIAF_birthdate'] = df['birthdate']
+    # df['VIAF_birthdate'] = df['birthdate']
     df['VIAF_titlelist'] = df['viaf_title_list']
     #df['S2_pubdates'] = df['S2Years']
 
@@ -641,9 +655,8 @@ if __name__ == '__main__':
 
             if len(pubdates) == 0:
                 continue
-            else:
-                avg_pubdate = find_avg_pubdate(pubdates)
-                df.at[idx, 'avg_pubdate'] = avg_pubdate
+        avg_pubdate = find_avg_pubdate(pubdates)
+        df.at[idx, 'avg_pubdate'] = avg_pubdate
     # %%
     # df_notnull = df.loc[df['avg_pubdate'].notnull()]
     # # %%

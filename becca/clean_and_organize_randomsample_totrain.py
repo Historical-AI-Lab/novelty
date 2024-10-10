@@ -491,37 +491,55 @@ def process_row(row):
     else:
         # if pubdates is not None and birth is not None:
         if pubdates and birth:
-            test = birth2maxdate(birth, pubdates, author)
+            # test = birth2maxdate(birth, pubdates, author)
             # print(test)
             # if pd.notna(birth):
             #     if pd.notna(pubdates):
-            if pd.notna(test):
-                birth2maxdate_value, absbirth2maxdate_value = birth2maxdate(birth, pubdates, author)
-                birth2mindate_value, absbirth2mindate_value = birth2mindate(birth, pubdates, author)
-                neg_status = any_negative(birth2maxdate_value, birth2mindate_value)
-                title_count = title_list_len(row['S2_titlelist'])
-                author_len = author_length(row['author'])
-                avg_pubdate = find_avg_pubdate(pubdates)
+            # if pd.notna(test):
+            birth2maxdate_value, absbirth2maxdate_value = birth2maxdate(birth, pubdates, author)
+            birth2mindate_value, absbirth2mindate_value = birth2mindate(birth, pubdates, author)
+            neg_status = any_negative(birth2maxdate_value, birth2mindate_value)
+            title_count = title_list_len(row['S2_titlelist'])
+            author_len = author_length(row['author'])
+            avg_pubdate = find_avg_pubdate(pubdates)
+            return {
+            'birth2maxdate': birth2maxdate_value,
+            'abs_birth2maxdate': absbirth2maxdate_value,
+            'birth2mindate': birth2mindate_value,
+            'abs_birth2mindate': absbirth2mindate_value,
+            'negative_status': neg_status,
+            'title_count': title_count,
+            'author_length': author_len,
+            'S2_pubdates': pubdates,
+            'VIAF_birthdate': birth,
+            'S2 titlelist': row['S2_titlelist'],
+            'VIAF_titlelist': row['VIAF_titlelist'],
+            'author': row['author'],
+            'pub_age': row['publication_age'],
+            ' avg_pubdate': row['avg_pubdate']
 
-                return {
-                    'birth2maxdate': birth2maxdate_value,
-                    'abs_birth2maxdate': absbirth2maxdate_value,
-                    'birth2mindate': birth2mindate_value,
-                    'abs_birth2mindate': absbirth2mindate_value,
-                    'negative_status': neg_status,
-                    'title_count': title_count,
-                    'author_length': author_len,
-                    'S2_pubdates': pubdates,
-                    'VIAF_birthdate': birth,
-                    'S2 titlelist': row['S2_titlelist'],
-                    'VIAF_titlelist': row['VIAF_titlelist'],
-                    'author': row['author'],
-                    'pub_age' : row['publication_age'],
-                   ' avg_pubdate': row['avg_pubdate']
+        }
 
-                }
-            else:
-                print('Test was NaN')
+        elif pubdates:
+            return {
+                'birth2maxdate': None,
+                'abs_birth2maxdate': None,
+                'birth2mindate': None,
+                'abs_birth2mindate': None,
+                'negative_status': None,
+                'title_count': title_list_len(row['S2_titlelist']),
+                'author_length': author_length(author),
+                'S2_pubdates': pubdates,
+                'VIAF_birthdate': None,
+                'S2 titlelist': row['S2_titlelist'],
+                'VIAF_titlelist': row['VIAF_titlelist'],
+                'author': row['author'],
+                'pub_age': row['publication_age'],
+                'avg_pubdate': row['avg_pubdate']}
+
+
+    #         else:
+    #             print('Test was NaN')
 
 def jaccard_distance_for_lists(list1, list2):
     # Convert both lists into sets (to remove duplicates within each list)
