@@ -100,11 +100,11 @@ def LoadTimeSlice(floor, ceiling, metadata, rootfolder):
 
             if not os.path.exists(filepath): 
                 try:
-                    paperId = str(int(paperId)).zfill(8)
+                    fileId = str(int(paperId)).zfill(8)
                 except ValueError:
                     print('Missing file:', filepath)
                     continue
-                filepath = rootfolder + '/' + paperId + '.txt'
+                filepath = rootfolder + '/' + fileId + '.txt'
                 if not os.path.exists(filepath):
                     print('Missing file:', filepath)
                     continue
