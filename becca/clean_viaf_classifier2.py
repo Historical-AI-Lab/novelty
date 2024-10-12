@@ -398,7 +398,7 @@ def count_matches(exact_title_match):
 ####
 if __name__ == '__main__':
     df = pd.read_csv('result_df_july18_1136am.csv')
-    file_path = 'LitMetadataWithS2 (3).tsv'
+    file_path = 'Oct_Classifier/LitMetadataWithS2 (3).tsv'
     meta = pd.read_csv(file_path, sep='\t')
     # %%
     # Ensure the authors column is of type list

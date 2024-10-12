@@ -638,7 +638,7 @@ if __name__ == '__main__':
 
     #remember that these are the entries for each unique author name?
     #need to add back S2 pubdates by authorname therefore?
-    file_path = 'LitMetadataWithS2 (3).tsv'
+    file_path = 'Oct_Classifier/LitMetadataWithS2 (3).tsv'
     meta = pd.read_csv(file_path, sep='\t')
     meta['author'] = meta['authors'].apply(lambda x: eval(x) if isinstance(x, str) else x)
 

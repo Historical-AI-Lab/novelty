@@ -206,7 +206,7 @@ if __name__ == '__main__':
     # Initialize and run the processor
     df = pd.read_csv('all_search_results_df_18hr_sept17.csv').iloc[:100]
     df['S2Titles'] = df['title_list']
-    processor = AuthorDataProcessor(df, 'LitMetadataWithS2 (3).tsv', 'viaf_classifier_sept23.pkl')
+    processor = AuthorDataProcessor(df, 'Oct_Classifier/LitMetadataWithS2 (3).tsv', 'viaf_classifier_sept23.pkl')
 
     # Process metadata and update the dataframe
     processor.process_meta()

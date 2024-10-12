@@ -173,7 +173,7 @@ if __name__ == '__main__':
 
     processor = AuthorDataProcessor(
         search_results_path='search_results_2.csv',
-        meta_path='LitMetadataWithS2 (3).tsv',
+        meta_path='Oct_Classifier/LitMetadataWithS2 (3).tsv',
         viaf_file1='new_viaf_data.txt',
         viaf_file2='new_viaf_data_2.txt'
     )

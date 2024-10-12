@@ -39,7 +39,7 @@ df = pd.read_csv('result_df_july18_1136am.csv')
 
 #get publication date to do avergae pub date work
 # Load the metadata TSV file into a DataFrame
-file_path = 'LitMetadataWithS2 (3).tsv'
+file_path = 'Oct_Classifier/LitMetadataWithS2 (3).tsv'
 
 
 
