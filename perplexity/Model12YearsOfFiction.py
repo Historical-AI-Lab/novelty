@@ -100,11 +100,11 @@ def LoadTimeSlice(floor, ceiling, metadata, rootfolder):
 
             if not os.path.exists(filepath): 
                 try:
-                    paperId = str(int(paperId)).zfill(8)
+                    fileId = str(int(paperId)).zfill(8)
                 except ValueError:
                     print('Missing file:', filepath)
                     continue
-                filepath = rootfolder + '/' + paperId + '.txt'
+                filepath = rootfolder + '/' + fileId + '.txt'
                 if not os.path.exists(filepath):
                     print('Missing file:', filepath)
                     continue
@@ -140,6 +140,9 @@ def LoadTimeSlice(floor, ceiling, metadata, rootfolder):
     for key, dataset in dataset_dict.items():
         print(f"Dataset: {key}", flush=True)
         print(f"Columns: {dataset.column_names}", flush=True)
+        if '__index_level_0__' not in dataset.column_names:
+            dataset = dataset.add_column('__index_level_0__', [''] * len(dataset))
+            print('added __index_level_0__ column')
 
     return dataset_dict
 
@@ -279,15 +282,22 @@ dataset_dict = LoadTimeSlice(floor, ceiling, metadata, rootfolder)
 print('Successfully loaded dataset for', floor, 'to', ceiling)
 
 columns_to_remove = ["text", "paper_Id", '__index_level_0__']
-existing_columns = [col for col in columns_to_remove if col in dataset_dict["first_train"].column_names]
 
-if len(existing_columns) < len(columns_to_remove):
-    missing_columns = set(columns_to_remove) - set(existing_columns)
-    print(f"Warning: The following columns are missing and will not be removed: {missing_columns}")
+tokenized_datasets = DatasetDict()
+for key, dataset in dataset_dict.items():
+    # Determine which columns actually exist in this dataset
+    existing_columns = [col for col in columns_to_remove if col in dataset.column_names]
+    
+    # Apply tokenization and remove only existing columns
+    tokenized_dataset = dataset.map(
+        tokenize_function, 
+        batched=True, 
+        remove_columns=existing_columns
+    )
+    
+    tokenized_datasets[key] = tokenized_dataset
 
-tokenized_datasets = dataset_dict.map(
-    tokenize_function, batched=True, remove_columns=existing_columns
-)
+print('Datasets tokenized successfully.')
 
 ## NOTE: the following parameter could be adjusted.
 chunk_size_value = 256
