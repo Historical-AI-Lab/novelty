@@ -657,7 +657,11 @@ if __name__ == '__main__':
             for idx, row in df.iterrows():
                 if str(row['S2_pubdates']) != 'nan' and str(row['S2_pubdates'] != 'no date'):
                     pubdates = str(row['S2_pubdates']).split(',')
-                    avg_pubdate = find_avg_pubdate(pubdates)
+                    pubdates = [int(x) for x in pubdates if x != '' and len(pubdates) != 0]
+                    try:
+                        avg_pubdate = find_avg_pubdate(pubdates)
+                    except:
+                        avg_pubdate = 0
                 else:
                     avg_pubdate = 0
                 df.at[idx, 'avg_pubdate'] = avg_pubdate
