@@ -191,7 +191,7 @@ def birth2maxdate(birth, pubdates,author):
             max_pubdate = find_max_pubdate(pubdates)
             if max_pubdate is not None:
                 birth2maxdate = max_pubdate - birth
-            abs_birth2maxdate = abs(birth2maxdate)
+                abs_birth2maxdate = abs(birth2maxdate)
             return birth2maxdate, abs_birth2maxdate
 
         elif len(pubdates) == 1:

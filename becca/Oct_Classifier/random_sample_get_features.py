@@ -930,10 +930,13 @@ if __name__ == '__main__':
     # df = df.drop([['S2 titlelist', 'S2_embeddings', 'S2_pubdates','S2_titlelist','VIAF_embeddings']])
     # Step 3: Run the loaded model over the new data
     print(df)
+    df = df.drop(['S2Titles','S2titles','matched_title_list','common_words','notes','birthdate'], axis=1)
     print(df.columns)
     # print(df['S2_pubdates'].head(30))
-    print(df['VIAF_birthdate'].head(30))
+    # print(df['VIAF_birthdate'].head(30))
+
     print(original_metadata.head(30))
+
 
 
     df.to_csv('random_sample_get_features_asCSV.csv')
