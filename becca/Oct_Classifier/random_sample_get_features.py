@@ -607,7 +607,8 @@ if __name__ == '__main__':
 
 
     df = pd.read_csv('../random_sample_search_results_VIAF_S2_Oct.csv', dtype ={'author': 'str', 'record_count': 'Int8', 'record_enumerated': 'Int8', 'viaf_title_list': 'str', 'birthdate': 'str', 'S2_titlelist': 'str', 'S2_pubdates': 'str', 'S2_Year': 'str', 'VIAF_birthdate': 'Int16', 'VIAF_titlelist': 'str'}, usecols = lambda col: col not in ['Search Parameters'])
-
+    df['publication_age'] = ""
+    # df = df.drop('birthyear')
     #lets clean up S2_pubdates first this time
     for idx, row in df.iterrows():
         cleaned_pubdates = []
@@ -641,12 +642,14 @@ if __name__ == '__main__':
                 if pubdate_clean == 'no date':
                     pubdates.remove(pubdate)
                 else:
-                    pubdate = pubdate_clean
-                    if len(pubdate) > 4:
-                        cleaned_pubdates.append(pubdate[:4])
+                    # pubdate = pubdate_clean
+                    pubdate = pubdate_clean.strip('-')
+                    if len(pubdate) > 4 and pubdate_clean.isdigit():
+                        pubdate = pubdate[:4]
+                        cleaned_pubdates.append(pubdate)
                     else:
                         cleaned_pubdates.append(pubdate)  # leave it unchanged if it's already a year
-                df.at[idx, 'VIAF_birthdates'] = ', '.join(cleaned_pubdates)
+                df.at[idx, 'VIAF_birthdate'] = ', '.join(cleaned_pubdates)
 
 
                 # df = pd.read_csv('random_sample_search_results_VIAF_S2_Oct.csv')
@@ -663,7 +666,7 @@ if __name__ == '__main__':
     # Apply the function to the relevant columns
     df['birthdate'] = df['birthdate'].apply(extract_year_2)
     df['S2_pubdates'] = df['S2_pubdates'].apply(extract_year_2)
-    df['VIAF_birthdate'] = df['birthdate'].apply(extract_year_2)
+    # df['VIAF_birthdate'] = df['birthdate'].apply(extract_year_2)
 
     print(df.head(30))
     print(df.columns)
@@ -715,23 +718,22 @@ if __name__ == '__main__':
         if len(birth) >= 5:
             birth = birth[:4]
             birth = birth.strip('-')
-        else:
-            if avg_pubdate is None or avg_pubdate == 'error' or str(avg_pubdate) == 'nan':
-                continue
-            elif birth != 'None':
-                pub_age = int(avg_pubdate) - int(birth)
-                df.at[idx, 'publication_age'] = pub_age
-
-    print('checking values of the row that was an issue so far')
-    # df['S2_Pubdates'][16]
-    print(df['VIAF_birthdate'][16])
-    print(df['S2_pubdates'][16])
-    # print(df['S2_Year'][16])
-
-    print(df.index)
-
-    test_case = process_row(df.iloc[16])
-    print(test_case)
+        if avg_pubdate is None or avg_pubdate == 'error' or str(avg_pubdate) == 'nan' or isinstance(avg_pubdate, float):
+            continue
+        if birth != 'None' and birth.isdigit():
+            pub_age = int(avg_pubdate) - int(birth)
+            df.at[idx, 'publication_age'] = pub_age
+    #
+    # print('checking values of the row that was an issue so far')
+    # # df['S2_Pubdates'][16]
+    # print(df['VIAF_birthdate'][16])
+    # print(df['S2_pubdates'][16])
+    # # print(df['S2_Year'][16])
+    #
+    # print(df.index)
+    #
+    # test_case = process_row(df.iloc[16])
+    # print(test_case)
 
 
     df = df.apply(process_row, axis=1, result_type='expand')
@@ -871,7 +873,7 @@ if __name__ == '__main__':
          'VIAF_birthdate', 'overlapping_words', 'word_overlap_count', 'lemma_overlap', 'overlapping_lemmas','exact_matches']].copy()
     print(df)
     print(df.columns.tolist())
-    df['birthyear'] = df['VIAF_birthdate']
+    # df['birthyear'] = df['VIAF_birthdate']
     columns_to_drop = ['S2 titlelist', 'S2_embeddings', 'S2_pubdates', 'VIAF_embeddings','S2_titlelist','VIAF_titlelist','author','mean_embedding','negative_status','overlapping_lemmas','overlapping_words','exact_matches', 'avg_pubdate', 'VIAF_birthdate']
     # Check which columns actually exist in the DataFrame before dropping
     existing_columns_to_drop = [col for col in columns_to_drop if col in df.columns]

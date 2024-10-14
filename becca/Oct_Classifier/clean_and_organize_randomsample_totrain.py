@@ -857,8 +857,50 @@ if __name__ == '__main__':
         # with open('S2_data_dict.txt', 'w') as json_file:
         #     json.dump(S2_data_dict, json_file, indent=4)  # indent for pretty printing
 
+        df = all_search_results_df
+
+        # lets clean up S2_pubdates first this time
+        for idx, row in df.iterrows():
+            cleaned_pubdates = []
+            if str(row['S2_pubdates']) != 'nan' and str(row['S2_pubdates'] != 'no date'):
+                row = str(row['S2_pubdates']).strip('[').strip(']')
+                # print(row)
+                pubdates = row.split(',')
+                for pubdate in pubdates:
+                    pubdate_clean = pubdate.strip(" ")
+                    pubdate_clean = pubdate_clean.strip("'")
+                    if pubdate_clean == 'no date':
+                        pubdates.remove(pubdate)
+                    else:
+                        pubdate = pubdate_clean
+                        if len(pubdate) > 4:
+                            cleaned_pubdates.append(pubdate[:4])
+                        else:
+                            cleaned_pubdates.append(pubdate)  # leave it unchanged if it's already a year
+                    df.at[idx, 'S2_pubdates'] = ', '.join(cleaned_pubdates)
+
+                    # lets clean up birthdate also first this time
+        for idx, row in df.iterrows():
+            cleaned_pubdates = []
+            if str(row['birthdate']) != 'nan' and str(row['birthdate'] != 'no date'):
+                row = str(row['birthdate']).strip('[').strip(']')
+                # print(row)
+                pubdates = row.split(',')
+                for pubdate in pubdates:
+                    pubdate_clean = pubdate.strip(" ")
+                    pubdate_clean = pubdate_clean.strip("'")
+                    if pubdate_clean == 'no date':
+                        pubdates.remove(pubdate)
+                    else:
+                        pubdate = pubdate_clean
+                        if len(pubdate) > 4:
+                            cleaned_pubdates.append(pubdate[:4])
+                        else:
+                            cleaned_pubdates.append(pubdate)  # leave it unchanged if it's already a year
+                    df.at[idx, 'VIAF_birthdates'] = ', '.join(cleaned_pubdates)
 
     all_search_results_df.to_csv('random_sample_search_results_VIAF_S2_Oct.csv')
+    print(all_search_results_df.head(30))
 
 
 import os
