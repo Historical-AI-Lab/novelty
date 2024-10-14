@@ -905,7 +905,9 @@ if __name__ == '__main__':
     df = df.drop(list, axis=1)
     df.to_csv('random_sample_search_results_VIAF_S2_Oct.csv')
     print(df.head(30))
-    print(df['S2_pubdates'].head(30))
+    # print(df['S2_pubdates'].head(30))
+    print(df['birth2maxdate'].head(30))
+
     print('these are the columns')
     print(df.columns)
 
