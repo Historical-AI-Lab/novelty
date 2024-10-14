@@ -493,7 +493,7 @@ def process_row(row):
                     'negative_status': neg_status,
                     'title_count': title_count,
                     'author_length': author_len,
-                    'S2_pubdates': pubdates,
+                    'S2_pubdates': row['S2_pubdates'],
                     'VIAF_birthdate': birth,
                     'S2 titlelist': row['S2_titlelist'],
                     'VIAF_titlelist': row['VIAF_titlelist'],
@@ -597,18 +597,30 @@ if __name__ == '__main__':
     # with open('S2_data_dict.txt', 'r') as file:
     #     S2_data_dict = json.load(json_file)
     #load the model for predictions
-    with open('../viaf_classifier_sept23.pkl', 'rb') as file:
-        loaded_model = pickle.load(file)
-    print(loaded_model.feature_names_in_)
+    # with open('../viaf_classifier_sept23.pkl', 'rb') as file:
+    #     loaded_model = pickle.load(file)
+    # print(loaded_model.feature_names_in_)
 
     with open('../S2_data_dict.txt', 'r') as filename:
         S2_data_dict = json.load(filename)
 
 
 
-    df = pd.read_csv('../random_sample_search_results_VIAF_S2_Oct.csv', dtype ={'author': 'str', 'record_count': 'Int8', 'record_enumerated': 'Int8', 'viaf_title_list': 'str', 'birthdate': 'str', 'S2_titlelist': 'str', 'S2_pubdates': 'str', 'S2_Year': 'str', 'VIAF_birthdate': 'Int16', 'VIAF_titlelist': 'str'}, usecols = lambda col: col not in ['Search Parameters'])
+    # df = pd.read_csv('../random_sample_search_results_VIAF_S2_Oct.csv', dtype ={'author': 'str', 'record_count': 'Int8', 'record_enumerated': 'Int8', 'viaf_title_list': 'str', 'birthdate': 'str', 'S2_titlelist': 'str', 'S2_pubdates': 'str', 'S2_Year': 'str', 'VIAF_birthdate': 'Int16', 'VIAF_titlelist': 'str'}, usecols = lambda col: col not in ['Search Parameters'])
+    df = pd.read_csv('random_sample_search_results_VIAF_S2_Oct.csv')
     df['publication_age'] = ""
     # df = df.drop('birthyear')
+    print(df.columns)
+    columns_to_drop = ['Unnamed: 0.1', 'Unnamed: 0', 'index','selected_birthyear','common_words','notes','standard_birthdate']
+    c = ['Unnamed: 0.1', 'Unnamed: 0', 'index', 'title_list',
+       'selected_birthyear', 'match',
+        'S2Titles', 'S2titles', 'avg_pubdates', 'pub_age', 'status',
+       'matched_title?', 'matched_title_list', 'common_words', 'notes',
+         'S2_Year',
+       'publication_age']
+
+    df = df.drop(c, axis=1)
+
     #lets clean up S2_pubdates first this time
     for idx, row in df.iterrows():
         cleaned_pubdates = []
@@ -632,8 +644,8 @@ if __name__ == '__main__':
                 # lets clean up birthdate also first this time
     for idx, row in df.iterrows():
         cleaned_pubdates = []
-        if str(row['birthdate']) != 'nan' and str(row['birthdate'] != 'no date'):
-            row = str(row['birthdate']).strip('[').strip(']')
+        if str(row['VIAF_birthdates']) != 'nan' and str(row['VIAF_birthdates'] != 'no date'):
+            row = str(row['VIAF_birthdates']).strip('[').strip(']')
             # print(row)
             pubdates = row.split(',')
             for pubdate in pubdates:
@@ -687,7 +699,7 @@ if __name__ == '__main__':
     print(df.head(30))
     print(df.columns)
     # df['VIAF_birthdate'] = df['birthdate']
-    df['VIAF_titlelist'] = df['viaf_title_list']
+    df['VIAF_titlelist'] = df['record_enumerated_titles']
     #df['S2_pubdates'] = df['S2Years']
 
 
@@ -865,7 +877,7 @@ if __name__ == '__main__':
     # Load the spaCy model
     nlp = spacy.load("en_core_web_sm")
 
-    df['mean_embedding'] = df['overlapping_words'].apply(get_word_embeddings)
+    # df['mean_embedding'] = df['overlapping_words'].apply(get_word_embeddings)
 
     # %%
     # rename to keep track of where birthdate data came from
@@ -891,7 +903,7 @@ if __name__ == '__main__':
     print(df)
     print(df.columns.tolist())
     # df['birthyear'] = df['VIAF_birthdate']
-    columns_to_drop = ['S2 titlelist', 'S2_embeddings', 'S2_pubdates', 'VIAF_embeddings','S2_titlelist','VIAF_titlelist','author','mean_embedding','negative_status','overlapping_lemmas','overlapping_words','exact_matches', 'avg_pubdate', 'VIAF_birthdate']
+    columns_to_drop = ['S2 titlelist', 'S2_embeddings', 'VIAF_embeddings','S2_titlelist','VIAF_titlelist','mean_embedding','negative_status', 'avg_pubdate', 'VIAF_birthdate']
     # Check which columns actually exist in the DataFrame before dropping
     existing_columns_to_drop = [col for col in columns_to_drop if col in df.columns]
 
@@ -919,6 +931,9 @@ if __name__ == '__main__':
     # Step 3: Run the loaded model over the new data
     print(df)
     print(df.columns)
-    print(df['S2_pubdates'].head(30))
+    # print(df['S2_pubdates'].head(30))
+    print(df['VIAF_birthdate'].head(30))
+    print(original_metadata.head(30))
+
 
     df.to_csv('random_sample_get_features_asCSV.csv')

@@ -642,6 +642,8 @@ if __name__ == '__main__':
 
     meta['author'] = meta['author'].astype(str).apply(normalize_text)
 
+    print(meta['S2years'].head(30))
+
     # test = meta.loc[meta['author'] == 'h t betteridge']
     # print(test.head())
 
@@ -654,6 +656,7 @@ if __name__ == '__main__':
 
 
     print(df.head(30))
+    print(df.columns)
 
     print(df['author'].head(30))
 
@@ -665,10 +668,10 @@ if __name__ == '__main__':
 
     # df = df.drop(columns_to_drop)
 
-    for idx, row in df.iterrows():
-        author = str(row['author'])
-        author_clean = normalize_text(author)
-        df.at[idx, 'author'] = author_clean
+# for idx, row in df.iterrows():
+#     author = str(row['author'])
+#     author_clean = normalize_text(author)
+#     df.at[idx, 'author'] = author_clean
 
 
 
@@ -794,72 +797,72 @@ if __name__ == '__main__':
     authors_data = {}
 
     # %%
-    import pandas as pd
+    # import pandas as pd
     import os
 
-    # Path to save the results
-    results_file = '../search_results_random_sample.csv'
+    # # Path to save the results
+    # results_file = '../search_results_random_sample.csv'
+    #
+    # # Load existing results if the file exists
+    # if os.path.exists(results_file):
+    #     all_search_results_df = pd.read_csv(results_file)
+    # else:
+    #     all_search_results_df = pd.DataFrame()
+    #
+    #     # Get the unique author names, skipping those already processed
+    # if not all_search_results_df.empty:
+    #     processed_authors = all_search_results_df['author'].unique()
+    #     unique_author_names = [name for name in unique_author_names if name not in processed_authors]
+    #
+    # # Chunk processing parameters
+    # chunk_size = 2000  # Adjust the size as needed
+    # total_authors = len(unique_author_names)
+    # print(total_authors)
+    #
+    # # Process in chunks
+    # for i in range(0, total_authors, chunk_size):
+    #     chunk = unique_author_names[i:i + chunk_size]
+    #     all_search_results = []
+    #
+    #     for author_name in chunk:
+    #         search_results = search_author(author_name)
+    #         all_search_results.extend(search_results)
+    #
+    #     # Convert list of dictionaries to DataFrame
+    #     chunk_df = pd.DataFrame(all_search_results)
+    #
+    #     # Append to existing results
+    #     all_search_results_df = pd.concat([all_search_results_df, chunk_df], ignore_index=True)
+    #
+    #     # Save the updated results to the file
+    #     all_search_results_df.to_csv(results_file, index=False)
+    author_missing_from_S2 = []
+    #
+    df['S2_titlelist'] = ""
+    df['S2_pubdates'] = ""
 
-    # Load existing results if the file exists
-    if os.path.exists(results_file):
-        all_search_results_df = pd.read_csv(results_file)
-    else:
-        all_search_results_df = pd.DataFrame()
-
-        # Get the unique author names, skipping those already processed
-    if not all_search_results_df.empty:
-        processed_authors = all_search_results_df['author'].unique()
-        unique_author_names = [name for name in unique_author_names if name not in processed_authors]
-
-    # Chunk processing parameters
-    chunk_size = 2000  # Adjust the size as needed
-    total_authors = len(unique_author_names)
-    print(total_authors)
-
-    # Process in chunks
-    for i in range(0, total_authors, chunk_size):
-        chunk = unique_author_names[i:i + chunk_size]
-        all_search_results = []
-
-        for author_name in chunk:
-            search_results = search_author(author_name)
-            all_search_results.extend(search_results)
-
-        # Convert list of dictionaries to DataFrame
-        chunk_df = pd.DataFrame(all_search_results)
-
-        # Append to existing results
-        all_search_results_df = pd.concat([all_search_results_df, chunk_df], ignore_index=True)
-
-        # Save the updated results to the file
-        all_search_results_df.to_csv(results_file, index=False)
-        author_missing_from_S2 = []
-
-        all_search_results_df['S2_titlelist'] = ""
-        all_search_results_df['S2_pubdates'] = ""
-
-
-        print(f"Processed authors {i + 1} to {min(i + chunk_size, total_authors)}")
-        for idx, row in all_search_results_df.iterrows():
-            author = normalize_text(row['author'])
-            if author:
-                if author in author_dict:
-                    S2titles = [entry['S2titles'] for entry in author_dict[author]]  # List of S2titles
-                    all_search_results_df.at[idx, 'S2_titlelist'] = S2titles
-                    pubdates = [entry['S2Years'] for entry in author_dict[author]]
-                    all_search_results_df.at[idx, 'S2_pubdates'] = pubdates
-                    pubdates2 = [entry['year'] for entry in author_dict[author]]
-                    all_search_results_df.at[idx, 'S2_Year'] = str(pubdates2)
-                else:
-                    author_missing_from_S2.append(author)
+    #
+    #     print(f"Processed authors {i + 1} to {min(i + chunk_size, total_authors)}")
+    for idx, row in df.iterrows():
+        author = normalize_text(row['author'])
+        if author:
+            if author in author_dict:
+                S2titles = [entry['S2titles'] for entry in author_dict[author]]  # List of S2titles
+                df.at[idx, 'S2_titlelist'] = S2titles
+                pubdates = [entry['S2Years'] for entry in author_dict[author]]
+                df.at[idx, 'S2_pubdates'] = pubdates
+                pubdates2 = [entry['year'] for entry in author_dict[author]]
+                df.at[idx, 'S2_Year'] = str(pubdates2)
+            else:
+                author_missing_from_S2.append(author)
 
         # # Open the file in write mode
         # with open('S2_data_dict.txt', 'w') as json_file:
         #     json.dump(S2_data_dict, json_file, indent=4)  # indent for pretty printing
 
-        df = all_search_results_df
+        # df = all_search_results_df
 
-        # lets clean up S2_pubdates first this time
+        # # lets clean up S2_pubdates first this time
         for idx, row in df.iterrows():
             cleaned_pubdates = []
             if str(row['S2_pubdates']) != 'nan' and str(row['S2_pubdates'] != 'no date'):
@@ -899,9 +902,10 @@ if __name__ == '__main__':
                             cleaned_pubdates.append(pubdate)  # leave it unchanged if it's already a year
                     df.at[idx, 'VIAF_birthdates'] = ', '.join(cleaned_pubdates)
 
-    all_search_results_df.to_csv('random_sample_search_results_VIAF_S2_Oct.csv')
-    print(all_search_results_df.head(30))
+    df.to_csv('random_sample_search_results_VIAF_S2_Oct.csv')
+    print(df.head(30))
     print(df['S2_pubdates'].head(30))
+    print(df.columns)
 
 
 import os

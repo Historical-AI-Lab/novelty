@@ -3,7 +3,7 @@ import pandas as pd
 df = pd.read_csv('../random_sample_get_features_asCSV.csv')
 print(df.columns)
 
-df = df.drop('birthyear', axis=1)
+# df = df.drop('birthyear', axis=1)
 print(df.head(30))
 
 
@@ -16,7 +16,7 @@ print(df.head(30))
 # import matplotlib.pyplot as plt
 #
 #
-# X = df.drop(columns=['author','VIAF_titlelist','S2_titlelist','overlapping_words','selected_birthyear','overlapping_lemmas','title_list','record_enumerated_titles','S2Titles','S2titles','matched_title_list','common_words','notes','normalized_author','S2_Titlelist','S2_Author','S2_pubdates','mean_embedding','matched_title?','match?','match'])  # Drop the label and metadata columns
+# X = df.drop(columns=['overlapping_lemmas','title_list','record_enumerated_titles','S2Titles','S2titles','matched_title_list','common_words','notes','normalized_author','S2_Titlelist','S2_Author','S2_pubdates','mean_embedding','matched_title?','match?','match'])  # Drop the label and metadata columns
 # y = df['match?']
 #
 # # Optional: If you want to split into training and test sets first
