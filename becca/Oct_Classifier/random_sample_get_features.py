@@ -121,9 +121,9 @@ def find_avg_pubdate(pubdates):
             pubdates = str(pubdates)
             if len(pubdates) > 5:
                 pubdates = pubdates[:4]
-                pubdates = int(pubdates)
-                avg_pubdate = pubdates
-                return avg_pubdate
+            pubdates = int(pubdates)
+            avg_pubdate = pubdates
+            return avg_pubdate
         if isinstance(pubdates, str) and pubdates != 'no date' and pubdates != "" and  pubdates != 'nan':
             # pubdates = pubdates.strip('-')
             pubdates = pubdates.replace('-', '')
@@ -619,7 +619,7 @@ if __name__ == '__main__':
             for pubdate in pubdates:
                 pubdate_clean = pubdate.strip(" ")
                 pubdate_clean = pubdate_clean.strip("'")
-                if pubdate_clean == 'no date':
+                if pubdate_clean == 'no date' or pubdate_clean == 'nan':
                     pubdates.remove(pubdate)
                 else:
                     pubdate = pubdate_clean
@@ -649,7 +649,19 @@ if __name__ == '__main__':
                         cleaned_pubdates.append(pubdate)
                     else:
                         cleaned_pubdates.append(pubdate)  # leave it unchanged if it's already a year
+                    # if isinstance(pubdates, float)
                 df.at[idx, 'VIAF_birthdate'] = ', '.join(cleaned_pubdates)
+                df['publication_age'] = ""
+                # df['publication_age'] = df['avg_pubdate'] - df['birthyear']
+
+            for idx, row in df.iterrows():
+                if str(row['S2_pubdates']) != 'nan' and str(row['S2_pubdates'] != 'no date'):
+                    pubdates = str(row['S2_pubdates']).split(',')
+                    avg_pubdate = find_avg_pubdate(pubdates)
+                else:
+                    avg_pubdate = 0
+                df.at[idx, 'avg_pubdate'] = avg_pubdate
+
 
 
                 # df = pd.read_csv('random_sample_search_results_VIAF_S2_Oct.csv')
@@ -678,31 +690,29 @@ if __name__ == '__main__':
 
 
     # df['avg_pubdate'] = df['S2_pubdates'].apply(find_avg_pubdate)
-    # for idx, row in df.iterrows():
-    #     pubdates = row['S2_pubdates']
-        # if pubdates is not None and str(pubdates) != 'nan':
-        #     # pubdates = ast.literal_eval(pubdates)
-        #     bad_string = pubdates
-        #     # Step 1: Clean up the string - remove unwanted characters
-        #     cleaned_string = re.sub(r"[\[\]\"']", '', bad_string)  # Remove extra brackets, quotes, etc.
-        #
-        #     # Step 2: Split the cleaned string into a list, remove extra whitespace
-        #     cleaned_list = [item.strip() for item in cleaned_string.split(',') if
-        #                     item.strip() not in ['nan', 'no date']]
-        #
-        #     # Now 'cleaned_list' is a properly formatted list
-        #     pubdates = cleaned_list
-        #     for i in range(len(pubdates)):
-        #         if len(pubdates[i]) > 4:
-        #             pubdates[i] = int(pubdates[i][:4]) # Keep only the first four characters (the year)
-        #
-        #     if len(pubdates) == 0:
-        #         continue
     for idx, row in df.iterrows():
         pubdates = row['S2_pubdates']
-            # if isinstance(pubdates, float)
-        avg_pubdate = find_avg_pubdate(pubdates)
-        df.at[idx, 'avg_pubdate'] = avg_pubdate
+        if isinstance(pubdates, float):
+            continue
+        if pubdates is not None and str(pubdates) != 'nan':
+            # pubdates = ast.literal_eval(pubdates)
+            bad_string = pubdates
+            # Step 1: Clean up the string - remove unwanted characters
+            cleaned_string = re.sub(r"[\[\]\"']", '', bad_string)  # Remove extra brackets, quotes, etc.
+
+            # Step 2: Split the cleaned string into a list, remove extra whitespace
+            cleaned_list = [item.strip() for item in cleaned_string.split(',') if
+                            item.strip() not in ['nan', 'no date']]
+
+            # Now 'cleaned_list' is a properly formatted list
+            pubdates = cleaned_list
+            for i in range(len(pubdates)):
+                if len(pubdates[i]) > 4:
+                    pubdates[i] = int(pubdates[i][:4]) # Keep only the first four characters (the year)
+
+            if len(pubdates) == 0:
+                continue
+
     # %%
     # df_notnull = df.loc[df['avg_pubdate'].notnull()]
     # # %%
@@ -723,7 +733,7 @@ if __name__ == '__main__':
         if birth != 'None' and birth.isdigit():
             pub_age = int(avg_pubdate) - int(birth)
             df.at[idx, 'publication_age'] = pub_age
-    #
+
     # print('checking values of the row that was an issue so far')
     # # df['S2_Pubdates'][16]
     # print(df['VIAF_birthdate'][16])
@@ -745,12 +755,15 @@ if __name__ == '__main__':
     # %%
     df
     # %%
-    df['publication_age'] = pd.to_numeric(df['pub_age'], errors='coerce')
+    # df['publication_age'] = pd.to_numeric(df['publication_age'], errors='coerce')
 
     # %% md
     # Add status variable, and then convert it from string to numbers
     # %%
     df['status'] = ""
+    df['publication_age'] = df['pub_age']
+    df['publication_age'] = pd.to_numeric(df['publication_age'], errors='coerce')
+
 
     for idx, row in df.iterrows():
         if row['publication_age'] < 0:
@@ -893,7 +906,7 @@ if __name__ == '__main__':
     # %%
     pd.to_numeric(df['birth2mindate'], errors='coerce')
     # %%
-    pd.to_numeric(df['birth2mindate'], errors='coerce')
+    pd.to_numeric(df['birth2maxdate'], errors='coerce')
     # %%
     # %%
     print("\nData types in df:")
