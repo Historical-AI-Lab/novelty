@@ -863,24 +863,28 @@ if __name__ == '__main__':
         # df = all_search_results_df
 
         # # lets clean up S2_pubdates first this time
-        for idx, row in df.iterrows():
-            cleaned_pubdates = []
-            if str(row['S2_pubdates']) != 'nan' and str(row['S2_pubdates'] != 'no date'):
-                row = str(row['S2_pubdates']).strip('[').strip(']')
-                # print(row)
-                pubdates = row.split(',')
-                for pubdate in pubdates:
-                    pubdate_clean = pubdate.strip(" ")
-                    pubdate_clean = pubdate_clean.strip("'")
-                    if pubdate_clean == 'no date':
-                        pubdates.remove(pubdate)
-                    else:
-                        pubdate = pubdate_clean
-                        if len(pubdate) > 4:
+    for idx, row in df.iterrows():
+        cleaned_pubdates = []
+        if str(row['S2_pubdates']) != 'nan' and str(row['S2_pubdates'] != 'no date'):
+            row = str(row['S2_pubdates'])
+            # print(row)
+            pubdates = row.split(',')
+            for pubdate in pubdates:
+                pubdate_clean = pubdate.strip(" ")
+                pubdate_clean = pubdate_clean.strip("'")
+                if pubdate_clean == 'no date':
+                    pubdates.remove(pubdate)
+                else:
+                    try:
+                        pubdate = int(pubdate_clean)
+                    except:
+                        if len(str(pubdate)) > 4:
                             cleaned_pubdates.append(pubdate[:4])
-                        else:
-                            cleaned_pubdates.append(pubdate)  # leave it unchanged if it's already a year
-                    df.at[idx, 'S2_pubdates'] = ', '.join(cleaned_pubdates)
+
+                cleaned_pubdates.append(str(pubdate))  # leave it unchanged if it's already a year
+                df.at[idx, 'S2_pubdates'] = ', '.join(cleaned_pubdates)
+
+        # df['S2_pubdates'].fillna(0, inplace=True)r
 
                     # lets clean up birthdate also first this time
         for idx, row in df.iterrows():
@@ -896,14 +900,14 @@ if __name__ == '__main__':
                         pubdates.remove(pubdate)
                     else:
                         pubdate = pubdate_clean
-                        if len(pubdate) > 4:
+                        if len(str(pubdate)) > 4:
                             cleaned_pubdates.append(pubdate[:4])
                         else:
                             cleaned_pubdates.append(pubdate)  # leave it unchanged if it's already a year
                     df.at[idx, 'VIAF_birthdates'] = ', '.join(cleaned_pubdates)
 
             # df['birth2maxdate'] = df[['birthdate','S2_pubdates']].apply(birth2maxdate)
-            df['birth2maxdate'] = df[['birthdate', 'S2_pubdates']].apply(lambda row: birth2maxdate(row['birthdate'], row['S2_pubdates']), axis=1)
+            df['birth2maxdate'] = df[['birthdate', 'S2_Year']].apply(lambda row: birth2maxdate(row['birthdate'], row['S2_Year']), axis=1)
             # df['birth2mindate'] = df[['birthdate', 'S2_pubdates']].apply(lambda row: birth2mindate(row['birthdate'], row['S2_pubdates']), axis=1)
 
     list = ['Unnamed: 0', 'index','S2Titles', 'S2titles', 'matched_title?', 'matched_title_list', 'common_words', 'notes']
