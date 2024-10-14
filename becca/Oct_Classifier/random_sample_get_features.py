@@ -611,15 +611,15 @@ if __name__ == '__main__':
     df['publication_age'] = ""
     # df = df.drop('birthyear')
     print(df.columns)
-    columns_to_drop = ['Unnamed: 0.1', 'Unnamed: 0', 'index','selected_birthyear','common_words','notes','standard_birthdate']
-    c = ['Unnamed: 0.1', 'Unnamed: 0', 'index', 'title_list',
-       'selected_birthyear', 'match',
-        'S2Titles', 'S2titles', 'avg_pubdates', 'pub_age', 'status',
-       'matched_title?', 'matched_title_list', 'common_words', 'notes',
-         'S2_Year',
-       'publication_age']
+    # columns_to_drop = ['Unnamed: 0.1', 'Unnamed: 0', 'index','selected_birthyear','common_words','notes','standard_birthdate']
+    # c = ['Unnamed: 0.1', 'Unnamed: 0', 'index', 'title_list',
+    #    'selected_birthyear', 'match',
+    #     'S2Titles', 'S2titles', 'avg_pubdates', 'pub_age', 'status',
+    #    'matched_title?', 'matched_title_list', 'common_words', 'notes',
+    #      'S2_Year',
+    #    'publication_age']
 
-    df = df.drop(c, axis=1)
+    # df = df.drop(c, axis=1)
 
     #lets clean up S2_pubdates first this time
     for idx, row in df.iterrows():
@@ -930,7 +930,7 @@ if __name__ == '__main__':
     # df = df.drop([['S2 titlelist', 'S2_embeddings', 'S2_pubdates','S2_titlelist','VIAF_embeddings']])
     # Step 3: Run the loaded model over the new data
     print(df)
-    df = df.drop(['S2Titles','S2titles','matched_title_list','common_words','notes','birthdate'], axis=1)
+    # df = df.drop(['S2Titles','S2titles','matched_title_list','common_words','notes','birthdate'], axis=1)
     print(df.columns)
     # print(df['S2_pubdates'].head(30))
     # print(df['VIAF_birthdate'].head(30))

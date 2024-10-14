@@ -901,10 +901,12 @@ if __name__ == '__main__':
                         else:
                             cleaned_pubdates.append(pubdate)  # leave it unchanged if it's already a year
                     df.at[idx, 'VIAF_birthdates'] = ', '.join(cleaned_pubdates)
-
+    list = ['Unnamed: 0', 'index','S2Titles', 'S2titles', 'matched_title?', 'matched_title_list', 'common_words', 'notes']
+    df = df.drop(list, axis=1)
     df.to_csv('random_sample_search_results_VIAF_S2_Oct.csv')
     print(df.head(30))
     print(df['S2_pubdates'].head(30))
+    print('these are the columns')
     print(df.columns)
 
 
