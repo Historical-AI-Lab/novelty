@@ -176,7 +176,7 @@ def find_avg_pubdate(pubdates):
 
 
 weird_cases_to_examine = []
-def birth2maxdate(birth, pubdates,author):
+def birth2maxdate(birth, pubdates):
     # Convert the string representation to an actual tuple
     # pubdates_tuple = literal_eval(pubdates)
 
@@ -225,7 +225,7 @@ def birth2maxdate(birth, pubdates,author):
 
 
 
-def birth2mindate(birth, pubdates,author):
+def birth2mindate(birth, pubdates):
     # Convert the string representation to an actual tuple
     # pubdates_tuple = literal_eval(pubdates)
 
@@ -901,6 +901,11 @@ if __name__ == '__main__':
                         else:
                             cleaned_pubdates.append(pubdate)  # leave it unchanged if it's already a year
                     df.at[idx, 'VIAF_birthdates'] = ', '.join(cleaned_pubdates)
+
+            # df['birth2maxdate'] = df[['birthdate','S2_pubdates']].apply(birth2maxdate)
+            df['birth2maxdate'] = df[['birthdate', 'S2_pubdates']].apply(lambda row: birth2maxdate(row['birthdate'], row['S2_pubdates']), axis=1)
+            # df['birth2mindate'] = df[['birthdate', 'S2_pubdates']].apply(lambda row: birth2mindate(row['birthdate'], row['S2_pubdates']), axis=1)
+
     list = ['Unnamed: 0', 'index','S2Titles', 'S2titles', 'matched_title?', 'matched_title_list', 'common_words', 'notes']
     df = df.drop(list, axis=1)
     df.to_csv('random_sample_search_results_VIAF_S2_Oct.csv')
@@ -913,4 +918,4 @@ if __name__ == '__main__':
 
 
 import os
-# os.system('say "Your script has finished"')
+os.system('say "Your script has finished"')
