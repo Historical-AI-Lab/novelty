@@ -901,6 +901,7 @@ if __name__ == '__main__':
 
     all_search_results_df.to_csv('random_sample_search_results_VIAF_S2_Oct.csv')
     print(all_search_results_df.head(30))
+    print(df['S2_pubdates'].head(30))
 
 
 import os

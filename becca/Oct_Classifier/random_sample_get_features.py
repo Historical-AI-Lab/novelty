@@ -918,4 +918,7 @@ if __name__ == '__main__':
     # df = df.drop([['S2 titlelist', 'S2_embeddings', 'S2_pubdates','S2_titlelist','VIAF_embeddings']])
     # Step 3: Run the loaded model over the new data
     print(df)
+    print(df.columns)
+    print(df['S2_pubdates'].head(30))
+
     df.to_csv('random_sample_get_features_asCSV.csv')

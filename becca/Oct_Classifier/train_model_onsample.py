@@ -1,7 +1,11 @@
 import pandas as pd
 
 df = pd.read_csv('../random_sample_get_features_asCSV.csv')
+print(df.columns)
+
+df = df.drop('birthyear', axis=1)
 print(df.head(30))
+
 
 # import pandas as pd
 # from sklearn.model_selection import train_test_split, cross_val_predict
