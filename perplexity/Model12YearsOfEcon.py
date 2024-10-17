@@ -42,7 +42,7 @@ def load_model_and_tokenizer(metadatapath = '../metadata/litstudies/LitMetadataW
 
     metadata = pd.read_csv(metadatapath, sep ='\t')
 
-    metadata['publicationYear'] = metadata['publicationYear'].astype(int)
+    metadata['year'] = metadata['year'].astype(int)
 
     # Drop rows with missing paperId values
     metadata = metadata.dropna(subset=['paperId'])
@@ -87,7 +87,7 @@ def LoadTimeSlice(floor, ceiling, metadata, rootfolder):
 
     # Helper function to load data and split into train/test
     def load_period_data(floor, ceiling, metadata, rootfolder, split_ratio=0.2):
-        paperIds = metadata[(metadata['publicationYear'] >= floor) & (metadata['publicationYear'] <= ceiling)]['paperId']
+        paperIds = metadata[(metadata['year'] >= floor) & (metadata['year'] <= ceiling)]['paperId']
         text_data = []
         paper_Ids = []
 
