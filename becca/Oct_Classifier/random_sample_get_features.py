@@ -143,6 +143,13 @@ def find_avg_pubdate(pubdates):
             avg_pubdate = 0
         return avg_pubdate
 
+# def clean_pubdates(pubdates):
+#     if isinstance(pubdates, list):
+#         for pubdate in pubdates:
+#             if pubdate == "'no date'":
+#                 pubdates.remove(pubdate)
+#             pubdate.strip('[]')
+
 
 
 
@@ -355,6 +362,37 @@ def find_word_overlap(row):
     # Return the overlap count and the list of overlapping words
     return pd.Series([len(overlap), list(overlap)])
 
+def cosine_similarity_titles(S2_titlelist, VIAF_titlelist, threshold=0.7):
+        # Ensure the title lists are evaluated properly if they are in string format
+        if isinstance(S2_titlelist, str):
+            S2_titlelist = ast.literal_eval(S2_titlelist)
+        if isinstance(VIAF_titlelist, str):
+            VIAF_titlelist = ast.literal_eval(VIAF_titlelist)
+
+        # Clean and lower the titles
+        S2_titles_clean = [title.replace('"', '').replace("'", '').strip().lower() for title in S2_titlelist]
+        VIAF_titles_clean = [title.replace('"', '').replace("'", '').strip().lower() for title in VIAF_titlelist]
+
+        # Combine both lists to vectorize
+        combined_titles = S2_titles_clean + VIAF_titles_clean
+
+        # Use TfidfVectorizer to convert the titles into vectors
+        vectorizer = TfidfVectorizer().fit_transform(combined_titles)
+        vectors = vectorizer.toarray()
+
+        # Calculate cosine similarity between all pairs
+        cosine_sim_matrix = cosine_similarity(vectors)
+
+        # Find matches that meet the similarity threshold
+        matches = []
+        for i, s2_title in enumerate(S2_titles_clean):
+            for j, viaf_title in enumerate(VIAF_titles_clean):
+                sim_score = cosine_sim_matrix[i, len(S2_titles_clean) + j]
+                if sim_score >= threshold:
+                    matches.append((s2_title, viaf_title, sim_score))
+
+        return matches
+
 
 def get_word_embeddings(words):
     embeddings = [nlp(word).vector for word in words if nlp(word).has_vector]
@@ -463,7 +501,7 @@ def process_row(row):
                     'author_length': author_length(author),
                     'S2_pubdates': row['S2_pubdates'],
                     'VIAF_birthdate': None,
-                    'S2 titlelist': row['S2_titlelist'],
+                    'S2_titlelist': row['S2_titlelist'],
                     'VIAF_titlelist': row['VIAF_titlelist'],
                     'author': row['author'],
                     'pub_age': row['publication_age'],
@@ -478,9 +516,11 @@ def process_row(row):
             # if pd.notna(birth):
             #     if pd.notna(pubdates):
             # if pd.notna(test):
-                birth2maxdate_value, absbirth2maxdate_value = birth2maxdate(birth, pubdates, author)
-                birth2mindate_value, absbirth2mindate_value = birth2mindate(birth, pubdates, author)
-                neg_status = any_negative(birth2maxdate_value, birth2mindate_value)
+            #     birth2maxdate_value, absbirth2maxdate_value = birth2maxdate(birth, pubdates, author)
+            #     birth2mindate_value, absbirth2mindate_value = birth2mindate(birth, pubdates, author)
+                birth2maxdate_value, absbirth2maxdate_value = row['birth2maxdate'], row['abs_birth2maxdate']
+                birth2mindate_value, absbirth2mindate_value = row['birth2mindate'], row['abs_birth2mindate']
+                neg_status = row['negative_status']
                 title_count = title_list_len(row['S2_titlelist'])
                 author_len = author_length(row['author'])
                 avg_pubdate = find_avg_pubdate(pubdates)
@@ -560,7 +600,7 @@ def find_exact_matches_for_author(row):
 
     # Get titles from viaf_title_list and title_list
     viaf_titles = row['VIAF_titlelist'] if isinstance(row['VIAF_titlelist'], list) else []
-    title_list = row['S2 titlelist'] if isinstance(row['S2 titlelist'], list) else [row['S2 titlelist']]
+    title_list = row['S2_titlelist'] if isinstance(row['S2_titlelist'], list) else [row['S2_titlelist']]
 
     # Convert both lists to lowercase to make the comparison case-insensitive
     viaf_titles_lower = set([str(title).lower() for title in viaf_titles])
@@ -579,10 +619,10 @@ def find_exact_matches_for_author(row):
     return matches
 def count_matches(exact_title_match):
     return len(exact_title_match)
-def extract_year(df, column_name):
-    # Apply a function to each row of the specified column
-    df[column_name] = df[column_name].apply(lambda x: int(x[:4]) if isinstance(x, str) and len(x) > 8 else x)
-    return df
+# def extract_year(df, column_name):
+#     # Apply a function to each row of the specified column
+#     df[column_name] = df[column_name].apply(lambda x: int(x[:4]) if isinstance(x, str) and len(x) > 8 else x)
+#     return df
 
 def load_json(filepath):
     """Load a JSON file."""
@@ -607,178 +647,18 @@ if __name__ == '__main__':
 
 
     # df = pd.read_csv('../random_sample_search_results_VIAF_S2_Oct.csv', dtype ={'author': 'str', 'record_count': 'Int8', 'record_enumerated': 'Int8', 'viaf_title_list': 'str', 'birthdate': 'str', 'S2_titlelist': 'str', 'S2_pubdates': 'str', 'S2_Year': 'str', 'VIAF_birthdate': 'Int16', 'VIAF_titlelist': 'str'}, usecols = lambda col: col not in ['Search Parameters'])
-    df = pd.read_csv('random_sample_search_results_VIAF_S2_Oct.csv')
-    df['publication_age'] = ""
-    # df = df.drop('birthyear')
-    print(df.columns)
-    # columns_to_drop = ['Unnamed: 0.1', 'Unnamed: 0', 'index','selected_birthyear','common_words','notes','standard_birthdate']
-    # c = ['Unnamed: 0.1', 'Unnamed: 0', 'index', 'title_list',
-    #    'selected_birthyear', 'match',
-    #     'S2Titles', 'S2titles', 'avg_pubdates', 'pub_age', 'status',
-    #    'matched_title?', 'matched_title_list', 'common_words', 'notes',
-    #      'S2_Year',
-    #    'publication_age']
+    df = pd.read_csv('processed_search_results_VIAF_S2_Oct.csv')
+    # df['publication_age'] = ""
+    df['VIAF_birthdate'] = df['birthdate']
+    df = df.drop('avg_pubdates', axis=1)
+    df = df.drop([col for col in df.columns if col.endswith('.1')], axis=1)
 
-    # df = df.drop(c, axis=1)
+    # List of columns to drop
+    columns_to_drop = ['index', 'Unnamed: 0','birthdate','title_list','S2Titles','S2titles','common_words','notes','record_enumerated_titles','selected_birthyear']
+    # Drop specified columns
+    df = df.drop(columns=columns_to_drop)
 
-    #lets clean up S2_pubdates first this time
-    for idx, row in df.iterrows():
-        cleaned_pubdates = []
-        if str(row['S2_pubdates']) != 'nan' and str(row['S2_pubdates'] != 'no date'):
-            row = str(row['S2_pubdates']).strip('[').strip(']')
-            # print(row)
-            pubdates = row.split(',')
-            for pubdate in pubdates:
-                pubdate_clean = pubdate.strip(" ")
-                pubdate_clean = pubdate_clean.strip("'")
-                if pubdate_clean == 'no date' or pubdate_clean == 'nan':
-                    pubdates.remove(pubdate)
-                else:
-                    pubdate = pubdate_clean
-                    if len(pubdate) > 4:
-                        cleaned_pubdates.append(pubdate[:4])
-                    else:
-                        cleaned_pubdates.append(pubdate)  # leave it unchanged if it's already a year
-                df.at[idx, 'S2_pubdates'] = ', '.join(cleaned_pubdates)
-
-                # lets clean up birthdate also first this time
-    for idx, row in df.iterrows():
-        cleaned_pubdates = []
-        if str(row['VIAF_birthdates']) != 'nan' and str(row['VIAF_birthdates'] != 'no date'):
-            row = str(row['VIAF_birthdates']).strip('[').strip(']')
-            # print(row)
-            pubdates = row.split(',')
-            for pubdate in pubdates:
-                pubdate_clean = pubdate.strip(" ")
-                pubdate_clean = pubdate_clean.strip("'")
-                if pubdate_clean == 'no date':
-                    pubdates.remove(pubdate)
-                else:
-                    # pubdate = pubdate_clean
-                    pubdate = pubdate_clean.strip('-')
-                    if len(pubdate) > 4 and pubdate_clean.isdigit():
-                        pubdate = pubdate[:4]
-                        cleaned_pubdates.append(pubdate)
-                    else:
-                        cleaned_pubdates.append(pubdate)  # leave it unchanged if it's already a year
-                    # if isinstance(pubdates, float)
-                df.at[idx, 'VIAF_birthdate'] = ', '.join(cleaned_pubdates)
-                df['publication_age'] = ""
-                # df['publication_age'] = df['avg_pubdate'] - df['birthyear']
-
-            for idx, row in df.iterrows():
-                if str(row['S2_pubdates']) != 'nan' and str(row['S2_pubdates'] != 'no date'):
-                    pubdates = str(row['S2_pubdates']).split(',')
-                    pubdates = [int(x) for x in pubdates if x != '' and len(pubdates) != 0]
-                    try:
-                        avg_pubdate = find_avg_pubdate(pubdates)
-                    except:
-                        avg_pubdate = 0
-                else:
-                    avg_pubdate = 0
-                df.at[idx, 'avg_pubdate'] = avg_pubdate
-
-
-
-                # df = pd.read_csv('random_sample_search_results_VIAF_S2_Oct.csv')
-    # Extract the first 4 characters and convert to Int16
-    def extract_year_2(year_str):
-        if isinstance(year_str, str) and len(year_str) >= 4:
-            try:
-                return pd.Int16Dtype().type(int(year_str[:4]))  # Convert to Int16
-            except ValueError:
-                return None  # or handle the error as needed
-        return None
-
-
-    # Apply the function to the relevant columns
-    df['birthdate'] = df['birthdate'].apply(extract_year_2)
-    df['S2_pubdates'] = df['S2_pubdates'].apply(extract_year_2)
-    # df['VIAF_birthdate'] = df['birthdate'].apply(extract_year_2)
-
-    print(df.head(30))
-    print(df.columns)
-    # df['VIAF_birthdate'] = df['birthdate']
-    df['VIAF_titlelist'] = df['record_enumerated_titles']
-    #df['S2_pubdates'] = df['S2Years']
-
-
-
-
-    # df['avg_pubdate'] = df['S2_pubdates'].apply(find_avg_pubdate)
-    for idx, row in df.iterrows():
-        pubdates = row['S2_pubdates']
-        if isinstance(pubdates, float):
-            continue
-        if pubdates is not None and str(pubdates) != 'nan':
-            # pubdates = ast.literal_eval(pubdates)
-            bad_string = pubdates
-            # Step 1: Clean up the string - remove unwanted characters
-            cleaned_string = re.sub(r"[\[\]\"']", '', bad_string)  # Remove extra brackets, quotes, etc.
-
-            # Step 2: Split the cleaned string into a list, remove extra whitespace
-            cleaned_list = [item.strip() for item in cleaned_string.split(',') if
-                            item.strip() not in ['nan', 'no date']]
-
-            # Now 'cleaned_list' is a properly formatted list
-            pubdates = cleaned_list
-            for i in range(len(pubdates)):
-                if len(pubdates[i]) > 4:
-                    pubdates[i] = int(pubdates[i][:4]) # Keep only the first four characters (the year)
-
-            if len(pubdates) == 0:
-                continue
-
-    # %%
-    # df_notnull = df.loc[df['avg_pubdate'].notnull()]
-    # # %%
-    # df_notnull
-
-    # %%
-    # publication_age
-    df['publication_age'] = ""
-    # df['publication_age'] = df['avg_pubdate'] - df['birthyear']
-    for idx, row in df.iterrows():
-        avg_pubdate = row['avg_pubdate']
-        birth = str(row['VIAF_birthdate'])
-        if len(birth) >= 5:
-            birth = birth[:4]
-            birth = birth.strip('-')
-        if avg_pubdate is None or avg_pubdate == 'error' or str(avg_pubdate) == 'nan' or isinstance(avg_pubdate, float):
-            continue
-        if birth != 'None' and birth.isdigit():
-            pub_age = int(avg_pubdate) - int(birth)
-            df.at[idx, 'publication_age'] = pub_age
-
-    # print('checking values of the row that was an issue so far')
-    # # df['S2_Pubdates'][16]
-    # print(df['VIAF_birthdate'][16])
-    # print(df['S2_pubdates'][16])
-    # # print(df['S2_Year'][16])
-    #
-    # print(df.index)
-    #
-    # test_case = process_row(df.iloc[16])
-    # print(test_case)
-
-
-    df = df.apply(process_row, axis=1, result_type='expand')
-
-    # print(unique_authors_to_search)
-
-
-
-    # %%
-    df
-    # %%
-    # df['publication_age'] = pd.to_numeric(df['publication_age'], errors='coerce')
-
-    # %% md
-    # Add status variable, and then convert it from string to numbers
-    # %%
     df['status'] = ""
-    df['publication_age'] = df['pub_age']
-    df['publication_age'] = pd.to_numeric(df['publication_age'], errors='coerce')
 
 
     for idx, row in df.iterrows():
@@ -791,19 +671,15 @@ if __name__ == '__main__':
         else:
             df.at[idx, 'status'] = '0'
 
-    # %%
+
     df.loc[df['status'] != '0']
-    # %%
+
     df['status'] = df['status'].str.replace('zombie', '1')
     df['status'] = df['status'].fillna('0')
     df['status'] = df['status'].str.replace('not_born', '2')
     df['status'] = df['status'].str.replace('toddler', '3')
 
-    # %%
-    # df.loc[df['status'] == '2']
-    # %% md
-
-
+    #
     # Now S2 and VIAF titlelist embeddings
     # %%
     # embeddings
@@ -814,10 +690,9 @@ if __name__ == '__main__':
     model = SentenceTransformer('all-MiniLM-L6-v2')
 
     # Generate embeddings for each row in the DataFrame
-    df['S2_embeddings'] = df['S2 titlelist'].apply(get_embeddings)
+    df['S2_embeddings'] = df['S2_titlelist'].apply(get_embeddings)
     df['VIAF_embeddings'] = df['VIAF_titlelist'].apply(get_embeddings)
     # %%
-    df['S2_titlelist'] = df['S2 titlelist']
     # %%
 
     # %%
@@ -831,8 +706,6 @@ if __name__ == '__main__':
         lambda row: pd.Series(calculate_lemma_overlap(row['VIAF_titlelist'], row['S2_titlelist'])),
         axis=1)
 
-
-    # %%
 
     import pandas as pd
     from nltk.corpus import stopwords
@@ -852,15 +725,63 @@ if __name__ == '__main__':
     df['exact_matches'] = ""
     df['exact_match_count'] = ""
 
-    # df = apply_jaccard(df, 'S2_titlelist', 'VIAF_titlelist')
+    df.to_csv('df_oct_16_checkpoint.csv')
+
+    # for idx, row in df.iterrows():
+    #     if row['word_overlap_count'] > 0:
+    #         # print(row['overlapping_words'])
+    #         try:
+    #             S2_titlelist = ast.literal_eval(row['S2_titlelist'])
+    #             VIAF_titlelist = ast.literal_eval(row['VIAF_titlelist'])
+    #         except ValueError:
+    #             S2_titlelist = str(row['S2_titlelist']).strip('[]').strip('""').split(',')
+    #             S2_titles_clean = []
+    #             for title in S2_titlelist:
+    #                 title = title.replace('"', '').replace("'", '').strip().lower()
+    #                 S2_titles_clean.append(title.lower())
+    #                 S2_titlelist = S2_titles_clean
+    #             VIAF_titlelist = str(row['VIAF_titlelist']).strip('[]').strip('""').split(',')
+    #             VIAF_titles_clean = []
+    #             for title in VIAF_titlelist:
+    #                 title = title.replace('"', '').replace("'", '').strip().lower()
+    #                 VIAF_titles_clean.append(title.lower())
+    #                 VIAF_titlelist = VIAF_titles_clean
+    #         jaccard_distance = jaccard_distance_for_lists(S2_titlelist, VIAF_titlelist)
+    #         df.at[idx, 'Jaccard_Distance'] = jaccard_distance
+    #         exact_matches = find_exact_matches_for_author(row)
+    #         if exact_matches:
+    #             print('match')
+    #             df.at[idx, 'exact_matches'] = exact_matches
+
+    import ast
+    from sklearn.feature_extraction.text import TfidfVectorizer
+    from sklearn.metrics.pairwise import cosine_similarity
+
+
+
+
+
+    # Example usage on a DataFrame
     for idx, row in df.iterrows():
-        S2_titlelist = str(row['S2 titlelist']).split(',')
-        VIAF_titlelist = str(row['VIAF_titlelist']).split(',')
-        jaccard_distance = jaccard_distance_for_lists(S2_titlelist, VIAF_titlelist)
-        df.at[idx, 'Jaccard_Distance'] = jaccard_distance
-        exact_matches = find_exact_matches_for_author(row)
-        df.at[idx, 'exact_matches'] = exact_matches
-        df.at[idx, 'exact_match_count'] = len(exact_matches)
+        if row['word_overlap_count'] > 0:
+            try:
+                S2_titlelist = ast.literal_eval(row['S2_titlelist'])
+                VIAF_titlelist = ast.literal_eval(row['VIAF_titlelist'])
+            except ValueError:
+                S2_titlelist = str(row['S2_titlelist']).strip('[]').split(',')
+                VIAF_titlelist = str(row['VIAF_titlelist']).strip('[]').split(',')
+
+            # Perform cosine similarity matching between the lists
+            cosine_matches = cosine_similarity_titles(S2_titlelist, VIAF_titlelist, threshold=0.7)
+
+            # Example: Add matches to the DataFrame or handle them accordingly
+            if cosine_matches:
+                # print(f"Matches found for row {idx}: {cosine_matches}")
+                df.at[idx, 'cosine_matches'] = len(cosine_matches)
+            else:
+                df.at[idx, 'cosine_matches'] = 0
+
+                # print(f"No matches found for row {idx}")
 
     df['cosine_distance'] = ""
 
@@ -869,15 +790,7 @@ if __name__ == '__main__':
         S2_embedding = row['S2_embeddings']
         cosine_dist = get_cosine_distance_bw_title_embeddings(S2_embedding, VIAF_embedding)
         df.at[idx, 'cosine_distance'] = cosine_dist
-    # %%
-    # embed overlapping word meaning
-    import spacy
-    import numpy as np
 
-    # Load the spaCy model
-    nlp = spacy.load("en_core_web_sm")
-
-    # df['mean_embedding'] = df['overlapping_words'].apply(get_word_embeddings)
 
     # %%
     # rename to keep track of where birthdate data came from
@@ -889,54 +802,8 @@ if __name__ == '__main__':
     df.loc[df['VIAF_birthdate'] == '1949-06-01', 'VIAF_birthdate'] = 1949
     df.loc[df['S2_pubdates'] == '1949-06-01', 'S2_pubdates'] = 1949
     # df.loc[df['birthyear'] == '1949-06-01', 'birthyear'] = 1949
-    df = extract_year(df, 'VIAF_birthdate')
-    df = extract_year(df, 'S2_pubdates')
-    # df = extract_year(df, 'birthyear')
 
-    df['pub_age'] = df['publication_age']
-    # %%
-    # store the metadata to examine later with the probabilities
-    original_indices = df.index
-    original_metadata = df[
-        ['VIAF_titlelist',  'author', 'S2_titlelist', 'status', 'pub_age', 'avg_pubdate',
-         'VIAF_birthdate', 'overlapping_words', 'word_overlap_count', 'lemma_overlap', 'overlapping_lemmas','exact_matches']].copy()
-    print(df)
-    print(df.columns.tolist())
-    # df['birthyear'] = df['VIAF_birthdate']
-    columns_to_drop = ['S2 titlelist', 'S2_embeddings', 'VIAF_embeddings','S2_titlelist','VIAF_titlelist','mean_embedding','negative_status', 'avg_pubdate', 'VIAF_birthdate']
-    # Check which columns actually exist in the DataFrame before dropping
-    existing_columns_to_drop = [col for col in columns_to_drop if col in df.columns]
-
-    # Drop existing columns
-    df.drop(columns=existing_columns_to_drop, inplace=True)
-    print("\nData types in df:")
-    print(df.dtypes)
-
-    df['birth2mindate'] = pd.to_numeric(df['birth2mindate'], errors='coerce')
-    df['birth2maxdate'] = pd.to_numeric(df['birth2maxdate'], errors='coerce')
-
-    df['abs_birth2mindate'] = pd.to_numeric(df['abs_birth2mindate'], errors='coerce')
-
-    df['abs_birth2maxdate'] = pd.to_numeric(df['abs_birth2maxdate'], errors='coerce')
-
-    # %%
-    pd.to_numeric(df['birth2mindate'], errors='coerce')
-    # %%
-    pd.to_numeric(df['birth2maxdate'], errors='coerce')
-    # %%
-    # %%
-    print("\nData types in df:")
-    print(df.dtypes)
-    # df = df.drop([['S2 titlelist', 'S2_embeddings', 'S2_pubdates','S2_titlelist','VIAF_embeddings']])
-    # Step 3: Run the loaded model over the new data
-    print(df)
-    # df = df.drop(['S2Titles','S2titles','matched_title_list','common_words','notes','birthdate'], axis=1)
-    print(df.columns)
-    # print(df['S2_pubdates'].head(30))
-    # print(df['VIAF_birthdate'].head(30))
-
-    print(original_metadata.head(30))
-
-
-
+    #
+    # df_notnull_birth2max = df.loc[df['birth2maxdate'].notnull()]
+    # print(df_notnull_birth2max.head(30))
     df.to_csv('random_sample_get_features_asCSV.csv')

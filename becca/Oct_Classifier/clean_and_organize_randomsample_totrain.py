@@ -220,7 +220,10 @@ def birth2maxdate(birth, pubdates):
         try:
             return birth2maxdate, abs_birth2maxdate
         except:
-            return None, None
+            return 'exception','exception'
+    else:
+        return {'birth', 'pubdates'}
+            # return None, None
 
 
 
@@ -910,8 +913,8 @@ if __name__ == '__main__':
             df['birth2maxdate'] = df[['birthdate', 'S2_Year']].apply(lambda row: birth2maxdate(row['birthdate'], row['S2_Year']), axis=1)
             # df['birth2mindate'] = df[['birthdate', 'S2_pubdates']].apply(lambda row: birth2mindate(row['birthdate'], row['S2_pubdates']), axis=1)
 
-    list = ['Unnamed: 0', 'index','S2Titles', 'S2titles', 'matched_title?', 'matched_title_list', 'common_words', 'notes']
-    df = df.drop(list, axis=1)
+    default_result_list = ['Unnamed: 0', 'index','S2Titles', 'S2titles', 'matched_title?', 'matched_title_list', 'common_words', 'notes']
+    df = df.drop(default_result_list, axis=1)
     df.to_csv('random_sample_search_results_VIAF_S2_Oct.csv')
     print(df.head(30))
     # print(df['S2_pubdates'].head(30))
@@ -921,33 +924,33 @@ if __name__ == '__main__':
     print(df.columns)
 
 
-    def birth2maxdate(birth, pubdates):
-        print(f"Debug - birth: {birth}, pubdates: {pubdates}")  # Debug print
-
-        try:
-            if isinstance(birth, str):
-                birth = int(birth[:4])
-            else:
-                birth = int(birth)
-
-            if isinstance(pubdates, str):
-                pubdates = [int(year.strip()) for year in pubdates.split(',') if year.strip().isdigit()]
-            elif isinstance(pubdates, (list, tuple)):
-                pubdates = [int(year) for year in pubdates if str(year).isdigit()]
-            else:
-                pubdates = [int(pubdates)]
-
-            if not pubdates:
-                return None, None
-
-            max_pubdate = max(pubdates)
-            birth2maxdate = max_pubdate - birth
-            abs_birth2maxdate = abs(birth2maxdate)
-
-            return birth2maxdate, abs_birth2maxdate
-        except Exception as e:
-            print(f"Error in birth2maxdate: {e}")  # Debug print
-            return None, None
+    # def birth2maxdate(birth, pubdates):
+    #     print(f"Debug - birth: {birth}, pubdates: {pubdates}")  # Debug print
+    #
+    #     try:
+    #         if isinstance(birth, str):
+    #             birth = int(birth[:4])
+    #         else:
+    #             birth = int(birth)
+    #
+    #         if isinstance(pubdates, str):
+    #             pubdates = [int(year.strip()) for year in pubdates.split(',') if year.strip().isdigit()]
+    #         elif isinstance(pubdates, (list, tuple)):
+    #             pubdates = [int(year) for year in pubdates if str(year).isdigit()]
+    #         else:
+    #             pubdates = [int(pubdates)]
+    #
+    #         if not pubdates:
+    #             return None, None
+    #
+    #         max_pubdate = max(pubdates)
+    #         birth2maxdate = max_pubdate - birth
+    #         abs_birth2maxdate = abs(birth2maxdate)
+    #
+    #         return birth2maxdate, abs_birth2maxdate
+    #     except Exception as e:
+    #         print(f"Error in birth2maxdate: {e}")  # Debug print
+    #         return None, None
 
 
     # Modify the lambda function to use the updated birth2maxdate function

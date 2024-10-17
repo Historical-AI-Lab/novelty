@@ -807,7 +807,7 @@ if __name__ == '__main__':
     # print(df)
     print(df)
     df.to_csv('alldata_test_df.csv')
-    print(df.tail())
+    print(df['predictions'])
 
     # print(S2_data_dict['roger stephenson'])
     print(weird_cases_to_examine)

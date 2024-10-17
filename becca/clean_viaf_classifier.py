@@ -18,7 +18,7 @@ import pickle
 
 
 import pandas as pd
-df_2 = pd.read_csv('new_labels_aug22.csv')
+df_2 = pd.read_csv('Oct_Classifier/new_labels_aug22.csv')
 
 
 # In[550]:
@@ -815,7 +815,7 @@ df_2
 
 
 #in this case, I had done the true labels by hand, so let's add them in here
-df_2 = pd.read_csv('new_labels_aug22.csv')
+df_2 = pd.read_csv('Oct_Classifier/new_labels_aug22.csv')
 df['match?'] = df_2['new_label']
 
 
