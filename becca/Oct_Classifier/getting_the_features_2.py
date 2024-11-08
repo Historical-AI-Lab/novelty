@@ -652,11 +652,11 @@ if __name__ == '__main__':
     #     loaded_model = pickle.load(file)
     # print(loaded_model.feature_names_in_)
 
-    with open('../S2_data_dict.txt', 'r') as filename:
-        S2_data_dict = json.load(filename)
+    # with open('../S2_data_dict.txt', 'r') as filename:
+    #     S2_data_dict = json.load(filename)
 
-    df = pd.read_csv('processed_search_results_VIAF_S2_Oct_all_data.csv')
-    # df = df[:100]
+    # df = pd.read_csv('processed_search_results_VIAF_S2_Oct_all_data.csv')
+    # # df = df[:100]
 
     # df = pd.read_csv('../random_sample_search_results_VIAF_S2_Oct.csv', dtype ={'author': 'str', 'record_count': 'Int8', 'record_enumerated': 'Int8', 'viaf_title_list': 'str', 'birthdate': 'str', 'S2_titlelist': 'str', 'S2_pubdates': 'str', 'S2_Year': 'str', 'VIAF_birthdate': 'Int16', 'VIAF_titlelist': 'str'}, usecols = lambda col: col not in ['Search Parameters'])
     # df = pd.read_csv('processed_search_results_VIAF_S2_Oct.csv')
