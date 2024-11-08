@@ -25,7 +25,7 @@ df_2 = pd.read_csv('Oct_Classifier/new_labels_aug22.csv')
 
 
 #read in our data
-df = pd.read_csv('result_df_july18_1136am.csv')
+df = pd.read_csv('Oct_Classifier/training_classifiers/result_df_july18_1136am.csv')
 
 
 # For this specific subsample example, we need to add back S2 metadata like S2 titles and pubdates (there were left out/removed somehow when this VIAF subsample was created
