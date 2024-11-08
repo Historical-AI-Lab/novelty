@@ -2,7 +2,8 @@
 
 Research on different measures of novelty, precocity, and innovation. Begun in Fall 2023.
 
-People involved include Rebecca Cohen, Sarah Griebel, Lucian Li, Jiayu Liu, Jay Park, Jana Perkins, and Ted Underwood.
+People involved include Becca Cohen, Sarah Griebel, Lucian Li, Jiayu Liu, Jay Park, Jana Perkins, and Ted Underwood.
+
 
 ## cleandandchunk
 
