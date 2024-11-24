@@ -9,6 +9,6 @@ An intermediate edit to work with JSTOR is ```align_jstor_w_semantic_scholar.ipy
 
 The current best version of code to align and create metadata is ```Best_JSTOR-S2_Aligner.ipynb```. 
 
-The resulting metadata is the ../metadata folder.
+Condensed versions of the resulting metadata are the ../metadata folder.
 
-Ted also has the full json results for those articles, but they're big enough (49 MB) that we have not yet added them to the repo.
+We also have the full json results for these articles, listing all the citations to each article, but those files are big enough that we have not added them to the repo.
