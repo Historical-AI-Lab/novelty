@@ -12,24 +12,27 @@ There are two ways you can approach this repository: one is that you're curious 
 
 The other approach is if you're interested in trying to reproduce the whole process. That's more complex and is outlined below.
 
+## Our general workflow
 
-## cleandandchunk
+The basic logic is that we get texts and metadata--from JSTOR in the case of our nonfiction corpora, or from the Chicago Corpus in the case of fiction. Then, in the case of the nonfiction corpora, we match the articles to Semantic Scholar records in order to determine numbers of citations. (See ```/semantic_scholar``` and ```/metadata```.)
+
+We perform three kinds of modeling on the texts: topic modeling, tuned SentenceBERT embeddings, and continued pretraining of RoBERTa models that we can use to estimate perplexity. In the case of the first two methods, we then need to calculate *precocity* by comparing each text to texts in the future or past (represented as topic distributions or as embeddings). The perplexity calculation is simpler.
+
+At this point we have data that can be interpreted by the notebooks in ```/interpret```.
+
+### cleandandchunk
 
 scripts that convert text files into embedding-sized chunks
 
-## data sources
+### semantic_scholar
 
-A lot of our current work is under here.
+contains scripts for aligning JSTOR metadata with semantic scholar metadata about citations.
 
-```/hathi_API``` contains a script for getting volumes page by page from Hathi.
-
-```/semantic_scholar``` contains scripts for aligning JSTOR metadata with semantic scholar metadata about citations.
-
-## embeddingcode
+### embeddingcode
 
 This contains scripts for running GTE embeddings. Right now they are only adapted to run on data from JSTOR; getting them adapted for fiction is a next step.
 
-## precocitycalc
+### precocitycalc
 
 *Deprecated: the functions that were located here are now distributed elsewhere.*
 
