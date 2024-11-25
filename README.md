@@ -4,9 +4,9 @@ Code used in the paper "Locating the Leading Edge of Cultural Change."
 
 citation: 
 
-```Sarah Griebel, Becca Cohen, Lucian Li, Jaihyun Park, Jiayu Liu, Jay Park, Jana Perkins, and Ted Underwood, Locating the Leading Edge of Cultural Change, Computational Humanities Research 24, Aarhus Denmark 2024, [https://ceur-ws.org/Vol-3834/paper70.pdf](https://ceur-ws.org/Vol-3834/paper70.pdf)```
+```Sarah Griebel, Becca Cohen, Lucian Li, Jaihyun Park, Jiayu Liu, Jay Park, Jana Perkins, and Ted Underwood, Locating the Leading Edge of Cultural Change, Computational Humanities Research 24, Aarhus Denmark 2024,``` [```https://ceur-ws.org/Vol-3834/paper70.pdf```](https://ceur-ws.org/Vol-3834/paper70.pdf)
 
-The paper itself is available here as ```[paper.pdf](paper.pdf)```
+The paper itself is available here as [paper.pdf](paper.pdf)
 
 There are two ways you can approach this repository: one is that you're curious about a claim in the paper and want to backtrack into the code to see where it was produced. In that case you probably want to start with the folder ```/interpret```, which contains notebooks that the paper rests on most immediately.
 
