@@ -18,7 +18,7 @@ The basic logic is that we get texts and metadata--from JSTOR in the case of our
 
 We perform three kinds of modeling on the texts: topic modeling, tuned SentenceBERT embeddings, and continued pretraining of RoBERTa models that we can use to estimate perplexity. (See ```/tunedembeddings```, ```/topicmodel```, and ```/perplexity```.) 
 
-In the case of the first two methods, we then need to calculate *precocity* by comparing each text to texts in the future or past (represented as topic distributions or as embeddings). (See ```/precocitycalc```.) The perplexity calculation is simpler and doesn't require an extra step.
+In the case of the first two methods, we then need to calculate *precocity* by comparing each text to texts in the future or past (represented as topic distributions or as embeddings). (Historically the scripts for this step were in ```/precocitycalc```, but the currently-used versions are distributed across ```/tunedembeddings``` and ```/topicmodel```.) The perplexity calculation is simpler and doesn't require an extra step.
 
 At this point we have data that can be interpreted by the notebooks in ```/interpret```.
 
@@ -36,15 +36,15 @@ This contains scripts for running GTE embeddings. Right now they are only adapte
 
 ### precocitycalc
 
-*Deprecated: the functions that were located here are now distributed elsewhere.*
+*Deprecated: some functions that were located here are now distributed elsewhere.*
 
-This contains code for doing forward-and-back calculations. It will apply to both the embedding and the topic model representations of the corpus. Code for text reuse calculation is also placed here, since excluding chunks that quote/paraphrase other documents is part of this workflow.
+This once contained code for doing forward-and-back calculations, which is now distributed across ```/tunedembeddings``` and ```/topicmodel```. Code for text reuse calculation is still placed here.
 
-## topicmodel
+### topicmodel
 
 instructions for generating topic models and then using those models to calculate precocity
 
-## tunedembeddings
+### tunedembeddings
 
 contains scripts for fine-tuning embeddings using sentence transformers, and then using those embeddings to calculate preocity
 
