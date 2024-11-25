@@ -1,8 +1,16 @@
 # novelty
 
-Research on different measures of novelty, precocity, and innovation. Begun in Fall 2023.
+Code used in the paper "Locating the Leading Edge of Cultural Change."
 
-People involved include Becca Cohen, Sarah Griebel, Lucian Li, Jiayu Liu, Jay Park, Jana Perkins, and Ted Underwood.
+citation: 
+
+```Sarah Griebel, Becca Cohen, Lucian Li, Jaihyun Park, Jiayu Liu, Jay Park, Jana Perkins, and Ted Underwood, Locating the Leading Edge of Cultural Change, Computational Humanities Research 24, Aarhus Denmark 2024, [https://ceur-ws.org/Vol-3834/paper70.pdf](https://ceur-ws.org/Vol-3834/paper70.pdf)```
+
+The paper itself is available here as ```[paper.pdf](paper.pdf)```
+
+There are two ways you can approach this repository: one is that you're curious about a claim in the paper and want to backtrack into the code to see where it was produced. In that case you probably want to start with the folder ```/interpret```, which contains notebooks that the paper rests on most immediately.
+
+The other approach is if you're interested in trying to reproduce the whole process. That's more complex and is outlined below.
 
 
 ## cleandandchunk
