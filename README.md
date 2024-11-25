@@ -8,7 +8,7 @@ citation:
 
 The paper itself is available here as [paper.pdf](paper.pdf)
 
-There are two ways you can approach this repository: one is that you're curious about a claim in the paper and want to backtrack into the code to see where it was produced. In that case you probably want to start with the folder ```/interpret```, which contains notebooks that the paper rests on most immediately.
+There are two ways you can approach this repository: one is that you're curious about a claim in the paper and want to backtrack into the code to see where it was produced. In that case you probably want to start with the folder [```/interpret```](https://github.com/IllinoisLiteraryLab/novelty/tree/main/interpret), which contains notebooks that the paper rests on most immediately.
 
 The other approach is if you're interested in trying to reproduce the whole process. That's more complex and is outlined below.
 
