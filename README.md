@@ -22,17 +22,25 @@ In the case of the first two methods, we then need to calculate *precocity* by c
 
 At this point we have data that can be interpreted by the notebooks in ```/interpret```.
 
+### authorage
+
+Scripts that try to match our literary-studies authors to VIAF records, and then evaluate our confidence in the match. We used these--plus some manual work--to create a subset of literary-studies authors for which we had high confidence in their year of birth.
+
 ### cleandandchunk
 
-scripts that convert text files into embedding-sized chunks
+Scripts that convert text files into embedding-sized chunks
+
+### fiction
+
+This folder is an exception to the rule that we tried to organize files according to the kind of representation (topic model, embeddings, etc) rather than subject domain. Some of the work on fiction--especially having to do with embeddings--is contained here.
+
+### metadata
+
+contains metadata for all our corpora
 
 ### semantic_scholar
 
-contains scripts for aligning JSTOR metadata with semantic scholar metadata about citations.
-
-### embeddingcode
-
-This contains scripts for running GTE embeddings. Right now they are only adapted to run on data from JSTOR; getting them adapted for fiction is a next step.
+aligning JSTOR metadata with semantic scholar metadata about citations
 
 ### precocitycalc
 
