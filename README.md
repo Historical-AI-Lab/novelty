@@ -12,6 +12,10 @@ There are two ways you can approach this repository: one is that you're curious 
 
 The other approach is if you're interested in trying to reproduce the whole process. That's more complex and is outlined below.
 
+#### preregistration
+
+We did write [a preregistration at OSF,](https://osf.io/a3g6e) but we didn't adhere to the plan exactly, and we don't claim that it should increase readers' confidence in our results. It does increase our own confidence that we remember what we originally planned to do!
+
 ## Our general workflow
 
 The basic logic is that we get texts and metadata--from JSTOR in the case of our nonfiction corpora, or from the Chicago Corpus in the case of fiction. Then, in the case of the nonfiction corpora, we match the articles to Semantic Scholar records in order to determine numbers of citations. (See ```/semantic_scholar``` and ```/metadata```.)
