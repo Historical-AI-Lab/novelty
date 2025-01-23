@@ -1,0 +1,362 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="1a998ebf-eb32-44db-acde-7ffb124d91fa" name="Changes" comment="adding the classifer" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Jupyter Notebook" />
+        <option value="Python Script" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="PUSH_AUTO_UPDATE" value="true" />
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+    <option name="UPDATE_TYPE" value="REBASE" />
+  </component>
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;rscohen2&quot;
+  }
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/IllinoisLiteraryLab/novelty.git&quot;,
+    &quot;accountId&quot;: &quot;f2172549-5120-41f8-ad7c-9f20cf8ea50a&quot;
+  }
+}</component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 8
+}</component>
+  <component name="ProjectId" id="2lZBIkXX7Gt8IGUczVZUu7AhyJi" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Python.VIAF_classifier_run_over_alldata.executor": "Debug",
+    "Python.clean_and_combine_data_b4_features.executor": "Run",
+    "Python.clean_viaf_classifier.executor": "Debug",
+    "Python.getting_the_features.executor": "Run",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "git-widget-placeholder": "main",
+    "last_opened_file_path": "C:/Users/bscag/Coursework/IS597",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "vue.rearranger.settings.migration": "true"
+  }
+}]]></component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-js-predefined-d6986cc7102b-410509235cf1-JavaScript-PY-242.20224.428" />
+        <option value="bundled-python-sdk-80e8e15d2b92-39cff9de6eef-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-242.20224.428" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="1a998ebf-eb32-44db-acde-7ffb124d91fa" name="Changes" comment="" />
+      <created>1725377640537</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1725377640537</updated>
+      <workItem from="1725377641546" duration="3507000" />
+      <workItem from="1725381995566" duration="206000" />
+      <workItem from="1725728507273" duration="33000" />
+      <workItem from="1726533431976" duration="1209000" />
+      <workItem from="1726535927125" duration="7000" />
+      <workItem from="1726606034203" duration="19426000" />
+      <workItem from="1726701313916" duration="2289000" />
+      <workItem from="1726756631425" duration="6427000" />
+      <workItem from="1727107833787" duration="387000" />
+      <workItem from="1727142326842" duration="2624000" />
+      <workItem from="1727189145846" duration="222000" />
+      <workItem from="1727190106461" duration="4578000" />
+      <workItem from="1727194878130" duration="1068000" />
+      <workItem from="1727207822018" duration="5000" />
+      <workItem from="1727979951012" duration="21458000" />
+    </task>
+    <task id="LOCAL-00001" summary="adding the classifer">
+      <option name="closed" value="true" />
+      <created>1725377669543</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1725377669543</updated>
+    </task>
+    <task id="LOCAL-00002" summary="adding the classifer">
+      <option name="closed" value="true" />
+      <created>1725377685970</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1725377685970</updated>
+    </task>
+    <task id="LOCAL-00003" summary="adding the classifer">
+      <option name="closed" value="true" />
+      <created>1725380343731</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1725380343731</updated>
+    </task>
+    <task id="LOCAL-00004" summary="adding the classifer">
+      <option name="closed" value="true" />
+      <created>1725380883353</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1725380883353</updated>
+    </task>
+    <task id="LOCAL-00005" summary="adding the classifer">
+      <option name="closed" value="true" />
+      <created>1725380900816</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1725380900816</updated>
+    </task>
+    <task id="LOCAL-00006" summary="adding the classifer">
+      <option name="closed" value="true" />
+      <created>1725381117918</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1725381117918</updated>
+    </task>
+    <task id="LOCAL-00007" summary="adding the classifer">
+      <option name="closed" value="true" />
+      <created>1726534619420</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1726534619420</updated>
+    </task>
+    <task id="LOCAL-00008" summary="adding the classifer">
+      <option name="closed" value="true" />
+      <created>1727107863456</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1727107863456</updated>
+    </task>
+    <task id="LOCAL-00009" summary="adding the classifer">
+      <option name="closed" value="true" />
+      <created>1727144083688</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1727144083688</updated>
+    </task>
+    <task id="LOCAL-00010" summary="adding the classifer">
+      <option name="closed" value="true" />
+      <created>1727194643731</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1727194643731</updated>
+    </task>
+    <task id="LOCAL-00011" summary="adding the classifer">
+      <option name="closed" value="true" />
+      <created>1727979959128</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1727979959128</updated>
+    </task>
+    <task id="LOCAL-00012" summary="adding the classifer">
+      <option name="closed" value="true" />
+      <created>1727980018072</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1727980018072</updated>
+    </task>
+    <task id="LOCAL-00013" summary="adding the classifer">
+      <option name="closed" value="true" />
+      <created>1728036061424</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1728036061424</updated>
+    </task>
+    <task id="LOCAL-00014" summary="adding the classifer">
+      <option name="closed" value="true" />
+      <created>1728036081631</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1728036081631</updated>
+    </task>
+    <task id="LOCAL-00015" summary="adding the classifer">
+      <option name="closed" value="true" />
+      <created>1728038098446</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1728038098446</updated>
+    </task>
+    <task id="LOCAL-00016" summary="adding the classifer">
+      <option name="closed" value="true" />
+      <created>1728053557001</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1728053557002</updated>
+    </task>
+    <task id="LOCAL-00017" summary="adding the classifer">
+      <option name="closed" value="true" />
+      <created>1728054222393</created>
+      <option name="number" value="00017" />
+      <option name="presentableId" value="LOCAL-00017" />
+      <option name="project" value="LOCAL" />
+      <updated>1728054222393</updated>
+    </task>
+    <task id="LOCAL-00018" summary="adding the classifer">
+      <option name="closed" value="true" />
+      <created>1728054233596</created>
+      <option name="number" value="00018" />
+      <option name="presentableId" value="LOCAL-00018" />
+      <option name="project" value="LOCAL" />
+      <updated>1728054233596</updated>
+    </task>
+    <task id="LOCAL-00019" summary="adding the classifer">
+      <option name="closed" value="true" />
+      <created>1728054525264</created>
+      <option name="number" value="00019" />
+      <option name="presentableId" value="LOCAL-00019" />
+      <option name="project" value="LOCAL" />
+      <updated>1728054525264</updated>
+    </task>
+    <option name="localTasksCounter" value="20" />
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="adding the classifer" />
+    <option name="LAST_COMMIT_MESSAGE" value="adding the classifer" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" suspend="THREAD" type="jupyter-line">
+          <url>notebook://C:/Users/bscag/novelty/becca/.ipynb_checkpoints/clean_viaf_classifier-checkpoint.ipynb</url>
+          <line>589</line>
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="jupyter-line">
+          <url>notebook://C:/Users/bscag/novelty/becca/viaf_classifier_alldata.ipynb</url>
+          <line>566</line>
+          <option name="timeStamp" value="6" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="jupyter-line">
+          <url>notebook://C:/Users/bscag/novelty/becca/viaf_classifier_alldata.ipynb</url>
+          <line>604</line>
+          <option name="timeStamp" value="7" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="jupyter-line">
+          <url>notebook://C:/Users/bscag/novelty/becca/refator_viaf_for_classifier.ipynb</url>
+          <line>48</line>
+          <option name="timeStamp" value="8" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="jupyter-line">
+          <url>notebook://C:/Users/bscag/novelty/becca/refator_viaf_for_classifier.ipynb</url>
+          <line>104</line>
+          <option name="timeStamp" value="9" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="jupyter-line">
+          <url>notebook://C:/Users/bscag/novelty/becca/clean_viaf_classifier.ipynb</url>
+          <line>41</line>
+          <option name="timeStamp" value="18" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/clean_viaf_classifier.py</url>
+          <line>753</line>
+          <option name="timeStamp" value="11" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/clean_viaf_classifier.py</url>
+          <line>750</line>
+          <option name="timeStamp" value="17" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/VIAF_classifier_run_over_alldata.py</url>
+          <line>817</line>
+          <option name="timeStamp" value="23" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/VIAF_classifier_run_over_alldata.py</url>
+          <line>804</line>
+          <option name="timeStamp" value="25" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/VIAF_classifier_run_over_alldata.py</url>
+          <line>750</line>
+          <option name="timeStamp" value="27" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/clean_and_combine_data_b4_features.py</url>
+          <line>772</line>
+          <option name="timeStamp" value="36" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/clean_and_combine_data_b4_features.py</url>
+          <line>775</line>
+          <option name="timeStamp" value="37" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/clean_and_combine_data_b4_features.py</url>
+          <line>771</line>
+          <option name="timeStamp" value="38" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/getting_the_features.py</url>
+          <line>473</line>
+          <option name="timeStamp" value="39" />
+        </line-breakpoint>
+      </breakpoints>
+      <default-breakpoints>
+        <breakpoint type="python-exception">
+          <properties notifyOnTerminate="true" exception="BaseException">
+            <option name="notifyOnTerminate" value="true" />
+          </properties>
+        </breakpoint>
+      </default-breakpoints>
+    </breakpoint-manager>
+  </component>
+  <component name="com.intellij.coverage.CoverageDataManagerImpl">
+    <SUITE FILE_PATH="coverage/becca$clean_viaf_classifier.coverage" NAME="clean_viaf_classifier Coverage Results" MODIFIED="1727192482659" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/becca$getting_the_features.coverage" NAME="getting_the_features Coverage Results" MODIFIED="1728051358328" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/becca$VIAF_classifier_run_over_alldata.coverage" NAME="VIAF_classifier_run_over_alldata Coverage Results" MODIFIED="1727983861069" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/becca$clean_and_combine_data_b4_features.coverage" NAME="clean_and_combine_data_b4_features Coverage Results" MODIFIED="1728054463731" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+  </component>
+</project>
