@@ -1,36 +1,62 @@
 # novelty
 
-Research on different measures of novelty, precocity, and innovation. Begun in Fall 2023.
+Code used in the paper "Locating the Leading Edge of Cultural Change."
 
-People involved include Rebecca Cohen, Sarah Griebel, Lucian Li, Jiayu Liu, Jay Park, Jana Perkins, and Ted Underwood.
+citation: 
 
-## cleandandchunk
+```Sarah Griebel, Becca Cohen, Lucian Li, Jaihyun Park, Jiayu Liu, Jay Park, Jana Perkins, and Ted Underwood, Locating the Leading Edge of Cultural Change, Computational Humanities Research 24, Aarhus Denmark 2024,``` [```https://ceur-ws.org/Vol-3834/paper70.pdf```](https://ceur-ws.org/Vol-3834/paper70.pdf)
 
-scripts that convert text files into embedding-sized chunks
+The paper itself is available here as [paper.pdf](paper.pdf)
 
-## data sources
+There are two ways you can approach this repository: one is that you're curious about a claim in the paper and want to backtrack into the code to see where it was produced. In that case you probably want to start with the folder [```/interpret```](https://github.com/IllinoisLiteraryLab/novelty/tree/main/interpret), which contains notebooks that the paper rests on most immediately.
 
-A lot of our current work is under here.
+The other approach is if you're interested in trying to reproduce the whole process. That's more complex and is outlined below.
 
-```/hathi_API``` contains a script for getting volumes page by page from Hathi.
+#### preregistration
 
-```/semantic_scholar``` contains scripts for aligning JSTOR metadata with semantic scholar metadata about citations.
+We did write [a preregistration at OSF,](https://osf.io/a3g6e) but we didn't adhere to the plan exactly, and we don't claim that it should increase readers' confidence in our results. It does increase our own confidence that we remember what we originally planned to do!
 
-## embeddingcode
+## Our general workflow
 
-This contains scripts for running GTE embeddings. Right now they are only adapted to run on data from JSTOR; getting them adapted for fiction is a next step.
+The basic logic is that we get texts and metadata--from JSTOR in the case of our nonfiction corpora, or from the Chicago Corpus in the case of fiction. Then, in the case of the nonfiction corpora, we match the articles to Semantic Scholar records in order to determine numbers of citations. (See ```/semantic_scholar``` and ```/metadata```.)
 
-## precocitycalc
+We perform three kinds of modeling on the texts: topic modeling, tuned SentenceBERT embeddings, and continued pretraining of RoBERTa models that we can use to estimate perplexity. (See ```/tunedembeddings```, ```/topicmodel```, and ```/perplexity```.) 
 
-*Deprecated: the functions that were located here are now distributed elsewhere.*
+In the case of the first two methods, we then need to calculate *precocity* by comparing each text to texts in the future or past (represented as topic distributions or as embeddings). (Historically the scripts for this step were in ```/precocitycalc```, but the currently-used versions are distributed across ```/tunedembeddings``` and ```/topicmodel```.) The perplexity calculation is simpler and doesn't require an extra step.
 
-This contains code for doing forward-and-back calculations. It will apply to both the embedding and the topic model representations of the corpus. Code for text reuse calculation is also placed here, since excluding chunks that quote/paraphrase other documents is part of this workflow.
+At this point we have data that can be interpreted by the notebooks in ```/interpret```.
 
-## topicmodel
+### authorage
+
+Scripts that try to match our literary-studies authors to VIAF records, and then evaluate our confidence in the match. We used these--plus some manual work--to create a subset of literary-studies authors for which we had high confidence in their year of birth.
+
+### cleandandchunk
+
+Scripts that convert text files into embedding-sized chunks
+
+### fiction
+
+This folder is an exception to the rule that we tried to organize files according to the kind of representation (topic model, embeddings, etc) rather than subject domain. Some of the work on fiction--especially having to do with embeddings--is contained here.
+
+### metadata
+
+contains metadata for all our corpora
+
+### semantic_scholar
+
+aligning JSTOR metadata with semantic scholar metadata about citations
+
+### precocitycalc
+
+*Deprecated: some functions that were located here are now distributed elsewhere.*
+
+This once contained code for doing forward-and-back calculations, which is now distributed across ```/tunedembeddings``` and ```/topicmodel```. Code for text reuse calculation is still placed here.
+
+### topicmodel
 
 instructions for generating topic models and then using those models to calculate precocity
 
-## tunedembeddings
+### tunedembeddings
 
 contains scripts for fine-tuning embeddings using sentence transformers, and then using those embeddings to calculate preocity
 
