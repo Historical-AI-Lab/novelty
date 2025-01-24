@@ -156,8 +156,8 @@ if __name__ == '__main__':
     print(result_df.head())
     print('pub_age' in result_df.columns)  # Should return True if the column exists
 
-    file_path = 'LitMetadataWithS2 (3).tsv'
-
+    # file_path = 'LitMetadataWithS2 (3).tsv'
+    file_path = '../../metadata/litstudies/LitMetadataWithS2.tsv'
     import pandas as pd
 
     meta = pd.read_csv(file_path, sep='\t')

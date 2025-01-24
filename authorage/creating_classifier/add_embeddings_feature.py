@@ -28,5 +28,7 @@ if __name__ == '__main__':
     df = pd.read_csv('result_df_replicated2.csv')
 
     df['VIAF_embeddings'] = df['record_enumerated_titles'].apply(get_embeddings)
-    df['S2_embeddings'] = df['title_list'].apply(get_embeddings)
+    df['S2_embeddings'] = df['S2_titlelist'].apply(get_embeddings)
     df['cos_sim'] =  df.apply(lambda row:(get_cosine_dist(row['VIAF_embeddings'], row['S2_embeddings'])), axis=1)
+    df.to_csv('result_df_replicatedwembeddings.csv')
+
